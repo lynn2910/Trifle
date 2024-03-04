@@ -40,3 +40,7 @@ OU
 ```shell
 ./run.sh --class HoleConsole --build --run -- arg1 arg2 arg3
 ```
+
+## Bonus
+
+Vous pouvez activer les messages de logs en ajoutant l'argument `-v` ou `--verbose` à la commande. (avant les arguments d'execution)

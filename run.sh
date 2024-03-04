@@ -16,11 +16,16 @@ function help() {
   echo "  -r, --run          Run the compiled code"
   echo "  -p, --path         Compile and run the code in the specified subdirectory"
   echo "  -c, --class        Specify the class name to compile and run"
+  echo "  -v, --verbose      Display the execution status"
   echo "  -h, --help         Display this help message"
   exit 1
 }
 
 function build() {
+  if [ "$VERBOSE" -eq 1 ]; then
+    echo "Compiling..."
+  fi
+
   if [ -z "$WORKING_PATH" ]; then
     javac -cp 'src' -d $OUTPUT_DIR "src/${COMPILED_CLASS}.java"
   else
@@ -32,22 +37,26 @@ function build() {
     exit 1
   fi
 
-  echo -e "\n${GREEN}Compilation complete!${NC}"
+  if [ "$VERBOSE" -eq 1 ]; then
+    echo -e "\n${GREEN}Compilation complete!${NC}"
+  fi
 }
 
 function run() {
-  if [ -z "$WORKING_PATH" ]; then
-      java -cp "$OUTPUT_DIR" "src/${COMPILED_CLASS}" "$RUN_ARGS"
-    else
-      java -cp "$OUTPUT_DIR" "${COMPILED_CLASS}" "$RUN_ARGS"
-    fi
+  if [ "$VERBOSE" -eq 1 ]; then
+    echo "Executing..."
+  fi
 
-    if [ $? -ne 0 ]; then
-      echo -e "\n${RED}Execution failed!${NC}"
-      exit 1
-    fi
+  java -cp "$OUTPUT_DIR" "${COMPILED_CLASS}" "$RUN_ARGS"
 
+  if [ $? -ne 0 ]; then
+    echo -e "\n${RED}Execution failed!${NC}"
+    exit 1
+  fi
+
+  if [ "$VERBOSE" -eq 1 ]; then
     echo -e "\n${GREEN}Execution complete!${NC}"
+  fi
 }
 
 javac --version &> /dev/null
@@ -68,6 +77,7 @@ WORKING_PATH=""
 COMPILED_CLASS=""
 RUN_ARGS=""
 IS_IN_RUN_ARGS=0
+VERBOSE=0
 
 while [ "$1" != "" ]; do
   case $1 in
@@ -88,6 +98,26 @@ while [ "$1" != "" ]; do
     -p | --path)
       shift
       WORKING_PATH=$1
+      ;;
+    -v | --verbose)
+      VERBOSE=1
+      ;;
+    -brv | -bvr | -rvb | -rbv | -vbr | -vrb)
+      BUILD=1
+      RUN=1
+      VERBOSE=1
+      ;;
+    -rv | -vr)
+      RUN=1
+      VERBOSE=1
+      ;;
+    -bv | -vb)
+      BUILD=1
+      VERBOSE=1
+      ;;
+    -br | -rb)
+      BUILD=1
+      RUN=1
       ;;
     -- )
       IS_IN_RUN_ARGS=1
@@ -117,4 +147,10 @@ fi
 
 if [ $RUN -eq 1 ]; then
   run "$WORKING_PATH" "$COMPILED_CLASS" "$RUN_ARGS"
+fi
+
+if [ $BUILD -eq 0 ] && [ $RUN -eq 0 ]; then
+  echo "Please specify an option, ether --build or --run"
+  help
+  exit 1
 fi
