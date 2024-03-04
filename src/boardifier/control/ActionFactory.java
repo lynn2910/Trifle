@@ -23,7 +23,7 @@ public class ActionFactory {
             GameAction remove = new RemoveFromContainerAction(model, element);
             list.addSingleAction(remove);
         }
-        // create the put in container action,if possible
+        // create the put in container action, if possible
         if (containerDest != null) {
             // generate the action + animation
             GameAction put = new PutInContainerAction(model, element, nameContainerDest, rowDest, colDest);
