@@ -30,6 +30,7 @@ public class HoleBoard extends ContainerElement {
             }
         }
     }
+
     public List<Point> computeValidCells(int number) {
         List<Point> lst = new ArrayList<>();
          /*

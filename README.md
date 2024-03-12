@@ -1,4 +1,4 @@
-# Trifle
+# TrifleConsole
 
 Test de protection de branches
 

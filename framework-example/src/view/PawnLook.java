@@ -1,7 +1,6 @@
 package view;
 
 import boardifier.model.GameElement;
-import boardifier.view.ConsoleColor;
 import boardifier.view.ElementLook;
 import model.Pawn;
 
