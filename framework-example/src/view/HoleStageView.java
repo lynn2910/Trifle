@@ -1,12 +1,12 @@
 package view;
 
-import boardifier.control.Logger;
-import boardifier.model.GameStageModel;
-import boardifier.view.ClassicBoardLook;
-import boardifier.view.ContainerLook;
-import boardifier.view.GameStageView;
+import trifle.boardifier.control.Logger;
+import trifle.boardifier.model.GameStageModel;
+import trifle.boardifier.view.ClassicBoardLook;
+import trifle.boardifier.view.ContainerLook;
+import trifle.boardifier.view.GameStageView;
 
-import boardifier.view.TextLook;
+import trifle.boardifier.view.TextLook;
 import model.HoleStageModel;
 
 /**

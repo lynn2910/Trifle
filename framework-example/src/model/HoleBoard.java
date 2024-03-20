@@ -1,8 +1,8 @@
 package model;
 
-import boardifier.control.Logger;
-import boardifier.model.GameStageModel;
-import boardifier.model.ContainerElement;
+import trifle.boardifier.control.Logger;
+import trifle.boardifier.model.GameStageModel;
+import trifle.boardifier.model.ContainerElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,7 @@ public class HoleBoard extends ContainerElement {
             }
         }
     }
+
     public List<Point> computeValidCells(int number) {
         List<Point> lst = new ArrayList<>();
          /*

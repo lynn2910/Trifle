@@ -1,8 +1,8 @@
 package view;
 
-import boardifier.control.Logger;
-import boardifier.model.ContainerElement;
-import boardifier.view.GridLook;
+import trifle.boardifier.control.Logger;
+import trifle.boardifier.model.ContainerElement;
+import trifle.boardifier.view.GridLook;
 
 /**
  * Red pot inherits from GridLook but overrides the renderBorders() method

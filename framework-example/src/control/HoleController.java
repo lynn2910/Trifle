@@ -1,14 +1,14 @@
 package control;
 
-import boardifier.control.ActionFactory;
-import boardifier.control.ActionPlayer;
-import boardifier.control.Controller;
-import boardifier.model.GameElement;
-import boardifier.model.ContainerElement;
-import boardifier.model.Model;
-import boardifier.model.Player;
-import boardifier.model.action.ActionList;
-import boardifier.view.View;
+import trifle.boardifier.control.ActionFactory;
+import trifle.boardifier.control.ActionPlayer;
+import trifle.boardifier.control.Controller;
+import trifle.boardifier.model.GameElement;
+import trifle.boardifier.model.ContainerElement;
+import trifle.boardifier.model.Model;
+import trifle.boardifier.model.Player;
+import trifle.boardifier.model.action.ActionList;
+import trifle.boardifier.view.View;
 import model.HoleStageModel;
 
 import java.io.BufferedReader;

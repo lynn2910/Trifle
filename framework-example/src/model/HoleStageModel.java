@@ -1,6 +1,6 @@
 package model;
 
-import boardifier.model.*;
+import trifle.boardifier.model.*;
 
 /**
  * HoleStageModel defines the model for the single stage in "The Hole". Indeed,

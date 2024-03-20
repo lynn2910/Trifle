@@ -1,9 +1,9 @@
 package model;
 
-import boardifier.model.ContainerElement;
-import boardifier.model.GameStageModel;
-import boardifier.model.StageElementsFactory;
-import boardifier.model.TextElement;
+import trifle.boardifier.model.ContainerElement;
+import trifle.boardifier.model.GameStageModel;
+import trifle.boardifier.model.StageElementsFactory;
+import trifle.boardifier.model.TextElement;
 
 /**
  * HoleStageFactory must create the game elements that are defined in HoleStageModel

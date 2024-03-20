@@ -26,6 +26,8 @@ function build() {
     echo "Compiling..."
   fi
 
+  find . -name "*.class" -type f -delete
+
   if [ -z "$WORKING_PATH" ]; then
     javac -cp 'src' -d $OUTPUT_DIR "src/${COMPILED_CLASS}.java"
   else
