@@ -1,9 +1,9 @@
-import boardifier.model.GameException;
-import boardifier.view.View;
+import trifle.boardifier.model.GameException;
+import trifle.boardifier.view.View;
 import control.HoleController;
 
-import boardifier.control.StageFactory;
-import boardifier.model.Model;
+import trifle.boardifier.control.StageFactory;
+import trifle.boardifier.model.Model;
 
 public class HoleConsole {
 

@@ -1,7 +1,7 @@
 package view;
 
-import boardifier.model.ContainerElement;
-import boardifier.view.TableLook;
+import trifle.boardifier.model.ContainerElement;
+import trifle.boardifier.view.TableLook;
 
 /**
  * Black pot inherits from TableLook, using the constructor for

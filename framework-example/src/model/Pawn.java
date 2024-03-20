@@ -1,8 +1,8 @@
 package model;
 
-import boardifier.model.ElementTypes;
-import boardifier.model.GameElement;
-import boardifier.model.GameStageModel;
+import trifle.boardifier.model.ElementTypes;
+import trifle.boardifier.model.GameElement;
+import trifle.boardifier.model.GameStageModel;
 
 /**
  * A basic pawn element, with only 2 fixed parameters : number and color

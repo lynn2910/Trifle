@@ -1,7 +1,7 @@
 package view;
 
-import boardifier.model.GameElement;
-import boardifier.view.ElementLook;
+import trifle.boardifier.model.GameElement;
+import trifle.boardifier.view.ElementLook;
 import model.Pawn;
 
 public class PawnLook extends ElementLook {

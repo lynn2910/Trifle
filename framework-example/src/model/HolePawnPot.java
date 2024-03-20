@@ -1,7 +1,7 @@
 package model;
 
-import boardifier.model.GameStageModel;
-import boardifier.model.ContainerElement;
+import trifle.boardifier.model.GameStageModel;
+import trifle.boardifier.model.ContainerElement;
 
 public class HolePawnPot extends ContainerElement {
     public HolePawnPot(int x, int y, GameStageModel gameStageModel) {
