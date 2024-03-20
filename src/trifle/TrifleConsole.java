@@ -7,7 +7,7 @@ public class TrifleConsole {
         Tui tui;
         if (args.length < 1) {
             tui = new Tui();
-            tui.draw();
+            tui.run();
         }
     }
 }
