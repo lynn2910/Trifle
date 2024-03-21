@@ -1,6 +1,7 @@
 package trifle.tui;
 
 import trifle.boardifier.view.ConsoleColor;
+import trifle.rules.BotStrategy;
 import trifle.rules.GameMode;
 import trifle.rules.PlayerMode;
 
@@ -9,20 +10,21 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * TODO add the configuration of the bot.s strategy.ies
- * IDEA add the "reset" action?
+ * TODO Ecrire la documentation
  */
 public class Tui {
     private List<String> playerNames = new ArrayList<>();
+    private List<BotStrategy> botStrategies = new ArrayList<>();
     private GameMode gameMode;
     private PlayerMode playerMode;
 
     private final Scanner scanner = new Scanner(System.in);
 
     private void reset() {
-        this.gameMode = null;
-        this.playerMode = null;
-        this.playerNames = new ArrayList<>();
+        this.gameMode      = null;
+        this.playerMode    = null;
+        this.playerNames   = new ArrayList<>();
+        this.botStrategies = new ArrayList<>();
     }
 
     /**
@@ -35,8 +37,9 @@ public class Tui {
         System.out.println("(1). Définir le mode de jeu");
         System.out.println("(2). Définir le mode de joueur (humain ou ordinateur)");
         System.out.println("(3). Définir le nom du/des joueur(s)");
-        System.out.println("(4). Afficher la configuration actuelle");
-        System.out.println("(5). Lancer la partie");
+        System.out.println("(4). Définir la/les stratégie.s du/des bot.s");
+        System.out.println("(5). Afficher la configuration actuelle");
+        System.out.println("(6). Lancer la partie");
 
         System.out.println("Entrez 'q' pour quitter");
         System.out.print("> ");
@@ -91,13 +94,17 @@ public class Tui {
                     this.definePlayers();
                     break;
                 }
-                // On affiche la configuration actuelle
                 case "4": {
+                    this.defineBotStrategies();
+                    break;
+                }
+                // On affiche la configuration actuelle
+                case "5": {
                     this.showActualConfiguration();
                     break;
                 }
                 // Lancer la partie
-                case "5": {
+                case "6": {
                     if (isConfigReady())
                         run = false;
                     else
@@ -236,7 +243,7 @@ public class Tui {
         while (true) {
             System.out.println();
             System.out.println("Définition du mode de joueurs");
-            System.out.println(ConsoleColor.RED + "Les joueurs enregistré seront supprimé." + ConsoleColor.RESET);
+            System.out.println(ConsoleColor.RED + "Les joueurs et bots enregistré seront supprimé." + ConsoleColor.RESET);
             System.out.println("Modes de joueurs disponibles:");
             System.out.println("(a) " + PlayerMode.HumanVsHuman);
             System.out.println("(b) " + PlayerMode.HumanVsComputer);
@@ -255,12 +262,14 @@ public class Tui {
                 case "b": {
                     this.playerMode = PlayerMode.HumanVsComputer;
                     System.out.println("\nMode de joueur sélectionné: " + ConsoleColor.WHITE_BOLD + PlayerMode.HumanVsComputer + ConsoleColor.RESET);
+                    System.out.println("Par défaut, les bots utiliseront la stratégie " + ConsoleColor.WHITE_BOLD + BotStrategy.DEFAULT + ConsoleColor.RESET);
                     this.resetPlayers();
                     return;
                 }
                 case "c": {
                     this.playerMode = PlayerMode.ComputerVsComputer;
                     System.out.println("\nMode de joueur sélectionné: " + ConsoleColor.WHITE_BOLD + PlayerMode.ComputerVsComputer + ConsoleColor.RESET);
+                    System.out.println("Par défaut, les bots utiliseront la stratégie " + ConsoleColor.WHITE_BOLD + BotStrategy.DEFAULT + ConsoleColor.RESET);
                     this.resetPlayers();
                     return;
                 }
@@ -272,10 +281,77 @@ public class Tui {
     }
 
     /**
+     * Set the bot strategy
+     */
+    private void defineBotStrategies(){
+        System.out.println();
+        if (this.playerMode == null) {
+            System.out.println(ConsoleColor.RED + "Vous ne pouvez pas configurer les stratégies des bots avant d'avoir choisi le mode de joueurs." + ConsoleColor.RESET);
+            return;
+        }
+        if (this.playerMode == PlayerMode.HumanVsHuman) {
+            System.out.println("Le mode " + this.playerMode + " ne fait jouer aucun bot, aucune stratégie n'est à définir.");
+            return;
+        }
+
+        System.out.println(ConsoleColor.RED + "Toutes les stratégies des bots ont été réinitialisées." + ConsoleColor.RESET);
+        this.resetBotStrategies();
+
+        int nb = switch (this.playerMode) {
+            case HumanVsComputer -> 1;
+            case ComputerVsComputer -> 2;
+            default -> 0;
+        };
+
+        for (int i = 0; i < nb; i++)
+            this.setSingleBotStrategy(i + 1);
+
+        if (nb > 1)
+            System.out.println(ConsoleColor.GREEN + "Toutes les stratégies des bots ont été définies" + ConsoleColor.RESET);
+        else
+            System.out.println(ConsoleColor.GREEN + "La stratégie du bot a été définie" + ConsoleColor.RESET);
+    }
+
+    private void setSingleBotStrategy(int n){
+        while (true) {
+            System.out.println("Les stratégies sont:");
+            System.out.println("(a). " + BotStrategy.BanoffeePie);
+            System.out.println("    " + BotStrategy.BanoffeePie.getDescription());
+            System.out.println("(b). " + BotStrategy.SecondStrategy);
+            System.out.println("    " + BotStrategy.SecondStrategy.getDescription());
+            System.out.print("Quel sera la stratégie du bot n°" + n + "? ");
+
+            String l = scanner.nextLine().trim().toLowerCase();
+
+            switch (l) {
+                case "a": {
+                    this.botStrategies.add(BotStrategy.BanoffeePie);
+                    System.out.println("La stratégie du bot n°" + n + " sera " + ConsoleColor.WHITE_BOLD + BotStrategy.BanoffeePie + ConsoleColor.RESET);
+                    return;
+                }
+                case "b": {
+                    this.botStrategies.add(BotStrategy.SecondStrategy);
+                    System.out.println("La stratégie du bot n°" + n + " sera " + ConsoleColor.WHITE_BOLD + BotStrategy.SecondStrategy + ConsoleColor.RESET);
+                    return;
+                }
+                default:
+                    System.out.println(ConsoleColor.RED + "Je ne comprend pas votre choix" + ConsoleColor.RESET);
+            }
+        }
+    }
+
+    /**
      * Reset the player list for this configuration
      */
     private void resetPlayers(){
         this.playerNames.clear();
+    }
+
+    /**
+     * Reset the player list for this configuration
+     */
+    private void resetBotStrategies(){
+        this.botStrategies.clear();
     }
 
     /**
@@ -308,11 +384,30 @@ public class Tui {
                 + (this.playerMode == null ? ConsoleColor.WHITE_BOLD + "Aucun mode de joueur défini" + ConsoleColor.RESET : this.playerMode));
 
         System.out.print  ("  Joueurs enregistré: ");
-        if (this.playerNames.isEmpty()) {
+        if (this.playerNames == null || this.playerNames.isEmpty()) {
             System.out.println(ConsoleColor.WHITE_BOLD + "Aucun joueur enregistré" + ConsoleColor.RESET);
         } else {
             String playerList = String.join(", ", this.playerNames);
             System.out.println(playerList);
+        }
+        System.out.print  ("  Stratégies de bots: ");
+        if (this.botStrategies == null || this.botStrategies.isEmpty()) {
+            System.out.println(ConsoleColor.WHITE_BOLD + "Aucune stratégie de bots définie, la stratégie par défaut est " + ConsoleColor.RESET + BotStrategy.DEFAULT);
+        } else {
+            switch (this.playerMode) {
+                case HumanVsHuman: {
+                    System.out.println("\nAlors... Vous n'êtes pas sensé être là...");
+                    break;
+                }
+                case HumanVsComputer: {
+                    System.out.println("Bot <" + this.botStrategies.get(0) + ">");
+                    break;
+                }
+                case ComputerVsComputer: {
+                    System.out.print("Bot n°1 <" + this.botStrategies.get(0) + ">, Bot n°2 <" + this.botStrategies.get(1) + ">");
+                    break;
+                }
+            }
         }
 
         System.out.println();
