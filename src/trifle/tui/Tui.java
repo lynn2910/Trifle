@@ -13,11 +13,17 @@ import java.util.Scanner;
  * IDEA add the "reset" action?
  */
 public class Tui {
-    private final List<String> playerNames = new ArrayList<>();
+    private List<String> playerNames = new ArrayList<>();
     private GameMode gameMode;
     private PlayerMode playerMode;
 
     private final Scanner scanner = new Scanner(System.in);
+
+    private void reset() {
+        this.gameMode = null;
+        this.playerMode = null;
+        this.playerNames = new ArrayList<>();
+    }
 
     /**
      * Draw the navigation
@@ -55,6 +61,8 @@ public class Tui {
      * The main loop
      */
     public void run() {
+        this.reset();
+
         boolean run = true;
 
         while (run){
