@@ -8,14 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * TODO add the configuration of the bot.s strategy.ies
+ */
 public class Tui {
-    private List<String> playerNames = new ArrayList<>();
+    private final List<String> playerNames = new ArrayList<>();
     private GameMode gameMode;
     private PlayerMode playerMode;
 
     private final Scanner scanner = new Scanner(System.in);
 
-    private void draw(){
+    /**
+     * Draw the navigation
+     */
+    private void drawNavMenu(){
         System.out.println();
         System.out.println("Vous êtes dans le menu de configuration interactif.\nSélectionnez une option");
 
@@ -29,15 +35,29 @@ public class Tui {
         System.out.print("> ");
     }
 
+    /**
+     * Check whether the configuration is ready
+     * @return true if the config is ready to be played, false elsewhere
+     */
     private boolean isConfigReady(){
-        return false; // TODO
+        if (this.gameMode == null || this.playerMode == null)
+            return false;
+
+        return switch (this.playerMode) {
+            case HumanVsHuman -> this.playerNames.size() == 2;
+            case HumanVsComputer -> this.playerNames.size() == 1;
+            case ComputerVsComputer -> this.playerNames.isEmpty();
+        };
     }
 
+    /**
+     * The main loop
+     */
     public void run() {
         boolean run = true;
 
         while (run){
-            this.draw();
+            this.drawNavMenu();
             String line = scanner.nextLine().toLowerCase().trim();
 
             switch (line) {
@@ -59,12 +79,12 @@ public class Tui {
                 // Définir les joueurs.
                 // On va afficher la liste, la réinitialiser puis demander le nombre N de joueurs requis pour le mode de joueur
                 case "3": {
-                    // TODO
+                    this.definePlayers();
                     break;
                 }
                 // On affiche la configuration actuelle
                 case "4": {
-                    // TODO
+                    this.showActualConfiguration();
                     break;
                 }
                 // Lancer la partie
@@ -72,7 +92,7 @@ public class Tui {
                     if (isConfigReady())
                         run = false;
                     else
-                        this.notConfiguredTui();
+                        this.notConfigured();
 
                     break;
                 }
@@ -88,16 +108,87 @@ public class Tui {
         }
     }
 
-    private void setPlayerMode(){}
+    /**
+     * Define the players
+     */
+    private void definePlayers(){
+        if (this.playerMode == null) {
+            System.out.println(ConsoleColor.RED + "Vous devez sélectionner le mode de joueurs avant de configurer les joueurs." + ConsoleColor.RESET);
+            return;
+        }
 
+        int playersNb = switch (this.playerMode) {
+            case HumanVsHuman -> 2;
+            case HumanVsComputer -> 1;
+            case ComputerVsComputer -> 0;
+        };
+
+        if (playersNb < 1) {
+            System.out.println(ConsoleColor.YELLOW + "Aucun joueur humain n'est requis pour ce mode de joueur." + ConsoleColor.RESET);
+            return;
+        }
+
+        // On définit les joueurs
+        for (int i = 0; i < playersNb; i++)
+            this.addPlayer(i + 1);
+
+        System.out.println(ConsoleColor.GREEN + "Tout les joueurs ont été enregistré." + ConsoleColor.RESET);
+    }
+
+    /**
+     * Add a single player
+     * @param nb The number of the player (to say "Player n°<nb>"), it's purely aesthetic
+     */
+    private void addPlayer(int nb){
+        System.out.println("\nConfiguration du joueur n°" + nb);
+
+        boolean r = true;
+        String name = "";
+        while (r) {
+            System.out.print("Quel est son nom? ");
+
+            name = scanner.nextLine().trim();
+            r = !this.yesOrNo("Le nom du joueur n°" + nb + " sera '" + name + "', êtes-vous sûr? (y/n) ");
+        }
+        this.playerNames.add(name);
+        System.out.println("Le nom du joueur n°" + nb + " sera '" + name + "'");
+    }
+
+    /**
+     * A helper function to check if the user says yes or no
+     * @param msg The message
+     * @return true for yes, false for no
+     */
+    private boolean yesOrNo(String msg){
+        while (true) {
+            System.out.print(msg);
+            String l = scanner.nextLine().trim().toLowerCase();
+
+            if (l.isEmpty())
+                return true;
+
+            switch (l) {
+                case "y": case "yes": case "o": case "oui":
+                    return true;
+                case "n": case "no": case "non":
+                    return false;
+                default:
+                    System.out.println(ConsoleColor.RED + "Vous devez répondre Y ou N." + ConsoleColor.RESET);
+            }
+        }
+    }
+
+    /**
+     * Set the game mode for the game
+     */
     private void setGameMode(){
         while (true){
             System.out.println();
             System.out.println("Définition du mode de jeu");
             System.out.println("Modes de jeu disponibles:");
-            System.out.println("(a) Rapide\n      Une seule manche");
-            System.out.println("(b) Standard"); // TODO ajouter les infos de chaque mode de jeu...
-            System.out.println("(c) Marathon");
+            System.out.println("(a) " + GameMode.Fast     + "\n      " + GameMode.Fast.getDescription());
+            System.out.println("(b) " + GameMode.Standard + "\n      " + GameMode.Standard.getDescription());
+            System.out.println("(c) " + GameMode.Marathon + "\n      " + GameMode.Marathon.getDescription());
             System.out.println("Tapez 'exit' pour quitter ce menu");
             System.out.print(">> ");
 
@@ -105,17 +196,17 @@ public class Tui {
             switch (selection){
                 case "a": {
                     this.gameMode = GameMode.Fast;
-                    System.out.println("\nMode de jeu sélectionné: " + ConsoleColor.WHITE_BOLD + "Rapide" + ConsoleColor.RESET);
+                    System.out.println("\nMode de jeu sélectionné: " + ConsoleColor.WHITE_BOLD + GameMode.Fast + ConsoleColor.RESET);
                     return;
                 }
                 case "b": {
                     this.gameMode = GameMode.Standard;
-                    System.out.println("\nMode de jeu sélectionné: " + ConsoleColor.WHITE_BOLD + "Standard" + ConsoleColor.RESET);
+                    System.out.println("\nMode de jeu sélectionné: " + ConsoleColor.WHITE_BOLD + GameMode.Standard + ConsoleColor.RESET);
                     return;
                 }
                 case "c": {
                     this.gameMode = GameMode.Marathon;
-                    System.out.println("\nMode de jeu sélectionné: " + ConsoleColor.WHITE_BOLD + "Marathon" + ConsoleColor.RESET);
+                    System.out.println("\nMode de jeu sélectionné: " + ConsoleColor.WHITE_BOLD + GameMode.Marathon + ConsoleColor.RESET);
                     return;
                 }
                 case "exit": {
@@ -129,8 +220,60 @@ public class Tui {
         }
     }
 
-    private void notConfiguredTui(){
-        System.out.println(ConsoleColor.RED + "Certains éléments doivent être configurés:");
+    /**
+     * Set the player mode for the game
+     */
+    private void setPlayerMode(){
+        while (true) {
+            System.out.println();
+            System.out.println("Définition du mode de joueurs");
+            System.out.println(ConsoleColor.RED + "Les joueurs enregistré seront supprimé." + ConsoleColor.RESET);
+            System.out.println("Modes de joueurs disponibles:");
+            System.out.println("(a) " + PlayerMode.HumanVsHuman);
+            System.out.println("(b) " + PlayerMode.HumanVsComputer);
+            System.out.println("(c) " + PlayerMode.ComputerVsComputer);
+            System.out.println("Tapez 'exit' pour quitter ce menu");
+            System.out.print(">> ");
+
+            String selection = scanner.nextLine().toLowerCase().trim();
+            switch (selection) {
+                case "a": {
+                    this.playerMode = PlayerMode.HumanVsHuman;
+                    System.out.println("\nMode de joueur sélectionné: " + ConsoleColor.WHITE_BOLD + PlayerMode.HumanVsHuman + ConsoleColor.RESET);
+                    this.resetPlayers();
+                    return;
+                }
+                case "b": {
+                    this.playerMode = PlayerMode.HumanVsComputer;
+                    System.out.println("\nMode de joueur sélectionné: " + ConsoleColor.WHITE_BOLD + PlayerMode.HumanVsComputer + ConsoleColor.RESET);
+                    this.resetPlayers();
+                    return;
+                }
+                case "c": {
+                    this.playerMode = PlayerMode.ComputerVsComputer;
+                    System.out.println("\nMode de joueur sélectionné: " + ConsoleColor.WHITE_BOLD + PlayerMode.ComputerVsComputer + ConsoleColor.RESET);
+                    this.resetPlayers();
+                    return;
+                }
+                default: {
+                    System.out.println(ConsoleColor.RED + "Votre sélection n'est pas valide." + ConsoleColor.RESET);
+                }
+            }
+        }
+    }
+
+    /**
+     * Reset the player list for this configuration
+     */
+    private void resetPlayers(){
+        this.playerNames.clear();
+    }
+
+    /**
+     * Print the required information to start the game
+     */
+    private void notConfigured(){
+        System.out.println(ConsoleColor.RED + "Certains éléments doivent être configurez:");
         if (this.gameMode == null)
             System.out.println("- Mode de jeu (rapide, standard, marathon)");
         if (this.playerMode == null)
@@ -145,6 +288,30 @@ public class Tui {
         System.out.print(ConsoleColor.RESET);
     }
 
+    /**
+     * Show the actual configuration in a formatted-way
+     */
+    private void showActualConfiguration(){
+        System.out.println("\nConfiguration actuelle:");
+        System.out.println("  Mode de jeu:        "
+                + (this.gameMode == null ? ConsoleColor.WHITE_BOLD + "Aucun mode de jeu défini" + ConsoleColor.RESET : this.gameMode));
+        System.out.println("  Mode de joueur:     "
+                + (this.playerMode == null ? ConsoleColor.WHITE_BOLD + "Aucun mode de joueur défini" + ConsoleColor.RESET : this.playerMode));
+
+        System.out.print  ("  Joueurs enregistré: ");
+        if (this.playerNames.isEmpty()) {
+            System.out.println(ConsoleColor.WHITE_BOLD + "Aucun joueur enregistré" + ConsoleColor.RESET);
+        } else {
+            String playerList = String.join(", ", this.playerNames);
+            System.out.println(playerList);
+        }
+
+        System.out.println();
+    }
+
+    /**
+     * Et paf ça fait des chocapics
+     */
     private void recette(){
         System.out.println("\n");
         System.out.println("\033[1mIngrédients:\033[0m");
@@ -176,6 +343,18 @@ public class Tui {
         System.out.println("    * Râper le chocolat noir et le parsemer sur la crème Chantilly.");
         System.out.println("    * Placer le trifle au réfrigérateur pendant au moins 2 heures avant de servir.");
         System.out.println();
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
+    }
+
+    public PlayerMode getPlayerMode() {
+        return playerMode;
+    }
+
+    public List<String> getPlayerNames() {
+        return playerNames;
     }
 
     public Tui() {}
