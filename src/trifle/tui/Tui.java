@@ -148,7 +148,7 @@ public class Tui {
             System.out.print("Quel est son nom? ");
 
             name = scanner.nextLine().trim();
-            r = !this.yesOrNo("Le nom du joueur n°" + nb + " sera '" + name + "', êtes-vous sûr? (y/n) ");
+            r = !this.yesOrNo("Le nom du joueur n°" + nb + " sera '" + name + "', êtes-vous sûr? (Y/n) ");
         }
         this.playerNames.add(name);
         System.out.println("Le nom du joueur n°" + nb + " sera '" + name + "'");
