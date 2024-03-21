@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 /**
  * TODO add the configuration of the bot.s strategy.ies
+ * IDEA add the "reset" action?
  */
 public class Tui {
     private final List<String> playerNames = new ArrayList<>();
