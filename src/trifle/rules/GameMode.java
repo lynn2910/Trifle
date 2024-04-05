@@ -17,12 +17,22 @@ public enum GameMode {
      */
     Marathon;
 
-    public String toString(GameMode mode) {
-        return switch (mode) {
+    /**
+     * @return The name
+     */
+    public String toString() {
+        return switch (this) {
             case Fast -> "Rapide";
             case Standard -> "Standard";
             case Marathon -> "Marathon";
-            default -> "Mode inconnu";
+        };
+    }
+
+    public String getDescription(){
+        // TODO ajouter les descriptions des différents modes de jeu
+        return switch (this) {
+            case Fast ->  "Une manche";
+            default -> "";
         };
     }
 }

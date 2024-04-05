@@ -17,8 +17,8 @@ public enum PlayerMode {
      */
     ComputerVsComputer;
 
-    public String toString(PlayerMode mode) {
-        return switch (mode) {
+    public String toString() {
+        return switch (this) {
             case HumanVsHuman -> "Joueur contre Joueur";
             case HumanVsComputer -> "Joueur contre Ordinateur";
             case ComputerVsComputer -> "Ordinateur contre Ordinateur";
