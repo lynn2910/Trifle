@@ -1,9 +1,9 @@
-package trifle.boardifier.model.action;
+package boardifier.model.action;
 
-import trifle.boardifier.model.GameElement;
-import trifle.boardifier.model.Model;
-import trifle.boardifier.model.animation.AnimationTypes;
-import trifle.boardifier.model.animation.WaitAnimation;
+import boardifier.model.GameElement;
+import boardifier.model.Model;
+import boardifier.model.animation.AnimationTypes;
+import boardifier.model.animation.WaitAnimation;
 
 
 public class RemoveFromContainerAction extends GameAction {

@@ -1,7 +1,7 @@
-package trifle.boardifier.view;
+package boardifier.view;
 
-import trifle.boardifier.control.Logger;
-import trifle.boardifier.model.ContainerElement;
+import boardifier.control.Logger;
+import boardifier.model.ContainerElement;
 
 /**
  * ClassicBoardLook is a chess like board, with optional coordinate system to show, using A, B, C for columns

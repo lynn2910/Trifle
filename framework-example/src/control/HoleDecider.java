@@ -1,11 +1,11 @@
 package control;
 
-import trifle.boardifier.control.ActionFactory;
-import trifle.boardifier.control.Controller;
-import trifle.boardifier.control.Decider;
-import trifle.boardifier.model.GameElement;
-import trifle.boardifier.model.Model;
-import trifle.boardifier.model.action.ActionList;
+import boardifier.control.ActionFactory;
+import boardifier.control.Controller;
+import boardifier.control.Decider;
+import boardifier.model.GameElement;
+import boardifier.model.Model;
+import boardifier.model.action.ActionList;
 import model.HoleBoard;
 import model.HolePawnPot;
 import model.HoleStageModel;

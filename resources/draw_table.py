@@ -1,7 +1,8 @@
 manche = 1
-joueurs = { 0: 1, 1: 0 }
+joueurs = {0: 1, 1: 0}
 
 colors = [41, 42, 43, 44, 45, 46, 47, 100]
+
 
 def point_or_points(n):
     if n == 1:
@@ -9,23 +10,47 @@ def point_or_points(n):
     else:
         return "points"
 
-print("╔══════════════════════════╗")
+
+print("╔" + ("═" * 7) * 8 + "╗")
+
+
+# ║
+
+def get_color(offset: int):
+    return colors[offset % len(colors)]
+
+
+def draw_line(index: int):
+    # Because each case has a height of 3 and a width of 6
+    for j in range(0, 3):
+        if j == 1 and (index == 0 or index == 7):
+            s = ""
+            for k in range(0, 8):
+                pawn = " "
+                if index == 7:
+                    pawn = "x"
+                elif index == 0:
+                    pawn = "o"
+
+                c = get_color(index + k)
+                if pawn != " ":
+                    s += f"\u001b[{c}m  \u001b[0m {pawn} \u001b[{c}m  \u001b[0m"
+                else:
+                    s += f"\u001b[{c}m       \u001b[0m"
+            print(f"║{s}║")
+        else:
+            s = ""
+            for k in range(0, 8):
+                s += f"\u001b[{get_color(index + k)}m{' ' * 7}\u001b[0m"
+
+            if j != 2:
+                print(f"║{s}║")
+            else:
+                print(f"║{s}║", end="")
+
 
 for i in range(0, 8):
-    print("║ ", end="")
-
-    for j in range(0, 8):
-        s = "   "
-        if i == 0:
-            s = " x "
-        elif i == 7:
-            s = " o "
-
-        c = colors[(i + j) % len(colors)]
-        s = f"\u001b[1;30;{c}m{s}\u001b[0m"
-        print(s, end = '')
-
-    print(" ║", end="")
+    draw_line(i)
 
     match i:
         case 0:
@@ -37,4 +62,4 @@ for i in range(0, 8):
 
     print()
 
-print("╚══════════════════════════╝")
+print("╚" + ("═" * 7) * 8 + "╝")

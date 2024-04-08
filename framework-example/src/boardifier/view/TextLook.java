@@ -1,7 +1,7 @@
-package trifle.boardifier.view;
+package boardifier.view;
 
-import trifle.boardifier.model.GameElement;
-import trifle.boardifier.model.TextElement;
+import boardifier.model.GameElement;
+import boardifier.model.TextElement;
 
 public class TextLook extends ElementLook {
 

@@ -1,4 +1,4 @@
-package trifle.boardifier.view;
+package boardifier.view;
 
 public class ConsoleColor {
     // Reset

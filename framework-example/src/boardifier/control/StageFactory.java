@@ -1,9 +1,9 @@
-package trifle.boardifier.control;
+package boardifier.control;
 
-import trifle.boardifier.model.GameException;
-import trifle.boardifier.model.GameStageModel;
-import trifle.boardifier.model.Model;
-import trifle.boardifier.view.GameStageView;
+import boardifier.model.GameException;
+import boardifier.model.GameStageModel;
+import boardifier.model.Model;
+import boardifier.view.GameStageView;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

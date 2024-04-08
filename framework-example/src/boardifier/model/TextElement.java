@@ -1,6 +1,6 @@
-package trifle.boardifier.model;
+package boardifier.model;
 
-import trifle.boardifier.model.animation.AnimationStep;
+import boardifier.model.animation.AnimationStep;
 
 
 public class TextElement extends GameElement {

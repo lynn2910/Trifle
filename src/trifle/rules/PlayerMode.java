@@ -25,4 +25,12 @@ public enum PlayerMode {
             default -> "Mode inconnu";
         };
     }
+
+    public int getBotNumber(){
+        return switch (this) {
+            case HumanVsHuman -> 0;
+            case HumanVsComputer -> 1;
+            case ComputerVsComputer -> 2;
+        };
+    }
 }

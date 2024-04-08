@@ -1,4 +1,4 @@
-package trifle.boardifier.model.action;
+package boardifier.model.action;
 
 @FunctionalInterface
 public interface ActionCallback {

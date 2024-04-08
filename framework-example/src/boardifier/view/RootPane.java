@@ -1,8 +1,8 @@
-package trifle.boardifier.view;
+package boardifier.view;
 
-import trifle.boardifier.control.Logger;
-import trifle.boardifier.model.Coord2D;
-import trifle.boardifier.model.GameElement;
+import boardifier.control.Logger;
+import boardifier.model.Coord2D;
+import boardifier.model.GameElement;
 
 import java.util.Collections;
 import java.util.List;

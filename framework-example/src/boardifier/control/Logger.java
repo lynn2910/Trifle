@@ -1,4 +1,4 @@
-package trifle.boardifier.control;
+package boardifier.control;
 
 public class Logger {
 

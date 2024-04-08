@@ -1,7 +1,7 @@
-package trifle.boardifier.model.animation;
+package boardifier.model.animation;
 
-import trifle.boardifier.model.Coord2D;
-import trifle.boardifier.model.Model;
+import boardifier.model.Coord2D;
+import boardifier.model.Model;
 
 public class MoveAnimation extends Animation {
     protected Coord2D start;

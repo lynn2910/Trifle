@@ -1,7 +1,7 @@
-package trifle.boardifier.model.animation;
+package boardifier.model.animation;
 
-import trifle.boardifier.model.Coord2D;
-import trifle.boardifier.model.Model;
+import boardifier.model.Coord2D;
+import boardifier.model.Model;
 
 public class LinearMoveAnimation extends MoveAnimation {
     // type of movement : "move/linearprop" = prop. to the distance => factor is a speed in pixel/frame

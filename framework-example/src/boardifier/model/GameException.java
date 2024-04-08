@@ -1,5 +1,5 @@
 
-package trifle.boardifier.model;
+package boardifier.model;
 
 public class GameException extends Exception {
 

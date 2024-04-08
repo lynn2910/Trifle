@@ -1,6 +1,6 @@
-package trifle.boardifier.view;
+package boardifier.view;
 
-import trifle.boardifier.model.*;
+import boardifier.model.*;
 
 import java.util.ArrayList;
 import java.util.List;

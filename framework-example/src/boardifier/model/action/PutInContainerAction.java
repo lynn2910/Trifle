@@ -1,13 +1,13 @@
-package trifle.boardifier.model.action;
+package boardifier.model.action;
 
-import trifle.boardifier.control.Logger;
-import trifle.boardifier.model.ContainerElement;
-import trifle.boardifier.model.Coord2D;
-import trifle.boardifier.model.GameElement;
-import trifle.boardifier.model.Model;
-import trifle.boardifier.model.animation.AnimationTypes;
-import trifle.boardifier.model.animation.LinearMoveAnimation;
-import trifle.boardifier.model.animation.MoveAnimation;
+import boardifier.control.Logger;
+import boardifier.model.ContainerElement;
+import boardifier.model.Coord2D;
+import boardifier.model.GameElement;
+import boardifier.model.Model;
+import boardifier.model.animation.AnimationTypes;
+import boardifier.model.animation.LinearMoveAnimation;
+import boardifier.model.animation.MoveAnimation;
 
 
 public class PutInContainerAction extends GameAction {

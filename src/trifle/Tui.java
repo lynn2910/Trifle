@@ -1,4 +1,4 @@
-package trifle.tui;
+package trifle;
 
 import trifle.boardifier.view.ConsoleColor;
 import trifle.rules.BotStrategy;
