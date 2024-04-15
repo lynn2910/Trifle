@@ -19,17 +19,6 @@ public class TrifleBoard extends ContainerElement {
             {2, 7, 4, 1, 6, 3, 0, 5},
             {7, 6, 5, 4, 3, 2, 1, 0}
     };
-    
-    //    public static String[] COLORS = new String[]{
-    //           0 CYAN,
-    //           1 BLUE,
-    //           2 PURPLE,
-    //           3 WHITE,
-    //           4 YELLOW,
-    //           5 RED,
-    //           6 GREEN,
-    //           7 BLACK
-    //   };
 
     public TrifleBoard(int x, int y, GameStageModel gameStageModel) {
         super("trifle_board", x, y, 8, 8, gameStageModel);

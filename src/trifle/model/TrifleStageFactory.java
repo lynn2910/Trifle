@@ -35,5 +35,15 @@ public class TrifleStageFactory extends StageElementsFactory {
             cyanPawns.add(new Pawn(colorIndex,Pawn.CYAN_PLAYER,  stageModel));
         }
         stageModel.setCyanPawns(cyanPawns);
+
+        // Create all background cells
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                int colorIndex = TrifleBoard.BOARD[y][x];
+
+                BackgroundCell backgroundCell = new BackgroundCell(colorIndex, stageModel);
+                stageModel.addBackgroundCell(backgroundCell);
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ import trifle.boardifier.model.GameStageModel;
 import trifle.boardifier.view.ClassicBoardLook;
 import trifle.boardifier.view.ElementLook;
 import trifle.boardifier.view.GameStageView;
+import trifle.model.BackgroundCell;
 import trifle.model.TrifleStageModel;
 
 public class TrifleStageView extends GameStageView {
@@ -23,12 +24,11 @@ public class TrifleStageView extends GameStageView {
         ClassicBoardLook boardLook = new ClassicBoardLook(PawnLook.HEIGHT, PawnLook.WIDTH, model.getBoard(), 1, 1, true);
 
         boardLook.setPadding(0);
-        boardLook.setColWidth(PawnLook.WIDTH + 1);
+        boardLook.setPaddingLeft(-4);
+        boardLook.setPaddingRight(1);
+        boardLook.setColWidth(PawnLook.WIDTH + 3);
         boardLook.setRowHeight(PawnLook.HEIGHT + 1);
         addLook(boardLook);
-
-//      TODO pour ajouter la couleur des cases??
-//        boardLook.addInnerLook(..., x, y);
 
         // add look for all pawns
         for (int i = 0; i < 8; i++) {
@@ -37,16 +37,28 @@ public class TrifleStageView extends GameStageView {
             ElementLook bluePawnLook = new PawnLook(bluePawn);
             addLook(bluePawnLook);
             model.getBoard().addElement(bluePawn, 0, i);
-            boardLook.addInnerLook(bluePawnLook, 0, i);
 
             // Add cyan
             GameElement cyanPawn = model.getCyanPlayer().get(i);
             ElementLook cyanPawnLook = new PawnLook(cyanPawn);
             addLook(cyanPawnLook);
             model.getBoard().addElement(cyanPawn, 7, i);
-            boardLook.addInnerLook(cyanPawnLook, 7, i);
         }
 
+        // add look for inners cases (the cell colors)
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                int index = x + y * 8;
+                BackgroundCell backgroundCell = model.getBackgroundCells().get(index);
+
+                ElementLook look = new BackgroundCellLook(backgroundCell);
+
+                addLook(look);
+                boardLook.addInnerLook(look, x, y);
+            }
+        }
+
+        boardLook.updateInners();
 
         Logger.debug("Finished creating game stage looks", this);
     }

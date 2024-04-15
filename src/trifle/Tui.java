@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * TODO Ecrire la documentation
- */
 public class Tui {
     private List<String> playerNames = new ArrayList<>();
     private List<BotStrategy> botStrategies = new ArrayList<>();

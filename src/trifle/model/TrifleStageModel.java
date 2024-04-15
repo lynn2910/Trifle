@@ -12,14 +12,17 @@ public class TrifleStageModel extends GameStageModel {
     private List<Pawn> bluePlayer;
     private List<Pawn> cyanPlayer;
 
+    private List<BackgroundCell> backgroundCells;
+
     private Optional<Point> lastBluePlayerMove;
     private Optional<Point> lastCyanPlayerMove;
 
     public TrifleStageModel(String name, Model model) {
         super(name, model);
 
-        this.bluePlayer = new ArrayList<>();
-        this.cyanPlayer = new ArrayList<>();
+        this.bluePlayer      = new ArrayList<>();
+        this.cyanPlayer      = new ArrayList<>();
+        this.backgroundCells = new ArrayList<>();
     }
 
     public StageElementsFactory getDefaultElementFactory() {
@@ -47,10 +50,18 @@ public class TrifleStageModel extends GameStageModel {
         for (Pawn pawn: cyanPawns) addElement(pawn);
     }
 
+    public void addBackgroundCell(BackgroundCell backgroundCell) {
+        this.backgroundCells.add(backgroundCell);
+    }
+    public List<BackgroundCell> getBackgroundCells() {
+        return this.backgroundCells;
+    }
+
     public Optional<Point> getLastBluePlayerMove() { return this.lastBluePlayerMove; }
     public void setLastBluePlayerMove(Point lastBluePlayerMove) {
         this.lastBluePlayerMove = Optional.of(lastBluePlayerMove);
     }
+
     public Optional<Point> getLastCyanPlayerMove() { return this.lastCyanPlayerMove; }
     public void setLastCyanPlayerMove(Point lastCyanPlayerMove) {
         this.lastCyanPlayerMove = Optional.of(lastCyanPlayerMove);
