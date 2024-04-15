@@ -11,7 +11,7 @@ def point_or_points(n):
         return "points"
 
 
-print("╔" + ("═" * 7) * 8 + "╗")
+print("╔" + ("═" * 7) * 8 + ("═" * 7) + "╗")
 
 
 # ║
@@ -34,19 +34,19 @@ def draw_line(index: int):
 
                 c = get_color(index + k)
                 if pawn != " ":
-                    s += f"\u001b[{c}m  \u001b[0m {pawn} \u001b[{c}m  \u001b[0m"
+                    s += f"\u001b[{c}m  \u001b[0m {pawn} \u001b[{c}m  \u001b[0m║"
                 else:
-                    s += f"\u001b[{c}m       \u001b[0m"
-            print(f"║{s}║")
+                    s += f"\u001b[{c}m       \u001b[0m║"
+            print(f"║{s}")
         else:
             s = ""
             for k in range(0, 8):
-                s += f"\u001b[{get_color(index + k)}m{' ' * 7}\u001b[0m"
+                s += f"\u001b[{get_color(index + k)}m{' ' * 7}\u001b[0m║"
 
             if j != 2:
-                print(f"║{s}║")
+                print(f"║{s}")
             else:
-                print(f"║{s}║", end="")
+                print(f"║{s}", end="")
 
 
 for i in range(0, 8):
@@ -62,4 +62,4 @@ for i in range(0, 8):
 
     print()
 
-print("╚" + ("═" * 7) * 8 + "╝")
+print("╚" + ("═" * 7) * 8 + ("═" * 7) + "╝")

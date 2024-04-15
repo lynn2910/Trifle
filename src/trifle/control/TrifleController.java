@@ -29,7 +29,8 @@ public class TrifleController extends Controller {
 
         this.update();
 
-        while(!this.model.isEndStage()) {
+        // FIXME
+        while((!this.model.isEndStage()) && false) {
             this.playTurn();
             this.endOfTurn();
             this.update();
@@ -48,5 +49,10 @@ public class TrifleController extends Controller {
         this.endGame();
     }
 
-    private void playTurn() {}
+    private void playTurn() {
+        // TODO
+
+//        ActionList actions = ActionFactory.generatePutInContainer(model, pawn, "trifle_board", row, col);
+
+    }
 }

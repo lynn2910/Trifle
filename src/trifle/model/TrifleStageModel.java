@@ -1,15 +1,44 @@
 package trifle.model;
 
-import trifle.boardifier.model.GameStageModel;
-import trifle.boardifier.model.Model;
-import trifle.boardifier.model.StageElementsFactory;
+import trifle.boardifier.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrifleStageModel extends GameStageModel {
+    TrifleBoard board;
+    private List<Pawn> bluePlayer;
+    private List<Pawn> cyanPlayer;
+
     public TrifleStageModel(String name, Model model) {
         super(name, model);
+
+        this.bluePlayer = new ArrayList<>();
+        this.cyanPlayer = new ArrayList<>();
     }
 
     public StageElementsFactory getDefaultElementFactory() {
         return new TrifleStageFactory(this);
+    }
+
+    public ContainerElement getBoard() {
+        return board;
+    }
+
+    public void setBoard(TrifleBoard board) {
+        this.board = board;
+        addContainer(board);
+    }
+
+    public List<Pawn> getBluePlayer() { return this.bluePlayer; }
+    public void setBluePawns(List<Pawn> bluePawns) {
+        this.bluePlayer = bluePawns;
+        for (Pawn pawn: bluePawns) addElement(pawn);
+    }
+
+    public List<Pawn> getCyanPlayer() { return this.cyanPlayer; }
+    public void setCyanPawns(List<Pawn> cyanPawns) {
+        this.cyanPlayer = cyanPawns;
+        for (Pawn pawn: cyanPawns) addElement(pawn);
     }
 }
