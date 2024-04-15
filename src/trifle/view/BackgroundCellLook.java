@@ -1,6 +1,6 @@
 package trifle.view;
 
-import boardifier.view.ConsoleColor;
+import trifle.boardifier.view.ConsoleColor;
 import trifle.boardifier.model.GameElement;
 import trifle.boardifier.view.ElementLook;
 import trifle.model.BackgroundCell;
