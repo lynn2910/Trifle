@@ -25,11 +25,8 @@ their name will be listed below as long as they aren't involved in the project:
 
 ## Installation
 
-> ⚠️ The instructions below are only if the game is in the `main` branch.
-
 ### Requirements
 
-#### Software
 - Java Development Kit (JDK):
   - **Version:** 17 (or later, unless compatibility issues exist)
 - Hardware/Terminal:
@@ -37,10 +34,13 @@ their name will be listed below as long as they aren't involved in the project:
   - **Colored Bash:** Your terminal shall display colors, as elsewhere you will not be able to see the case and pawn colors.
 - OS:
   - **Linux** (Tested on Debian 12)
-  - **Windows 10/11** (Respectfully tested)
+  - **Windows 10/11** (Both tested)
   - **MacOS** (Tested by a third-party)
+
 ### Instructions
 
+> ⚠️ The instructions below are only if the game is in the `main` branch.
+> 
 Clone the game:
 ```bash
 https://gitlab.iut-bm.univ-fcomte.fr/ccolin2/trifle.git
