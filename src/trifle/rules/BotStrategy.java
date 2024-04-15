@@ -19,8 +19,8 @@ public enum BotStrategy {
 
     public String getDescription(){
         return switch (this) {
-            case BanoffeePie -> "Algorithme MinMax avec réseau neuronal";
-            case SecondStrategy -> "A faire"; // TODO
+            case BanoffeePie -> "MinMax algorithm with neural network";
+            case SecondStrategy -> "Work In Progress"; // TODO
         };
     }
 }

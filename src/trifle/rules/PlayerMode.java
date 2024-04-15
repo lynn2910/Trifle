@@ -19,17 +19,16 @@ public enum PlayerMode {
 
     public String toString() {
         return switch (this) {
-            case HumanVsHuman -> "Joueur contre Joueur";
-            case HumanVsComputer -> "Joueur contre Ordinateur";
-            case ComputerVsComputer -> "Ordinateur contre Ordinateur";
-            default -> "Mode inconnu";
+            case HumanVsHuman       -> "Player vs Player";
+            case HumanVsComputer    -> "Player vs Computer";
+            case ComputerVsComputer -> "Computer vs Computer";
         };
     }
 
     public int getBotNumber(){
         return switch (this) {
-            case HumanVsHuman -> 0;
-            case HumanVsComputer -> 1;
+            case HumanVsHuman       -> 0;
+            case HumanVsComputer    -> 1;
             case ComputerVsComputer -> 2;
         };
     }
