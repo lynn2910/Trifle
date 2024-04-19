@@ -40,10 +40,10 @@ their name will be listed below as long as they aren't involved in the project:
 ### Instructions
 
 > ⚠️ The instructions below are only if the game is in the `main` branch.
-> 
+
 Clone the game:
 ```bash
-https://gitlab.iut-bm.univ-fcomte.fr/ccolin2/trifle.git
+git clone https://gitlab.iut-bm.univ-fcomte.fr/ccolin2/trifle.git
 ```
 
 Build the game:
@@ -64,6 +64,8 @@ java -cp out trifle.TrifleConsole 0
 ```
 
 > **Note:** The TUI lets you configure things such as the bot.s strategy.ies and player name.s, while if you run it without the TUI, default values will be set for you.
+
+> **Note:** For JUNIT, you should run with the ide IDEA.
 
 ## Useful resources
 
