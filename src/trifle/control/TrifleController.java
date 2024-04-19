@@ -1,8 +1,10 @@
 package trifle.control;
 
+import trifle.boardifier.control.ActionPlayer;
 import trifle.boardifier.control.Controller;
 import trifle.boardifier.model.Model;
 import trifle.boardifier.model.Player;
+import trifle.boardifier.model.action.ActionList;
 import trifle.boardifier.view.ConsoleColor;
 import trifle.boardifier.view.View;
 
@@ -52,8 +54,6 @@ public class TrifleController extends Controller {
     }
 
     private void playTurn() {
-        // TODO
-
         Player p = model.getCurrentPlayer();
 
         switch (p.getType()) {
@@ -70,15 +70,13 @@ public class TrifleController extends Controller {
                 System.exit(1);
             }
         }
-
-//        ActionList actions = ActionFactory.generatePutInContainer(model, pawn, "trifle_board", row, col);
     }
 
     private static void printMoveHelp(){
         System.out.println("\nHow to move my pawn?");
         System.out.println("We will take an example. If you are Player 1 and want to move your cyan pawn at A1 to G7, you input will be:");
-        System.out.println("  CG7");
-        System.out.println("`C` for `cyan` and where you want to move it.");
+        System.out.println("  CG7 or A1G7 (where A1 is the pawn position)");
+        System.out.println("*`C` is for `cyan` and where you want to move it.*");
         System.out.println("Here is each color code:");
         System.out.println("- Cyan:   `c`");
         System.out.println("- Blue:   `b`");
@@ -88,7 +86,6 @@ public class TrifleController extends Controller {
         System.out.println("- Red:    `f`");
         System.out.println("- Green:  `g`");
         System.out.println("- Black:  `n`");
-        System.out.println("NOTE: You can also provide the pawn coordinates, like `A1G7`, but we advise you to use the color code, as it simpler to keep a track on the game.");
         System.out.println("You can view again this message by typing `?` in your input.\n");
     }
 
@@ -129,6 +126,21 @@ public class TrifleController extends Controller {
 
     private boolean analyseAndPlay(String move) {
         // TODO
+
+        ActionList actions = new ActionList();
+        actions.setDoEndOfTurn(true);
+        ActionPlayer play = new ActionPlayer(model, this, actions);
+
+        play.start();
+
         return true;
+    }
+
+    @Override
+    public void endOfTurn(){
+        model.setNextPlayer();
+
+        Player p = model.getCurrentPlayer();
+        // TODO set the current player name
     }
 }

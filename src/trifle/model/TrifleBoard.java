@@ -8,6 +8,8 @@ import java.awt.Point;
 import java.util.*;
 
 public class TrifleBoard extends ContainerElement {
+    public static final String BOARD_ID = "trifle_board";
+
     // FIXME Il y a sans doute des erreurs dedans
     public static int[][] BOARD = {
             {0, 1, 2, 3, 4, 5, 6, 7},
@@ -21,7 +23,7 @@ public class TrifleBoard extends ContainerElement {
     };
 
     public TrifleBoard(int x, int y, GameStageModel gameStageModel) {
-        super("trifle_board", x, y, 8, 8, gameStageModel);
+        super(BOARD_ID, x, y, 8, 8, gameStageModel);
     }
 
     public void setValidCells(int n) {
