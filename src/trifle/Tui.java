@@ -17,7 +17,7 @@ public class Tui {
 
     private final Scanner scanner = new Scanner(System.in);
 
-    private void reset() {
+    public void reset() {
         this.gameMode      = null;
         this.playerMode    = null;
         this.playerNames   = new ArrayList<>();
@@ -141,9 +141,17 @@ public class Tui {
             return;
         }
 
+        System.out.println("If you want to exit, type 'exit'");
+
         // On définit les joueurs
-        for (int i = 0; i < playersNb; i++)
-            this.addPlayer(i + 1);
+        for (int i = 0; i < playersNb; i++) {
+            boolean r = this.addPlayer(i + 1);
+
+            if (r) {
+                System.out.println(ConsoleColor.YELLOW + "You exited this sub-menu. Registered players will not be cleared" + ConsoleColor.RESET);
+                return;
+            }
+        }
 
         System.out.println(ConsoleColor.GREEN + "All the players have been registered." + ConsoleColor.RESET);
     }
@@ -151,8 +159,9 @@ public class Tui {
     /**
      * Add a single player
      * @param nb The number of the player (to say "Player n°<nb>"), it's purely aesthetic
+     * @return whether the player want to exit or not
      */
-    private void addPlayer(int nb){
+    private boolean addPlayer(int nb){
         System.out.println("\nPlayer configuration no." + nb);
 
         boolean r = true;
@@ -161,10 +170,16 @@ public class Tui {
             System.out.print("What's his name? ");
 
             name = scanner.nextLine().trim();
-            r = !this.yesOrNo("Player name no." + nb + " will be '" + name + "',  are you sure (Y/n) ");
+
+            if (name.equals("exit")) {
+                return true;
+            }
+
+            r = !this.yesOrNo("Player name no." + nb + " will be '" + name + "', are you sure? (Y/n) ");
         }
         this.playerNames.add(name);
         System.out.println("Player name no." + nb + " will be '" + name + "'");
+        return false;
     }
 
     /**
@@ -300,8 +315,14 @@ public class Tui {
             default                 -> 0;
         };
 
-        for (int i = 0; i < nb; i++)
-            this.setSingleBotStrategy(i + 1);
+        for (int i = 0; i < nb; i++) {
+            boolean r = this.setSingleBotStrategy(i + 1);
+
+            if (r) {
+                System.out.println(ConsoleColor.YELLOW + "You exited this sub-menu. Registered bot strategies will not be cleared" + ConsoleColor.RESET);
+                return;
+            }
+        }
 
         if (nb > 1)
             System.out.println(ConsoleColor.GREEN + "All bot strategies have been defined" + ConsoleColor.RESET);
@@ -309,14 +330,19 @@ public class Tui {
             System.out.println(ConsoleColor.GREEN + "The bot strategy has been defined" + ConsoleColor.RESET);
     }
 
-    private void setSingleBotStrategy(int n){
+    /**
+     *
+     * @param n The ID of this bot
+     * @return Whether the user want to exit or not
+     */
+    private boolean setSingleBotStrategy(int n){
         while (true) {
             System.out.println("The strategies are:");
             System.out.println("(a). " + BotStrategy.BanoffeePie);
             System.out.println("    " + BotStrategy.BanoffeePie.getDescription());
             System.out.println("(b). " + BotStrategy.SecondStrategy);
             System.out.println("    " + BotStrategy.SecondStrategy.getDescription());
-            System.out.print("What will be bot n°" + n + "'s strategy?");
+            System.out.print("What will be bot n°" + n + "'s strategy? ");
 
             String l = scanner.nextLine().trim().toLowerCase();
 
@@ -324,15 +350,18 @@ public class Tui {
                 case "a": {
                     this.botStrategies.add(BotStrategy.BanoffeePie);
                     System.out.println("Bot no." + n + " strategy will be " + ConsoleColor.WHITE_BOLD + BotStrategy.BanoffeePie + ConsoleColor.RESET);
-                    return;
+                    return true;
                 }
                 case "b": {
                     this.botStrategies.add(BotStrategy.SecondStrategy);
                     System.out.println("Bot no." + n + " strategy will be " + ConsoleColor.WHITE_BOLD + BotStrategy.SecondStrategy + ConsoleColor.RESET);
-                    return;
+                    return false;
+                }
+                case "exit": {
+                    return true;
                 }
                 default:
-                    System.out.println(ConsoleColor.RED + "I don't understand your choice" + ConsoleColor.RESET);
+                    System.out.println(ConsoleColor.RED + "Your selection is invalid." + ConsoleColor.RESET);
             }
         }
     }
@@ -375,7 +404,7 @@ public class Tui {
      */
     private void showActualConfiguration(){
         System.out.println("\nCurrent configuration:");
-        System.out.println("  Game mode:        "
+        System.out.println("  Game mode:          "
                 + (this.gameMode == null ? ConsoleColor.WHITE_BOLD + "No game mode defined" + ConsoleColor.RESET : this.gameMode));
         System.out.println("  Mode de joueur:     "
                 + (this.playerMode == null ? ConsoleColor.WHITE_BOLD + "No player mode defined" + ConsoleColor.RESET : this.playerMode));
@@ -387,7 +416,7 @@ public class Tui {
             String playerList = String.join(", ", this.playerNames);
             System.out.println(playerList);
         }
-        System.out.print  ("  Bots strategies: ");
+        System.out.print  ("  Bots strategies:    ");
         if (this.botStrategies == null || this.botStrategies.isEmpty()) {
             System.out.println(ConsoleColor.WHITE_BOLD + "No bot strategy defined, the default strategy is " + ConsoleColor.RESET + BotStrategy.DEFAULT);
         } else {
