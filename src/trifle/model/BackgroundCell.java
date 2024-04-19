@@ -5,7 +5,7 @@ import trifle.boardifier.model.GameElement;
 import trifle.boardifier.model.GameStageModel;
 
 public class BackgroundCell extends GameElement {
-    public static int BACKGROUND_CELL_ID = 51;
+    public static final int BACKGROUND_CELL_ID = 51;
 
     private final int colorIndex;
 

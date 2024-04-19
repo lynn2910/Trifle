@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class TrifleController extends Controller {
     // Store the gameMode. Useful to check how many rounds are left.
-    private GameMode gameMode;
+    private final GameMode gameMode;
 
     /**
      * The Buffer used by the game

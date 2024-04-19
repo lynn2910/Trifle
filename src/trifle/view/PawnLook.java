@@ -7,11 +7,9 @@ import trifle.boardifier.view.ElementLook;
 import trifle.model.Pawn;
 import trifle.model.TrifleBoard;
 
-import java.util.Arrays;
-
 public class PawnLook extends ElementLook {
-    public static int WIDTH = 7;
-    public static int HEIGHT = 3;
+    public static final int WIDTH = 7;
+    public static final int HEIGHT = 3;
 
     public PawnLook(GameElement element){
         super(element, WIDTH, HEIGHT);

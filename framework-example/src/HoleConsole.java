@@ -21,6 +21,7 @@ public class HoleConsole {
                 mode = 0;
             }
         }
+
         Model model = new Model();
         if (mode == 0) {
             model.addHumanPlayer("player1");
@@ -30,7 +31,7 @@ public class HoleConsole {
             model.addHumanPlayer("player");
             model.addComputerPlayer("computer");
         }
-        else if (mode == 2) {
+        else {
             model.addComputerPlayer("computer1");
             model.addComputerPlayer("computer2");
         }

@@ -5,9 +5,6 @@ import trifle.boardifier.model.GameElement;
 import trifle.boardifier.view.ElementLook;
 import trifle.model.BackgroundCell;
 import trifle.model.Pawn;
-import trifle.model.TrifleBoard;
-
-import java.util.Arrays;
 
 public class BackgroundCellLook extends ElementLook {
     public BackgroundCellLook(GameElement element) {
@@ -20,12 +17,6 @@ public class BackgroundCellLook extends ElementLook {
 
         shape[0][0] = Pawn.BG_COLORS[colorIndex] + " ";
         shape[0][PawnLook.WIDTH - 1] = " " + ConsoleColor.RESET;
-
-//        shape[1][0] = Pawn.BG_COLORS[colorIndex] + " ";
-//        shape[1][2] = ConsoleColor.RESET + " ";
-//        shape[1][4] += Pawn.BG_COLORS[colorIndex];
-//        shape[1][PawnLook.WIDTH - 1] = " " + ConsoleColor.RESET;
-
 
         shape[1][0] = Pawn.BG_COLORS[colorIndex] + " ";
         shape[1][PawnLook.WIDTH - 1] = " " + ConsoleColor.RESET;

@@ -6,17 +6,16 @@ import trifle.rules.GameMode;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class TrifleStageModel extends GameStageModel {
     TrifleBoard board;
     private List<Pawn> bluePlayer;
     private List<Pawn> cyanPlayer;
 
-    private List<BackgroundCell> backgroundCells;
+    private final List<BackgroundCell> backgroundCells;
 
-    private Optional<Point> lastBluePlayerMove;
-    private Optional<Point> lastCyanPlayerMove;
+    private Point lastBluePlayerMove;
+    private Point lastCyanPlayerMove;
 
     private TextElement playerName;
     private TextElement roundCounter;
@@ -75,14 +74,14 @@ public class TrifleStageModel extends GameStageModel {
         return this.backgroundCells;
     }
 
-    public Optional<Point> getLastBluePlayerMove() { return this.lastBluePlayerMove; }
+    public Point getLastBluePlayerMove() { return this.lastBluePlayerMove; }
     public void setLastBluePlayerMove(Point lastBluePlayerMove) {
-        this.lastBluePlayerMove = Optional.of(lastBluePlayerMove);
+        this.lastBluePlayerMove = lastBluePlayerMove;
     }
 
-    public Optional<Point> getLastCyanPlayerMove() { return this.lastCyanPlayerMove; }
+    public Point getLastCyanPlayerMove() { return this.lastCyanPlayerMove; }
     public void setLastCyanPlayerMove(Point lastCyanPlayerMove) {
-        this.lastCyanPlayerMove = Optional.of(lastCyanPlayerMove);
+        this.lastCyanPlayerMove = lastCyanPlayerMove;
     }
 
     public TextElement getPlayerName() {

@@ -11,7 +11,7 @@ public class TrifleBoard extends ContainerElement {
     public static final String BOARD_ID = "trifle_board";
 
     // FIXME Il y a sans doute des erreurs dedans
-    public static int[][] BOARD = {
+    public static final int[][] BOARD = {
             {0, 1, 2, 3, 4, 5, 6, 7},
             {5, 0, 3, 6, 1, 4, 7, 2},
             {6, 3, 0, 5, 2, 7, 3, 1},

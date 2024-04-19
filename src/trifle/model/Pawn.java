@@ -9,11 +9,11 @@ import trifle.boardifier.view.ConsoleColor;
  * This is a pawn in the game which store what color he is.
  */
 public class Pawn extends GameElement {
-    public static int PAWN_ELEMENT_ID = 50;
-    public static int BLUE_PLAYER = 1;
-    public static int CYAN_PLAYER = 2;
+    public static final int PAWN_ELEMENT_ID = 50;
+    public static final int BLUE_PLAYER = 1;
+    public static final int CYAN_PLAYER = 2;
 
-    public static String[] COLORS = new String[]{
+    public static final String[] COLORS = new String[]{
             ConsoleColor.CYAN,
             ConsoleColor.BLUE,
             ConsoleColor.PURPLE,
@@ -24,7 +24,7 @@ public class Pawn extends GameElement {
             ConsoleColor.BLACK
     };
 
-    public static String[] BG_COLORS = new String[]{
+    public static final String[] BG_COLORS = new String[]{
             ConsoleColor.CYAN_BACKGROUND,
             ConsoleColor.BLUE_BACKGROUND,
             ConsoleColor.PURPLE_BACKGROUND,

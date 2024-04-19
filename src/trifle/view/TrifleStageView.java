@@ -1,9 +1,7 @@
 package trifle.view;
 
-import trifle.boardifier.control.ActionFactory;
 import trifle.boardifier.control.Logger;
 import trifle.boardifier.model.GameElement;
-import trifle.boardifier.model.GameException;
 import trifle.boardifier.model.GameStageModel;
 import trifle.boardifier.view.*;
 import trifle.model.BackgroundCell;
@@ -17,7 +15,7 @@ public class TrifleStageView extends GameStageView {
     public static final int BOARD_WIDTH = 82;
 
     @Override
-    public void createLooks() throws GameException {
+    public void createLooks() {
         TrifleStageModel model = (TrifleStageModel) this.gameStageModel;
 
         // add the look for all texts
