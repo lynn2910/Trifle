@@ -92,7 +92,7 @@ public class TrifleController extends Controller {
         System.out.println("You can view again this message by typing `?` in your input.\n");
     }
 
-    private static final Pattern MOVE_PATTERN = Pattern.compile("^([a-h][1-8]|[cbpdefgn])([a-h][1-8])$");
+    private static final Pattern MOVE_PATTERN = Pattern.compile("^([a-hA-H][1-8]|[cbpdefgnCBPDEFGN])([a-hA-H][1-8])$");
 
     private void playerTurn(Player p) {
         boolean ok = false;
@@ -110,6 +110,7 @@ public class TrifleController extends Controller {
                 if ((move.length() != 3 && move.length() != 4) || !MOVE_PATTERN.matcher(move).find()) {
                     System.out.println(ConsoleColor.RED + "Your input must be like `A1G7` or `cG7`, where the first is whether the color code or the coordinate of the move, and after, where you want to move it." + ConsoleColor.RESET);
                     System.out.println(ConsoleColor.YELLOW + "The match is insensitive and doesn't differentiate upper and lower case" + ConsoleColor.RESET);
+                    continue;
                 }
 
                 ok = this.analyseAndPlay(move);
