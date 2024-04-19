@@ -36,4 +36,17 @@ public enum GameMode {
             default       -> "";
         };
     }
+
+    public int numberOfRounds(){
+        // FIXME heu je ne connais pas les valeurs moi!
+        return switch (this) {
+            case Fast -> 1;
+            case Standard -> 3;
+            case Marathon -> 5;
+        };
+    }
+
+    public static GameMode defaultValue() {
+        return Fast;
+    }
 }

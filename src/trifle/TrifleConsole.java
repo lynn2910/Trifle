@@ -7,6 +7,7 @@ import trifle.boardifier.model.Model;
 import static trifle.boardifier.view.ConsoleColor.*;
 import trifle.boardifier.view.View;
 import trifle.control.TrifleController;
+import trifle.rules.GameMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,21 +35,22 @@ public class TrifleConsole {
         Logger.setVerbosity(Logger.VERBOSE_BASIC);
 
         Tui tui = new Tui();
-        int mode = 0;
+        GameMode mode = GameMode.defaultValue();
 
         // get the required data
         if (args.length < 1) {
             tui.run();
+            mode = tui.getGameMode();
         }
         else {
             switch (args[0]) {
                 case "0": break;
                 case "1": {
-                    mode = 1;
+                    mode = GameMode.Standard;
                     break;
                 }
                 case "2": {
-                    mode = 2;
+                    mode = GameMode.Marathon;
                     break;
                 }
                 default: {
@@ -56,6 +58,8 @@ public class TrifleConsole {
                 }
             }
         }
+
+        GameMode gameMode = GameMode.valueOf(String.valueOf(mode));
 
         Model model = new Model();
 
@@ -88,7 +92,7 @@ public class TrifleConsole {
         // Initiate the required instances, such as the view, StageFactory and the controller
         StageFactory.registerModelAndView("trifle", "trifle.model.TrifleStageModel", "trifle.view.TrifleStageView");
         View view = new View(model);
-        TrifleController controller = new TrifleController(model, view);
+        TrifleController controller = new TrifleController(model, view, gameMode);
         controller.setFirstStageName("trifle");
 
         try {
@@ -109,10 +113,10 @@ public class TrifleConsole {
      * @param tuiEnabled If whether the tui was called
      * @return The player mode (between zero and two, included)
      */
-    private static int getPlayerMode(Tui tui, int mode, boolean tuiEnabled) {
+    private static int getPlayerMode(Tui tui, GameMode mode, boolean tuiEnabled) {
         if (tuiEnabled)
             return tui.getPlayerMode().ordinal();
-        else return mode;
+        else return mode.ordinal();
     }
 
     /**
@@ -123,10 +127,10 @@ public class TrifleConsole {
      * @param mode The player-mode given as argument, if any
      * @return The list of the names
      */
-    private static List<String> getPlayerNames(Tui tui, int mode) {
+    private static List<String> getPlayerNames(Tui tui, GameMode mode) {
         List<String> tuiPlayerNames = tui.getPlayerNames();
         if (tuiPlayerNames.isEmpty()) {
-            return switch (mode) {
+            return switch (mode.ordinal()) {
                 case 1 -> List.of("Player", "Computer");
                 case 2 -> List.of("Computer1", "Computer2");
                 default -> List.of("Player1", "Player2");

@@ -21,8 +21,13 @@ public class TrifleStageFactory extends StageElementsFactory {
     public void setup() {
         // Create the text that will be used to display the player name
         TextElement playerNameText = new TextElement(stageModel.getCurrentPlayerName(), stageModel);
-        playerNameText.setLocation(BOARD_WIDTH + 2, 3);
+        playerNameText.setLocation(BOARD_WIDTH + 2, 5);
         stageModel.setPlayerName(playerNameText);
+
+        // Create the round counter
+        TextElement roundCounterText = new TextElement("Round 1/" + stageModel.getGameMode().numberOfRounds(), stageModel);
+        roundCounterText.setLocation(BOARD_WIDTH + 2, 3);
+        stageModel.setRoundCounter(roundCounterText);
 
         // Create the board
         TrifleBoard board = new TrifleBoard(0, 0, this.stageModel);

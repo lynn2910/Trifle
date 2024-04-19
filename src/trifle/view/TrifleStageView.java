@@ -20,8 +20,9 @@ public class TrifleStageView extends GameStageView {
     public void createLooks() throws GameException {
         TrifleStageModel model = (TrifleStageModel) this.gameStageModel;
 
-        // add the right panel look
+        // add the look for all texts
         addLook(new TextLook(model.getPlayerName()));
+        addLook(new TextLook(model.getRoundCounter()));
 
         // Create the main board (8x8)
         ClassicBoardLook boardLook = new ClassicBoardLook(PawnLook.HEIGHT, PawnLook.WIDTH, model.getBoard(), 1, 1, true);

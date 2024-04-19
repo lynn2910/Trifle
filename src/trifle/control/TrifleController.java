@@ -7,6 +7,8 @@ import trifle.boardifier.model.Player;
 import trifle.boardifier.model.action.ActionList;
 import trifle.boardifier.view.ConsoleColor;
 import trifle.boardifier.view.View;
+import trifle.model.TrifleStageModel;
+import trifle.rules.GameMode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,14 +16,26 @@ import java.io.InputStreamReader;
 import java.util.regex.Pattern;
 
 public class TrifleController extends Controller {
+    // Store the gameMode. Useful to check how many rounds are left.
+    private GameMode gameMode;
 
     /**
      * The Buffer used by the game
      */
     BufferedReader consoleSysIn;
 
-    public TrifleController(Model model, View view) {
+    public TrifleController(Model model, View view, GameMode gameMode) {
         super(model, view);
+        this.gameMode = gameMode;
+    }
+
+    /**
+     * This method is used to transmit information to the Model, such as the game mode
+     */
+    private void shareInformations() {
+        TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
+
+        stageModel.setGameMode(gameMode);
     }
 
     /**
@@ -29,6 +43,8 @@ public class TrifleController extends Controller {
      */
     @Override
     public void stageLoop() {
+        this.shareInformations();
+
         InputStreamReader inputStreamReader = new InputStreamReader(System.in);
         this.consoleSysIn = new BufferedReader(inputStreamReader);
 
@@ -141,6 +157,7 @@ public class TrifleController extends Controller {
         model.setNextPlayer();
 
         Player p = model.getCurrentPlayer();
-        // TODO set the current player name
+        TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
+        stageModel.getPlayerName().setText(p.getName());
     }
 }

@@ -19,8 +19,21 @@ public class TrifleStageModel extends GameStageModel {
     private Optional<Point> lastCyanPlayerMove;
 
     private TextElement playerName;
+    private TextElement roundCounter;
 
-    private GameMode gameMode;
+    private GameMode gameMode = GameMode.defaultValue();
+
+
+
+
+
+    /*
+     *
+     *
+     *   ====== METHODS ======
+     *
+     *
+     */
 
     public TrifleStageModel(String name, Model model) {
         super(name, model);
@@ -85,5 +98,13 @@ public class TrifleStageModel extends GameStageModel {
     }
     public void setGameMode(GameMode gameMode) {
         this.gameMode = gameMode;
+    }
+
+    public TextElement getRoundCounter() {
+        return this.roundCounter;
+    }
+    public void setRoundCounter(TextElement roundCounter) {
+        this.roundCounter = roundCounter;
+        addElement(roundCounter);
     }
 }
