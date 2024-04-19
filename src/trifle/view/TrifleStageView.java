@@ -5,9 +5,7 @@ import trifle.boardifier.control.Logger;
 import trifle.boardifier.model.GameElement;
 import trifle.boardifier.model.GameException;
 import trifle.boardifier.model.GameStageModel;
-import trifle.boardifier.view.ClassicBoardLook;
-import trifle.boardifier.view.ElementLook;
-import trifle.boardifier.view.GameStageView;
+import trifle.boardifier.view.*;
 import trifle.model.BackgroundCell;
 import trifle.model.TrifleStageModel;
 
@@ -16,9 +14,14 @@ public class TrifleStageView extends GameStageView {
         super(name, gameStageModel);
     }
 
+    public static final int BOARD_WIDTH = 82;
+
     @Override
     public void createLooks() throws GameException {
         TrifleStageModel model = (TrifleStageModel) this.gameStageModel;
+
+        // add the right panel look
+        addLook(new TextLook(model.getPlayerName()));
 
         // Create the main board (8x8)
         ClassicBoardLook boardLook = new ClassicBoardLook(PawnLook.HEIGHT, PawnLook.WIDTH, model.getBoard(), 1, 1, true);

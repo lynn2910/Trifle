@@ -1,6 +1,7 @@
 package trifle.model;
 
 import trifle.boardifier.model.*;
+import trifle.rules.GameMode;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,6 +17,10 @@ public class TrifleStageModel extends GameStageModel {
 
     private Optional<Point> lastBluePlayerMove;
     private Optional<Point> lastCyanPlayerMove;
+
+    private TextElement playerName;
+
+    private GameMode gameMode;
 
     public TrifleStageModel(String name, Model model) {
         super(name, model);
@@ -65,5 +70,20 @@ public class TrifleStageModel extends GameStageModel {
     public Optional<Point> getLastCyanPlayerMove() { return this.lastCyanPlayerMove; }
     public void setLastCyanPlayerMove(Point lastCyanPlayerMove) {
         this.lastCyanPlayerMove = Optional.of(lastCyanPlayerMove);
+    }
+
+    public TextElement getPlayerName() {
+        return this.playerName;
+    }
+    public void setPlayerName(TextElement playerName) {
+        this.playerName = playerName;
+        addElement(playerName);
+    }
+
+    public GameMode getGameMode() {
+        return this.gameMode;
+    }
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
     }
 }

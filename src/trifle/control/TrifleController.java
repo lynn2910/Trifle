@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class TrifleController extends Controller {
 
     /**
-     * The
+     * The Buffer used by the game
      */
     BufferedReader consoleSysIn;
 
@@ -25,7 +25,7 @@ public class TrifleController extends Controller {
     }
 
     /**
-     * The game loop :O
+     * The game loop
      */
     @Override
     public void stageLoop() {

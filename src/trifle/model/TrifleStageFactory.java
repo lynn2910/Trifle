@@ -2,9 +2,12 @@ package trifle.model;
 
 import trifle.boardifier.model.GameStageModel;
 import trifle.boardifier.model.StageElementsFactory;
+import trifle.boardifier.model.TextElement;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static trifle.view.TrifleStageView.BOARD_WIDTH;
 
 public class TrifleStageFactory extends StageElementsFactory {
     private final TrifleStageModel stageModel;
@@ -16,8 +19,13 @@ public class TrifleStageFactory extends StageElementsFactory {
 
     @Override
     public void setup() {
+        // Create the text that will be used to display the player name
+        TextElement playerNameText = new TextElement(stageModel.getCurrentPlayerName(), stageModel);
+        playerNameText.setLocation(BOARD_WIDTH + 2, 3);
+        stageModel.setPlayerName(playerNameText);
+
         // Create the board
-        TrifleBoard board = new TrifleBoard(0, 1, this.stageModel);
+        TrifleBoard board = new TrifleBoard(0, 0, this.stageModel);
         stageModel.setBoard(board);
 
         // Create the blue pawns

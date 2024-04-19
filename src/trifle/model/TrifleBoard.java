@@ -38,4 +38,5 @@ public class TrifleBoard extends ContainerElement {
     public List<Point> determineValidCells(int n) {
         return new ArrayList<>();
     }
+
 }
