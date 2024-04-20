@@ -12,6 +12,7 @@ import trifle.model.TrifleStageModel;
 import trifle.rules.GameMode;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -22,6 +23,8 @@ public class TrifleController extends Controller {
     private final GameMode gameMode;
     private final List<String> playerNames;
 
+    private FileWriter outputMovesFileWriter;
+
     /**
      * The Buffer used by the game
      */
@@ -31,6 +34,14 @@ public class TrifleController extends Controller {
         super(model, view);
         this.gameMode = gameMode;
         this.playerNames = playerNames;
+    }
+
+    public void addOutputMovesFileWriter(String path) throws IOException {
+        if (this.outputMovesFileWriter != null)
+            throw new IllegalArgumentException("The output file writer have already been defined.");
+
+        this.outputMovesFileWriter = new FileWriter(path);
+        this.outputMovesFileWriter.write("");
     }
 
     /**
@@ -150,6 +161,8 @@ public class TrifleController extends Controller {
                 ok = this.analyseAndPlay(move);
 
                 if (ok) {
+                    // TODO Require to be normalized to A1G7
+                    this.addOldMoveToFile(move);
                     this.addMoveToOldMoves(p, "Cyan (A1)", "G7");
                 }
 
@@ -162,18 +175,48 @@ public class TrifleController extends Controller {
         }
     }
 
-    private void addMoveToOldMoves(Player p, String pawn, String move){
+    @Override
+    public void endGame(){
+        // Close the file writer if any
+        if (this.outputMovesFileWriter != null) {
+            try {
+                this.outputMovesFileWriter.close();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        super.endGame();
+    }
+
+    private void addOldMoveToFile(String move){
+        if (this.outputMovesFileWriter == null)
+            return;
+
+        try {
+            this.outputMovesFileWriter.append(move).append("\n");
+            this.outputMovesFileWriter.flush();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void addMoveToOldMoves(Player p, String normalizedPawn, String normalizedMove){
         TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
 
         OldMove oldMove = new OldMove(
                 p.getName().equals(playerNames.get(0)) ? 0 : 1,
                 p.getName(),
-                pawn,
-                move
+                normalizedPawn,
+                normalizedMove
         );
 
         stageModel.addOldMove(oldMove);
         stageModel.updateHistory();
+
+
     }
 
     private void botTurn(Player p) {

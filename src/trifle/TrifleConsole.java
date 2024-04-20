@@ -11,7 +11,9 @@ import trifle.rules.GameMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TrifleConsole {
     /**
@@ -34,16 +36,39 @@ public class TrifleConsole {
         Logger.setLevel(Logger.LOGGER_INFO);
         Logger.setVerbosity(Logger.VERBOSE_BASIC);
 
+        Optional<String> outputMovesDir = Optional.empty();
+
+
+        // Parse the internal arguments, such as `--output-moves`
+        List<String> externalArgs = new ArrayList<>();
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+
+            switch (arg) {
+                case "": {break;}
+                case "--output-moves": {
+                    outputMovesDir = Optional.of(args[i + 1]);
+                    // remove this arg
+                    args[i] = "";
+                    args[i + 1] = "";
+                    break;
+                }
+                default:
+                    externalArgs.add(arg);
+            }
+        }
+
+
         Tui tui = new Tui();
         GameMode mode = GameMode.defaultValue();
 
         // get the required data
-        if (args.length < 1) {
+        if (externalArgs.isEmpty()) {
             tui.run();
             mode = tui.getGameMode();
         }
         else {
-            switch (args[0]) {
+            switch (externalArgs.get(0)) {
                 case "0": break;
                 case "1": {
                     mode = GameMode.Standard;
@@ -54,7 +79,7 @@ public class TrifleConsole {
                     break;
                 }
                 default: {
-                    System.out.println("Le mode de jeu que vous souhaitez jouer (" + args[0] + ") n'est pas compris en 0 et 2 (inclus).\nLe mode de jeu a été automatiquement passé en Humain vs Humain.");
+                    System.out.println("Le mode de jeu que vous souhaitez jouer (" + externalArgs.get(0) + ") n'est pas compris en 0 et 2 (inclus).\nLe mode de jeu a été automatiquement passé en Humain vs Humain.");
                 }
             }
         }
@@ -65,7 +90,7 @@ public class TrifleConsole {
 
         // Add the players to the model
         List<String> playerNames = getPlayerNames(tui, mode);
-        switch (getPlayerMode(tui, mode, args.length < 1)) {
+        switch (getPlayerMode(tui, mode, externalArgs.isEmpty())) {
             case 0: {
                 model.addHumanPlayer(playerNames.get(0));
                 model.addHumanPlayer(playerNames.get(1));
@@ -92,6 +117,16 @@ public class TrifleConsole {
         View view = new View(model);
         TrifleController controller = new TrifleController(model, view, gameMode, playerNames);
         controller.setFirstStageName("trifle");
+
+        if (outputMovesDir.isPresent()) {
+            try {
+                controller.addOutputMovesFileWriter(outputMovesDir.get());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
 
         try {
             controller.startGame();
