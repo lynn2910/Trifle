@@ -145,7 +145,13 @@ public class TrifleController extends Controller {
         while (!ok) {
             System.out.print(p.getName() + " > ");
             try {
-                String move = consoleSysIn.readLine().toUpperCase().trim();
+                String move = consoleSysIn.readLine().toLowerCase().trim();
+
+                if (move.contains("stop")) {
+                    System.out.println(ConsoleColor.YELLOW + "You used the keyword 'stop'. End of the game." + ConsoleColor.RESET);
+                    endGame();
+                    System.exit(0);
+                }
 
                 if (move.equals("?")) {
                     printMoveHelp();
