@@ -55,9 +55,24 @@ public class TrifleController extends Controller {
 
         this.update();
 
+        int waitBeforeEnd = 0; // 2500
+        if (System.getenv().containsKey("WAIT_BEFORE_END")) {
+            waitBeforeEnd = Integer.parseInt(System.getenv().get("WAIT_BEFORE_END"));
+        }
+
         while(!this.model.isEndStage()) {
+            long before = System.currentTimeMillis();
+
             this.playTurn();
             this.endOfTurn();
+
+            long after = System.currentTimeMillis();
+            if (after - before < waitBeforeEnd) {
+                // Sleep
+                try { Thread.sleep(1000 - (after-before)); }
+                catch (InterruptedException e) { System.out.println(e.getMessage()); e.printStackTrace(); }
+            }
+
             this.update();
         }
 
@@ -159,6 +174,7 @@ public class TrifleController extends Controller {
 
     @Override
     public void endOfTurn(){
+        System.out.println();
         model.setNextPlayer();
 
         Player p = model.getCurrentPlayer();
