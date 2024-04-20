@@ -13,20 +13,23 @@ import trifle.rules.GameMode;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class TrifleController extends Controller {
     // Store the gameMode. Useful to check how many rounds are left.
     private final GameMode gameMode;
+    private List<String> playerNames;
 
     /**
      * The Buffer used by the game
      */
     BufferedReader consoleSysIn;
 
-    public TrifleController(Model model, View view, GameMode gameMode) {
+    public TrifleController(Model model, View view, GameMode gameMode, List<String> playerNames) {
         super(model, view);
         this.gameMode = gameMode;
+        this.playerNames = playerNames;
     }
 
     /**
@@ -36,6 +39,8 @@ public class TrifleController extends Controller {
         TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
 
         stageModel.setGameMode(gameMode);
+        stageModel.setPlayerNames(playerNames);
+        stageModel.updatePlayerPoints();
     }
 
     /**

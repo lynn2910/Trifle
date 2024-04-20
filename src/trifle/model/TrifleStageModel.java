@@ -2,15 +2,21 @@ package trifle.model;
 
 import trifle.boardifier.model.*;
 import trifle.rules.GameMode;
+import trifle.rules.PlayerMode;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static trifle.view.TrifleStageView.BOARD_WIDTH;
 
 public class TrifleStageModel extends GameStageModel {
     TrifleBoard board;
     private List<Pawn> bluePlayer;
     private List<Pawn> cyanPlayer;
+
+    private List<String> playerNames = List.of("Unknown", "Unknown");
 
     private final List<BackgroundCell> backgroundCells;
 
@@ -19,8 +25,13 @@ public class TrifleStageModel extends GameStageModel {
 
     private TextElement playerName;
     private TextElement roundCounter;
+    private TextElement playerPoints;
 
     private GameMode gameMode = GameMode.defaultValue();
+    private PlayerMode playerMode = PlayerMode.defaultValue();
+
+    private int bluePlayerPoints = 0;
+    private int cyanPlayerPoints = 0;
 
 
 
@@ -99,11 +110,64 @@ public class TrifleStageModel extends GameStageModel {
         this.gameMode = gameMode;
     }
 
+    public PlayerMode getPlayerMode(){
+        return this.playerMode;
+    }
+    public void setPlayerMode(PlayerMode playerMode){
+        this.playerMode = playerMode;
+    }
+
     public TextElement getRoundCounter() {
         return this.roundCounter;
     }
     public void setRoundCounter(TextElement roundCounter) {
         this.roundCounter = roundCounter;
         addElement(roundCounter);
+    }
+
+    public int getBluePlayerPoints(){
+        return this.bluePlayerPoints;
+    }
+    public void incBluePlayerPoints(){
+        this.bluePlayerPoints++;
+    }
+
+    public int getCyanPlayerPoints(){
+        return this.cyanPlayerPoints;
+    }
+    public void incCyanPlayerPoints(){
+        this.cyanPlayerPoints++;
+    }
+
+    public List<String> getPlayerNames(){
+        return this.playerNames;
+    }
+    public void setPlayerNames(List<String> playerNames) {
+        this.playerNames = playerNames;
+    }
+
+    public TextElement getPlayerPoints() {
+        return playerPoints;
+    }
+    public void setPlayerPoints(TextElement playerPoints) {
+        this.playerPoints = playerPoints;
+        addElement(playerPoints);
+    }
+
+    /**
+     * Create or update the TextElement which store the number of points for each player
+     */
+    public void updatePlayerPoints() {
+        String text = playerNames.get(0) + ": " + this.getBluePlayerPoints()
+                + "   " + playerNames.get(1) + ": " + this.getBluePlayerPoints();
+
+        if (this.getPlayerPoints() == null) {
+            TextElement playerPointsCounter = new TextElement(text, this);
+            playerPointsCounter.setLocation(BOARD_WIDTH + 2 + 2, 4);
+            this.setPlayerPoints(playerPointsCounter);
+        } else {
+            // update the text
+            this.getPlayerPoints().setText(text);
+        }
     }
 }

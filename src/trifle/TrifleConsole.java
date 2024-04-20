@@ -64,21 +64,19 @@ public class TrifleConsole {
         Model model = new Model();
 
         // Add the players to the model
+        List<String> playerNames = getPlayerNames(tui, mode);
         switch (getPlayerMode(tui, mode, args.length < 1)) {
             case 0: {
-                List<String> playerNames = getPlayerNames(tui, mode);
                 model.addHumanPlayer(playerNames.get(0));
                 model.addHumanPlayer(playerNames.get(1));
                 break;
             }
             case 1: {
-                List<String> playerNames = getPlayerNames(tui, mode);
                 model.addHumanPlayer(playerNames.get(0));
                 model.addComputerPlayer(playerNames.get(1));
                 break;
             }
             case 2: {
-                List<String> playerNames = getPlayerNames(tui, mode);
                 model.addComputerPlayer(playerNames.get(0));
                 model.addComputerPlayer(playerNames.get(1));
                 break;
@@ -92,7 +90,7 @@ public class TrifleConsole {
         // Initiate the required instances, such as the view, StageFactory and the controller
         StageFactory.registerModelAndView("trifle", "trifle.model.TrifleStageModel", "trifle.view.TrifleStageView");
         View view = new View(model);
-        TrifleController controller = new TrifleController(model, view, gameMode);
+        TrifleController controller = new TrifleController(model, view, gameMode, playerNames);
         controller.setFirstStageName("trifle");
 
         try {
