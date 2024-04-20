@@ -26,3 +26,8 @@ The first syntax uses the coordinates of the pawn and where to move it, while th
 | Green  | g    |
 | Black  | n    |
 
+## Move file
+
+Each input file must end with the `.in` extension.
+
+> **Note:** The extension is required to be simpler for the devs, it doesn't affect any technical aspects.
