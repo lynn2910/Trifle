@@ -7,6 +7,7 @@ import trifle.boardifier.model.TextElement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static trifle.model.TrifleStageModel.MAX_HISTORY_SIZE;
 import static trifle.view.TrifleStageView.BOARD_WIDTH;
 
 public class TrifleStageFactory extends StageElementsFactory {
@@ -31,6 +32,15 @@ public class TrifleStageFactory extends StageElementsFactory {
 
         // create the player counter
         stageModel.updatePlayerPoints();
+
+        // add all texts history
+        for (int i = 0; i < MAX_HISTORY_SIZE; i++) {
+            TextElement text = new TextElement("", stageModel);
+            text.setLocation(BOARD_WIDTH + 2 + 2, 7 + 2 + i);
+
+            stageModel.getMovesHistory().add(text);
+            stageModel.addElement(text);
+        }
 
         // Create the board
         TrifleBoard board = new TrifleBoard(0, 0, this.stageModel);

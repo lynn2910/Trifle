@@ -6,7 +6,6 @@ import trifle.rules.PlayerMode;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static trifle.view.TrifleStageView.BOARD_WIDTH;
@@ -33,6 +32,9 @@ public class TrifleStageModel extends GameStageModel {
     private int bluePlayerPoints = 0;
     private int cyanPlayerPoints = 0;
 
+    private final List<TextElement> movesHistory;
+    private final List<OldMove> oldMovesList;
+
 
 
 
@@ -51,6 +53,8 @@ public class TrifleStageModel extends GameStageModel {
         this.bluePlayer      = new ArrayList<>();
         this.cyanPlayer      = new ArrayList<>();
         this.backgroundCells = new ArrayList<>();
+        this.oldMovesList    = new ArrayList<>();
+        this.movesHistory    = new ArrayList<>();
     }
 
     public StageElementsFactory getDefaultElementFactory() {
@@ -169,5 +173,25 @@ public class TrifleStageModel extends GameStageModel {
             // update the text
             this.getPlayerPoints().setText(text);
         }
+    }
+
+    public List<TextElement> getMovesHistory() {
+        return this.movesHistory;
+    }
+    public void addOldMove(OldMove move){
+        this.oldMovesList.add(move);
+    }
+
+    public static final int MAX_HISTORY_SIZE = 14;
+
+    public void updateHistory(){
+        // 13 -> 12, 12 -> 11, ...
+        for (int i = 0; i < MAX_HISTORY_SIZE - 1; i++) {
+            TextElement thisText = this.movesHistory.get(i);
+            thisText.setText(this.movesHistory.get(i + 1).getText());
+        }
+
+        TextElement newMove = this.movesHistory.get(MAX_HISTORY_SIZE - 1);
+        newMove.setText(oldMovesList.get(oldMovesList.size() - 1).toString());
     }
 }

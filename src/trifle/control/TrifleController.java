@@ -7,6 +7,7 @@ import trifle.boardifier.model.Player;
 import trifle.boardifier.model.action.ActionList;
 import trifle.boardifier.view.ConsoleColor;
 import trifle.boardifier.view.View;
+import trifle.model.OldMove;
 import trifle.model.TrifleStageModel;
 import trifle.rules.GameMode;
 
@@ -19,7 +20,7 @@ import java.util.regex.Pattern;
 public class TrifleController extends Controller {
     // Store the gameMode. Useful to check how many rounds are left.
     private final GameMode gameMode;
-    private List<String> playerNames;
+    private final List<String> playerNames;
 
     /**
      * The Buffer used by the game
@@ -67,7 +68,7 @@ public class TrifleController extends Controller {
             this.endOfTurn();
 
             long after = System.currentTimeMillis();
-            if (after - before < waitBeforeEnd) {
+            if (waitBeforeEnd > 0 && after - before < waitBeforeEnd) {
                 // Sleep
                 try { Thread.sleep(1000 - (after-before)); }
                 catch (InterruptedException e) { System.out.println(e.getMessage()); e.printStackTrace(); }
@@ -147,6 +148,11 @@ public class TrifleController extends Controller {
                 }
 
                 ok = this.analyseAndPlay(move);
+
+                if (ok) {
+                    this.addMoveToOldMoves(p, "Cyan (A1)", "G7");
+                }
+
             } catch (IOException e) {
                 System.out.println(ConsoleColor.RED + e.getMessage());
                 e.printStackTrace();
@@ -154,6 +160,20 @@ public class TrifleController extends Controller {
                 System.exit(1);
             }
         }
+    }
+
+    private void addMoveToOldMoves(Player p, String pawn, String move){
+        TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
+
+        OldMove oldMove = new OldMove(
+                p.getName().equals(playerNames.get(0)) ? 0 : 1,
+                p.getName(),
+                pawn,
+                move
+        );
+
+        stageModel.addOldMove(oldMove);
+        stageModel.updateHistory();
     }
 
     private void botTurn(Player p) {
@@ -179,6 +199,6 @@ public class TrifleController extends Controller {
 
         Player p = model.getCurrentPlayer();
         TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
-        stageModel.getPlayerName().setText(p.getName());
+        stageModel.getPlayerName().setText(p.getName() + " is playing.");
     }
 }
