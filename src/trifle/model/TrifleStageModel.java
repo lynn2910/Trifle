@@ -73,7 +73,7 @@ public class TrifleStageModel extends GameStageModel {
     public List<Pawn> getBluePlayer() { return this.bluePlayer; }
     public void setBluePawns(List<Pawn> bluePawns) {
         this.bluePlayer = bluePawns;
-        for (Pawn pawn: bluePawns) addElement(pawn);
+        for (Pawn pawn: bluePawns) addElement(pawn);;
     }
 
     public List<Pawn> getCyanPlayer() { return this.cyanPlayer; }

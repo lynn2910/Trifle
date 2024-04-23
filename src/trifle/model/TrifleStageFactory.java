@@ -50,7 +50,7 @@ public class TrifleStageFactory extends StageElementsFactory {
         List<Pawn> bluePawns = new ArrayList<>();
         for (int x = 0; x < 8; x++) {
             int colorIndex = TrifleBoard.BOARD[0][x];
-            bluePawns.add(new Pawn(colorIndex, Pawn.BLUE_PLAYER, stageModel));
+            bluePawns.add(new Pawn(colorIndex, Pawn.BLUE_PLAYER, stageModel, x, 0));
         }
         stageModel.setBluePawns(bluePawns);
 
@@ -58,7 +58,7 @@ public class TrifleStageFactory extends StageElementsFactory {
         List<Pawn> cyanPawns = new ArrayList<>();
         for (int x = 0; x < 8; x++) {
             int colorIndex = TrifleBoard.BOARD[7][x];
-            cyanPawns.add(new Pawn(colorIndex,Pawn.CYAN_PLAYER,  stageModel));
+            cyanPawns.add(new Pawn(colorIndex,Pawn.CYAN_PLAYER,  stageModel, x, 7));
         }
         stageModel.setCyanPawns(cyanPawns);
 

@@ -5,6 +5,8 @@ import trifle.boardifier.model.GameElement;
 import trifle.boardifier.model.GameStageModel;
 import trifle.boardifier.view.ConsoleColor;
 
+import java.awt.*;
+
 /**
  * This is a pawn in the game which store what color he is.
  */
@@ -38,7 +40,9 @@ public class Pawn extends GameElement {
     private final int colorIndex;
     private final int playerNumber;
 
-    public Pawn(int colorIndex, int playerNumber, GameStageModel gameStageModel) {
+    private Point coords;
+
+    public Pawn(int colorIndex, int playerNumber, GameStageModel gameStageModel, int x, int y) {
         super(gameStageModel);
 
         ElementTypes.register("pawn", PAWN_ELEMENT_ID);
@@ -47,6 +51,15 @@ public class Pawn extends GameElement {
 
         this.colorIndex = colorIndex;
         this.playerNumber = playerNumber;
+
+        this.coords = new Point(x, y);
+    }
+
+    public Point getCoords(){
+        return coords;
+    }
+    public void setCoords(Point coords){
+        this.coords = coords;
     }
 
     public int getColorIndex(){

@@ -2,6 +2,7 @@ package trifle.model;
 
 import trifle.boardifier.control.Logger;
 import trifle.boardifier.model.ContainerElement;
+import trifle.boardifier.model.Coord2D;
 import trifle.boardifier.model.GameStageModel;
 
 import java.awt.Point;
@@ -26,17 +27,89 @@ public class TrifleBoard extends ContainerElement {
         super(BOARD_ID, x, y, 8, 8, gameStageModel);
     }
 
-    public void setValidCells(int n) {
+    public void setValidCells(Point coordinates, int playerId) {
         Logger.debug("setting valid cells :D", this);
         resetReachableCells(false);
 
-        List<Point> validCells = this.determineValidCells(n);
-
-        // TODO définir les cases jouables par le joueur
+        List<Point> validCells = this.computeValidCells(coordinates, playerId);
+        if (validCells != null) {
+            for (Point p: validCells) {
+                reachableCells[p.x][p.y] = true;
+            }
+        }
     }
 
-    public List<Point> determineValidCells(int n) {
-        return new ArrayList<>();
+    public List<Point> computeValidCells(Point coords, int playerId) {
+        List<Point> validCells = new ArrayList<>();
+
+        if (playerId == 0) {
+            // player is based on the top and must go to the bottom
+
+            // check on the vertical
+            for (int y = coords.y + 1; y < 8; y++) {
+                if (getElement(y, coords.x) == null) {
+                    validCells.add(new Point(coords.x, y));
+                } else break;
+            }
+
+            // check on the right diagonal
+            int x = coords.x, y = coords.y;
+
+            while (x < 7 && y < 7) {
+                x++;
+                y++;
+                if (getElement(y, x) == null) {
+                    validCells.add(new Point(x, y));
+                } else break;
+            }
+
+            // now reset x and y, and do the left diagonal
+            x = coords.x; y = coords.y;
+            while (x > 0 && y < 7) {
+                x--;
+                y++;
+                if (getElement(y, x) == null) {
+                    validCells.add(new Point(x, y));
+                } else break;
+            }
+
+            // Done.
+        }
+        else {
+            // player is based on the bottom and must go to the top
+
+            // The same as the upper code, but with inverse conditions
+            // edited line will be commented with `+` after
+
+            for (int y = coords.y - 1; y >= 0; y--) { // +
+                if (getElement(y, coords.x) == null) {
+                    validCells.add(new Point(coords.x, y));
+                } else break;
+            }
+
+            // check on the right diagonal
+            int x = coords.x, y = coords.y;
+
+            while (x < 7 && y >= 0) {
+                x++;
+                y--; // +
+                if (getElement(y, x) == null) {
+                    validCells.add(new Point(x, y));
+                } else break;
+            }
+
+            // now reset x and y, and do the left diagonal
+            x = coords.x; y = coords.y;
+            while (x > 0 && y >= 0) { // +
+                x--;
+                y--; // +
+                if (getElement(y, x) == null) {
+                    validCells.add(new Point(x, y));
+                } else break;
+            }
+        }
+
+        return validCells;
     }
 
 }

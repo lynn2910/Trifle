@@ -1,16 +1,21 @@
 package trifle.control;
 
+import trifle.boardifier.control.ActionFactory;
 import trifle.boardifier.control.ActionPlayer;
 import trifle.boardifier.control.Controller;
+import trifle.boardifier.model.GameElement;
 import trifle.boardifier.model.Model;
 import trifle.boardifier.model.Player;
 import trifle.boardifier.model.action.ActionList;
 import trifle.boardifier.view.ConsoleColor;
 import trifle.boardifier.view.View;
 import trifle.model.OldMove;
+import trifle.model.Pawn;
+import trifle.model.TrifleBoard;
 import trifle.model.TrifleStageModel;
 import trifle.rules.GameMode;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -221,24 +226,150 @@ public class TrifleController extends Controller {
 
         stageModel.addOldMove(oldMove);
         stageModel.updateHistory();
-
-
     }
 
     private void botTurn(Player p) {
         // TODO computer play?
     }
 
+    /**
+     * Analyze the movement and play if possible
+     * @param move The move requested by the user. Must be lowercase
+     * @return true if the move was approved, false elsewhere
+     */
     private boolean analyseAndPlay(String move) {
-        // TODO
+        TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
 
-        ActionList actions = new ActionList();
+        Integer pawnIndex = extractPawnIndex(move);
+        if (pawnIndex == null)
+            return false;
+
+        Point moveCoordinates = extractRequestedMove(move);
+        if (moveCoordinates == null)
+            return false;
+
+        // now we know that the user input is correctly formed, we can check if the movement is legal
+        List<Pawn> pawns = model.getIdPlayer() == 0 ? gameStage.getBluePlayer() : gameStage.getCyanPlayer();
+        Pawn pawn = model.getIdPlayer() == 0 ? pawns.get(pawnIndex) : pawns.get(7 - pawnIndex);
+
+        Point lastEnemyMovement = model.getIdPlayer() == 0 ? gameStage.getLastCyanPlayerMove() : gameStage.getLastBluePlayerMove();
+
+        // Check the pawn color based on the last movement of the enemy.
+        if (lastEnemyMovement != null) {
+            // TODO There is another rule?
+            // get this cell color
+            int colorIndex = TrifleBoard.BOARD[lastEnemyMovement.x][lastEnemyMovement.y];
+            if (colorIndex != pawn.getColorIndex()) {
+                System.out.println(ConsoleColor.RED + "You can only play the pawn on which your opponent's pawn case color was moved.\nThis means that, if he move his blue pawn onto the red case, you must play the red pawn.\n" + ConsoleColor.RESET);
+                return false;
+            }
+        }
+
+        // Update the allowed cells
+        ((TrifleBoard) gameStage.getBoard()).setValidCells(pawn.getCoords(), model.getIdPlayer());
+
+        // check it
+        if (!gameStage.getBoard().canReachCell(moveCoordinates.x, moveCoordinates.y)) {
+            System.out.println("You can't play this move. Try again.");
+            return false;
+        }
+
+        pawn.setCoords(moveCoordinates);
+
+        ActionList actions = ActionFactory.generatePutInContainer(
+                model,
+                pawn,
+                TrifleBoard.BOARD_ID,
+                moveCoordinates.y,
+                moveCoordinates.x
+        );
+
         actions.setDoEndOfTurn(true);
         ActionPlayer play = new ActionPlayer(model, this, actions);
 
         play.start();
 
         return true;
+    }
+
+    /**
+     * Return the pawn index from the user's input
+     * @param move The movement in lower case, it can be CG7 or A1G7, for example
+     * @return The pawn index or null if it doesn't exist/is invalid
+     */
+    public Integer extractPawnIndex(String move) {
+        TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
+
+        if (move.length() == 3) {
+            // a color code
+            return switch (move.charAt(0)) {
+                case 'c' -> 0;
+                case 'b' -> 1;
+                case 'p' -> 2;
+                case 'd' -> 3;
+                case 'e' -> 4;
+                case 'f' -> 5;
+                case 'g' -> 6;
+                case 'n' -> 7;
+                default -> null;
+            };
+        }
+        else if (move.length() == 4) {
+            // the first two characters are the pawn coordinates
+            int x = ((int) move.charAt(0)) - 97; // we get the first char,
+            // and as it should be between a and h (included),
+            // we use `pos - 97` (ascii code of 'a')
+
+            if (x < 0 || x > 7) {
+                System.out.println(ConsoleColor.RED + "The position of the pawn you gave is invalid on the X axis at least." + ConsoleColor.RESET);
+                return null;
+            }
+
+            int y = ((int) move.charAt(1)) - 49; // we get the second char,
+            // and as it should be between 1 and 8 (included),
+            // we use `pos - 48` (ascii code of '0')
+
+            if (y < 0 || y > 7) {
+                System.out.println(ConsoleColor.RED + "The position of the pawn you gave is invalid on the Y axis." + ConsoleColor.RESET);
+                return null;
+            }
+
+            TrifleBoard board = (TrifleBoard) gameStage.getBoard();
+
+            GameElement pawn = board.getElement(y, x);
+            return pawn != null ? ((Pawn) pawn).getColorIndex() : null;
+        }
+        return null;
+    }
+
+    /**
+     * Return the coordinates of the wanted movement from the user's input
+     * @param move The movement in lower case, it can be CG7 or A1G7, for example
+     * @return The coordinates on (x, y) of the movement, or null if the movement is invalid/out of bound
+     */
+    public Point extractRequestedMove(String move) {
+        int offset;
+        if (move.length() == 3) {
+            offset = 1;
+        } else if (move.length() == 4) {
+            offset = 2;
+        } else throw new IllegalArgumentException("The input length is not 3 or 4, the input form wasn't checked before being passed to this function");
+
+        int x = ((int) move.charAt(offset) - 97); // same method as `extractPawnPosition`
+
+        if (x < 0 || x > 7) {
+            System.out.println(ConsoleColor.RED + "The movement you gave is invalid on the X axis at least." + ConsoleColor.RESET);
+            return null;
+        }
+
+        int y = ((int) move.charAt(offset + 1) - 49); // same method as `extractPawnPosition`
+
+        if (y < 1 || y > 8) {
+            System.out.println(ConsoleColor.RED + "The movement you gave is invalid on the Y axis." + ConsoleColor.RESET);
+            return null;
+        }
+
+        return new Point(x, y);
     }
 
     @Override

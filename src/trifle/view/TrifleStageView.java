@@ -39,18 +39,18 @@ public class TrifleStageView extends GameStageView {
         addLook(boardLook);
 
         // add look for all pawns
-        for (int i = 0; i < 8; i++) {
+        for (int col = 0; col < 8; col++) { // col = `x` axis
             // Add blue
-            GameElement bluePawn = model.getBluePlayer().get(i);
+            GameElement bluePawn = model.getBluePlayer().get(col);
             ElementLook bluePawnLook = new PawnLook(bluePawn);
             addLook(bluePawnLook);
-            model.getBoard().addElement(bluePawn, 0, i);
+            model.getBoard().addElement(bluePawn, 0, col);
 
             // Add cyan
-            GameElement cyanPawn = model.getCyanPlayer().get(i);
+            GameElement cyanPawn = model.getCyanPlayer().get(col);
             ElementLook cyanPawnLook = new PawnLook(cyanPawn);
             addLook(cyanPawnLook);
-            model.getBoard().addElement(cyanPawn, 7, i);
+            model.getBoard().addElement(cyanPawn, 7, col);
         }
 
         // add look for inners cases (the cell colors)
