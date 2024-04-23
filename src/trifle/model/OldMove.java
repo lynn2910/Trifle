@@ -13,8 +13,6 @@ public class OldMove {
     // Normalized to A1
     private String move;
 
-    public OldMove(){}
-
     public OldMove(int playerId, String playerName, String pawn, String move){
         this.playerId = playerId;
         this.playerName = playerName;
