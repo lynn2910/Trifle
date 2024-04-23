@@ -434,6 +434,34 @@ public class TrifleController extends Controller {
 
         Player p = model.getCurrentPlayer();
         TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
-        stageModel.getPlayerName().setText(p.getName() + " is playing.");
+
+        String text = p.getName() + " is playing.";
+
+        Point lastOpponentMove = model.getIdPlayer() == 0 ? stageModel.getLastCyanPlayerMove() : stageModel.getLastBluePlayerMove();
+        if (lastOpponentMove == null) {
+            text += " You start, so you can choose which pawn your moving.";
+        } else {
+            // Tell which color must be moved
+            int colorIndex = TrifleBoard.BOARD[lastOpponentMove.y][lastOpponentMove.x];
+
+            text += " You must play the ";
+            text += Pawn.COLORS[colorIndex];
+
+            text += switch (colorIndex) {
+                case 0 -> "Cyan";
+                case 1 -> "Blue";
+                case 2 -> "Purple";
+                case 3 -> "White";
+                case 4 -> "Yellow";
+                case 5 -> "Red";
+                case 6 -> "Green";
+                case 7 -> "Black";
+                default -> "Unknown";
+            };
+
+            text += ConsoleColor.RESET;
+        }
+
+        stageModel.getPlayerName().setText(text);
     }
 }

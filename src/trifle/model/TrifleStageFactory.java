@@ -4,6 +4,7 @@ import trifle.boardifier.model.GameStageModel;
 import trifle.boardifier.model.StageElementsFactory;
 import trifle.boardifier.model.TextElement;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class TrifleStageFactory extends StageElementsFactory {
     @Override
     public void setup() {
         // Create the text that will be used to display the player name
-        TextElement playerNameText = new TextElement(stageModel.getCurrentPlayerName() + " is playing.", stageModel);
+        TextElement playerNameText = new TextElement(stageModel.getCurrentPlayerName() + " is playing. You start, so you can choose which pawn your moving.", stageModel);
         playerNameText.setLocation(BOARD_WIDTH + 2, 6);
         stageModel.setPlayerName(playerNameText);
 
