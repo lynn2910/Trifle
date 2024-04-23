@@ -69,4 +69,32 @@ public class Pawn extends GameElement {
     public int getPlayerNumber(){
         return playerNumber;
     }
+
+    /**
+     * Format the pawn information
+     * @return Return a string in the form of "Cyan (A1)
+     */
+    public String getFormattedPawnId() {
+
+        String sb = COLORS[colorIndex];
+        sb += switch (this.getColorIndex()) {
+            case 0 -> "Cyan  ";
+            case 1 -> "Blue  ";
+            case 2 -> "Purple";
+            case 3 -> "White ";
+            case 4 -> "Yellow";
+            case 5 -> "Red   ";
+            case 6 -> "Green ";
+            case 7 -> "Black ";
+            default -> "Unknown";
+        };
+        sb += ConsoleColor.RESET;
+
+        sb +=" (";
+        sb += (char) (this.getCoords().x + 65);
+        sb += (this.getCoords().y + 1);
+        sb += ')';
+
+        return sb;
+    }
 }

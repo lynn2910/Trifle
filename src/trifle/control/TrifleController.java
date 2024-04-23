@@ -77,7 +77,7 @@ public class TrifleController extends Controller {
             waitBeforeEnd = Integer.parseInt(System.getenv().get("WAIT_BEFORE_END"));
         }
 
-        while(!this.model.isEndStage()) {
+        while(!this.model.isEndStage() && this.model.getIdWinner() == -1) {
             long before = System.currentTimeMillis();
 
             this.playTurn();
@@ -171,12 +171,6 @@ public class TrifleController extends Controller {
 
                 ok = this.analyseAndPlay(move);
 
-                if (ok) {
-                    // TODO Require to be normalized to A1G7
-                    this.addOldMoveToFile(move);
-                    this.addMoveToOldMoves(p, "Cyan (A1)", "G7");
-                }
-
             } catch (IOException e) {
                 System.out.println(ConsoleColor.RED + e.getMessage());
                 e.printStackTrace();
@@ -258,7 +252,7 @@ public class TrifleController extends Controller {
         if (lastEnemyMovement != null) {
             // TODO There is another rule?
             // get this cell color
-            int colorIndex = TrifleBoard.BOARD[lastEnemyMovement.x][lastEnemyMovement.y];
+            int colorIndex = TrifleBoard.BOARD[lastEnemyMovement.y][lastEnemyMovement.x];
             if (colorIndex != pawn.getColorIndex()) {
                 System.out.println(ConsoleColor.RED + "You can only play the pawn on which your opponent's pawn case color was moved.\nThis means that, if he move his blue pawn onto the red case, you must play the red pawn.\n" + ConsoleColor.RESET);
                 return false;
@@ -274,8 +268,6 @@ public class TrifleController extends Controller {
             return false;
         }
 
-        pawn.setCoords(moveCoordinates);
-
         ActionList actions = ActionFactory.generatePutInContainer(
                 model,
                 pawn,
@@ -289,7 +281,70 @@ public class TrifleController extends Controller {
 
         play.start();
 
+        if (model.getIdPlayer() == 0) {
+            gameStage.setLastBluePlayerMove(moveCoordinates);
+        } else {
+            gameStage.setLastCyanPlayerMove(moveCoordinates);
+        }
+
+        this.addOldMoveToFile(move);
+        this.addMoveToOldMoves(model.getCurrentPlayer(), pawn.getFormattedPawnId(), normalizeCoordinate(moveCoordinates, true));
+        pawn.setCoords(moveCoordinates);
+
+
+        // !! Last one !!
+        this.detectWin();
+
         return true;
+    }
+
+    /**
+     * Normalize a coordinate from a `Point` to a String like `G7`
+     * @param coordinates The coordinates to normalize
+     * @param colored If the output string should have colors
+     * @return The normalized coordinate
+     */
+    private String normalizeCoordinate(Point coordinates, boolean colored) {
+        String sb = "";
+
+        System.out.println(coordinates);
+
+        if (colored) {
+            int colorIndex = TrifleBoard.BOARD[coordinates.y][coordinates.x];
+            sb += Pawn.COLORS[colorIndex];
+        }
+
+        sb += ((char) (coordinates.x + 65)) + "";
+        sb += (coordinates.y + 1);
+
+        if (colored)
+            sb += ConsoleColor.RESET;
+
+        return sb;
+    }
+
+    /**
+     * Detect if there is a win-win situation
+     */
+    private void detectWin(){
+        // TODO detect situations when the game is a draw (no one can move his pawns)
+        TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
+
+        // check blue pawns
+        for (Pawn pawn: gameStage.getBluePlayer()) {
+            if (pawn.getCoords().y == 7) {
+                model.setIdWinner(0);
+                this.endGame();
+            }
+        }
+
+        // check cyan pawns
+        for (Pawn pawn: gameStage.getCyanPlayer()) {
+            if (pawn.getCoords().y == 0) {
+                model.setIdWinner(1);
+                this.endGame();
+            }
+        }
     }
 
     /**
@@ -364,7 +419,7 @@ public class TrifleController extends Controller {
 
         int y = ((int) move.charAt(offset + 1) - 49); // same method as `extractPawnPosition`
 
-        if (y < 1 || y > 8) {
+        if (y < 0 || y > 8) {
             System.out.println(ConsoleColor.RED + "The movement you gave is invalid on the Y axis." + ConsoleColor.RESET);
             return null;
         }

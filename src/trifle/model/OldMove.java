@@ -32,6 +32,6 @@ public class OldMove {
 
     @Override
     public String toString() {
-        return getPlayerColor() + playerName + ConsoleColor.RESET + " played the " + pawn + " on " + move;
+        return getPlayerColor() + playerName + ConsoleColor.RESET + " played " + pawn + " on " + move;
     }
 }
