@@ -163,7 +163,7 @@ public class TrifleStageModel extends GameStageModel {
      */
     public void updatePlayerPoints() {
         String text = playerNames.get(0) + ": " + this.getBluePlayerPoints()
-                + "   " + playerNames.get(1) + ": " + this.getBluePlayerPoints();
+                + "   " + playerNames.get(1) + ": " + this.getCyanPlayerPoints();
 
         if (this.getPlayerPoints() == null) {
             TextElement playerPointsCounter = new TextElement(text, this);
