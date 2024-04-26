@@ -27,8 +27,18 @@ public class TrifleController extends Controller {
     // Store the gameMode. Useful to check how many rounds are left.
     private final GameMode gameMode;
     private final List<String> playerNames;
+    private final long startTime;
+
+    /**
+     * Count the number of rounds currently played
+     */
+    private int currentRound = 0;
+
+    private int bluePlayerPoints = 0;
+    private int cyanPlayerPoints = 0;
 
     private FileWriter outputMovesFileWriter;
+    private final InputStreamReader inputStreamReader;
 
     /**
      * The Buffer used by the game
@@ -39,6 +49,11 @@ public class TrifleController extends Controller {
         super(model, view);
         this.gameMode = gameMode;
         this.playerNames = playerNames;
+
+        this.inputStreamReader = new InputStreamReader(System.in);
+        this.consoleSysIn = new BufferedReader(inputStreamReader);
+
+        this.startTime = System.currentTimeMillis();
     }
 
     public void addOutputMovesFileWriter(String path) throws IOException {
@@ -57,7 +72,6 @@ public class TrifleController extends Controller {
 
         stageModel.setGameMode(gameMode);
         stageModel.setPlayerNames(playerNames);
-        stageModel.updatePlayerPoints();
     }
 
     /**
@@ -67,8 +81,8 @@ public class TrifleController extends Controller {
     public void stageLoop() {
         this.shareInformations();
 
-        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
-        this.consoleSysIn = new BufferedReader(inputStreamReader);
+        this.updateRoundCounter();
+        this.updatePlayersCounter();
 
         this.update();
 
@@ -82,6 +96,7 @@ public class TrifleController extends Controller {
 
             this.playTurn();
             this.endOfTurn();
+            this.update();
 
             long after = System.currentTimeMillis();
             if (waitBeforeEnd > 0 && after - before < waitBeforeEnd) {
@@ -89,21 +104,22 @@ public class TrifleController extends Controller {
                 try { Thread.sleep(1000 - (after-before)); }
                 catch (InterruptedException e) { System.out.println(e.getMessage()); e.printStackTrace(); }
             }
-
-            this.update();
         }
+    }
 
-        // close the streams at the end of the game :)
+    public void closeStreams(){
         try {
             this.consoleSysIn.close();
             inputStreamReader.close();
+
+            // Close the file writer if any
+            if (this.outputMovesFileWriter != null)
+                this.outputMovesFileWriter.close();
         } catch (IOException e) {
             System.out.println("Error closing input stream");
             e.printStackTrace();
             System.exit(1);
         }
-
-        this.endGame();
     }
 
     private void playTurn() {
@@ -150,7 +166,13 @@ public class TrifleController extends Controller {
         while (!ok) {
             System.out.print(p.getName() + " > ");
             try {
-                String move = consoleSysIn.readLine().toLowerCase().trim();
+                String potentialMove = consoleSysIn.readLine();
+                if (potentialMove == null || potentialMove.isEmpty()) {
+                    System.out.println("\n" + ConsoleColor.RED + "The program received nothing as action. The stdin channel probably ended." + ConsoleColor.RESET);
+                    System.exit(1);
+                }
+
+                String move = potentialMove.toLowerCase().trim();
 
                 if (move.contains("stop")) {
                     System.out.println(ConsoleColor.YELLOW + "You used the keyword 'stop'. End of the game." + ConsoleColor.RESET);
@@ -180,19 +202,73 @@ public class TrifleController extends Controller {
         }
     }
 
+    private void updateRoundCounter(){
+        TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
+
+        String text = "Round " + (this.currentRound + 1) + "/" + gameMode.numberOfRounds();
+        stageModel.getRoundCounter().setText(text);
+    }
+
+    private void updatePlayersCounter(){
+        TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
+
+        stageModel.updatePlayerPoints(bluePlayerPoints, cyanPlayerPoints);
+    }
+
     @Override
     public void endGame(){
-        // Close the file writer if any
-        if (this.outputMovesFileWriter != null) {
-            try {
-                this.outputMovesFileWriter.close();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
+        // Winner logic
+        if (this.gameMode.numberOfRounds() > this.currentRound) {
+            // A round ended, so we give the winner of this round or tell that it's a draw otherwise
+            if (model.getIdWinner() != -1) {
+                System.out.println(model.getPlayers().get(model.getIdWinner()).getName() + " wins this round (no." + (this.currentRound + 1) + ")");
+
+                // increase the winner's points
+                if (model.getIdPlayer() == 0) {
+                    this.bluePlayerPoints++;
+                } else {
+                    this.cyanPlayerPoints++;
+                }
+            } else {
+                System.out.println("Draw for the round " + (this.currentRound + 1));
+            }
+
+            // Update the round counter
+            this.updateRoundCounter();
+        } else {
+            // All rounds have been played, we gave the number of points for each player and who win
+            System.out.println(model.getPlayers().get(0).getName() + ": " + bluePlayerPoints);
+            System.out.println(model.getPlayers().get(1).getName() + ": " + cyanPlayerPoints);
+            System.out.println();
+            System.out.println("Rounds: " + gameMode.numberOfRounds());
+            System.out.println("Time:   " + formatTime(System.currentTimeMillis() - startTime));
+
+            if (bluePlayerPoints > cyanPlayerPoints)
+                System.out.println("    " + model.getPlayers().get(0).getName() + " wins this game.");
+            else if (bluePlayerPoints < cyanPlayerPoints)
+                System.out.println("    " + model.getPlayers().get(1).getName() + " wins this game.");
+            else {
+                System.out.println("    Draw.");
             }
         }
+    }
 
-        super.endGame();
+    private String formatTime(long time){
+        String t = "";
+
+        long hours = time / 1000 / 60 / 60 % 24;
+        if (hours > 0)
+            t += hours+"h ";
+
+        long minutes = time / 1000 / 60 % 60;
+        if (minutes > 0)
+            t += minutes+"m ";
+
+        long seconds = time / 1000 % 60;
+        if (seconds > 0)
+            t += seconds+"s";
+
+        return t.trim();
     }
 
     private void addOldMoveToFile(String move){
@@ -235,12 +311,16 @@ public class TrifleController extends Controller {
         TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
 
         Integer pawnIndex = extractPawnIndex(move);
-        if (pawnIndex == null)
+        if (pawnIndex == null) {
+            System.out.println(ConsoleColor.RED + "The pawn you gave wasn't found." + ConsoleColor.RESET);
             return false;
+        }
 
         Point moveCoordinates = extractRequestedMove(move);
-        if (moveCoordinates == null)
+        if (moveCoordinates == null) {
+            System.out.println(ConsoleColor.RED + "The movement you gave is invalid." + ConsoleColor.RESET);
             return false;
+        }
 
         // now we know that the user input is correctly formed, we can check if the movement is legal
         List<Pawn> pawns = model.getIdPlayer() == 0 ? gameStage.getBluePlayer() : gameStage.getCyanPlayer();
@@ -264,7 +344,7 @@ public class TrifleController extends Controller {
 
         // check it
         if (!gameStage.getBoard().canReachCell(moveCoordinates.x, moveCoordinates.y)) {
-            System.out.println("You can't play this move. Try again.");
+            System.out.println(ConsoleColor.RED + "You can't play this move. Try again." + ConsoleColor.RESET);
             return false;
         }
 
@@ -425,6 +505,13 @@ public class TrifleController extends Controller {
         }
 
         return new Point(x, y);
+    }
+
+    public void increaseRoundCounter(){
+        this.currentRound++;
+    }
+    public int getCurrentRound(){
+        return this.currentRound;
     }
 
     @Override

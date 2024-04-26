@@ -60,37 +60,35 @@ public class TrifleConsole {
 
 
         Tui tui = new Tui();
-        GameMode mode = GameMode.defaultValue();
+        GameMode gameMode = GameMode.defaultValue();
 
         // get the required data
         if (externalArgs.isEmpty()) {
             tui.run();
-            mode = tui.getGameMode();
+            gameMode = tui.getGameMode();
         }
         else {
             switch (externalArgs.get(0)) {
                 case "0": break;
                 case "1": {
-                    mode = GameMode.Standard;
+                    gameMode = GameMode.Standard;
                     break;
                 }
                 case "2": {
-                    mode = GameMode.Marathon;
+                    gameMode = GameMode.Marathon;
                     break;
                 }
                 default: {
-                    System.out.println("Le mode de jeu que vous souhaitez jouer (" + externalArgs.get(0) + ") n'est pas compris en 0 et 2 (inclus).\nLe mode de jeu a été automatiquement passé en Humain vs Humain.");
+                    System.out.println("Le gameMode de jeu que vous souhaitez jouer (" + externalArgs.get(0) + ") n'est pas compris en 0 et 2 (inclus).\nLe gameMode de jeu a été automatiquement passé en Humain vs Humain.");
                 }
             }
         }
 
-        GameMode gameMode = GameMode.valueOf(String.valueOf(mode));
-
         Model model = new Model();
 
         // Add the players to the model
-        List<String> playerNames = getPlayerNames(tui, mode);
-        switch (getPlayerMode(tui, mode, externalArgs.isEmpty())) {
+        List<String> playerNames = getPlayerNames(tui, gameMode);
+        switch (getPlayerMode(tui, gameMode, externalArgs.isEmpty())) {
             case 0: {
                 model.addHumanPlayer(playerNames.get(0));
                 model.addHumanPlayer(playerNames.get(1));
@@ -107,7 +105,7 @@ public class TrifleConsole {
                 break;
             }
             default: {
-                System.out.println(RED + "Un problème est survenue dans la configuration du mode de jeux." + RESET);
+                System.out.println(RED + "Un problème est survenue dans la configuration du gameMode de jeux." + RESET);
                 System.exit(1);
             }
         }
@@ -129,13 +127,35 @@ public class TrifleConsole {
         }
 
         try {
-            controller.startGame();
-            controller.stageLoop();
-        } catch (GameException e) {
+            int numberOfRounds = gameMode.numberOfRounds();
+
+            System.out.println("You'll play " + numberOfRounds + " rounds.");
+
+            while (controller.getCurrentRound() < numberOfRounds) {
+                System.out.println("Round no." + (controller.getCurrentRound() + 1));
+
+                controller.startGame();
+                controller.stageLoop();
+
+                controller.increaseRoundCounter();
+
+                if (controller.getCurrentRound() < numberOfRounds - 1) {
+                    System.out.println("End of round. Next round start in 5s...");
+                    Thread.sleep(5000);
+                    System.out.println("\n\n");
+                }
+            }
+
+            controller.endGame();
+        } catch (GameException | InterruptedException e) {
             System.out.println(RED + e.getMessage());
             e.printStackTrace();
             System.out.println("Cannot start the game. Abort" + RESET);
             System.exit(1);
+        } finally {
+            Logger.trace("Closing InputReader stream...");
+            controller.closeStreams();
+            Logger.trace("Controller's streams closed successfully");
         }
     }
 

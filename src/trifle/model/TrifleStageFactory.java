@@ -32,7 +32,7 @@ public class TrifleStageFactory extends StageElementsFactory {
         stageModel.setRoundCounter(roundCounterText);
 
         // create the player counter
-        stageModel.updatePlayerPoints();
+        stageModel.updatePlayerPoints(0, 0);
 
         // add all texts history
         for (int i = 0; i < MAX_HISTORY_SIZE; i++) {

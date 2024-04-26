@@ -29,9 +29,6 @@ public class TrifleStageModel extends GameStageModel {
     private GameMode gameMode = GameMode.defaultValue();
     private PlayerMode playerMode = PlayerMode.defaultValue();
 
-    private int bluePlayerPoints = 0;
-    private int cyanPlayerPoints = 0;
-
     private final List<TextElement> movesHistory;
     private final List<OldMove> oldMovesList;
 
@@ -129,23 +126,6 @@ public class TrifleStageModel extends GameStageModel {
         addElement(roundCounter);
     }
 
-    public int getBluePlayerPoints(){
-        return this.bluePlayerPoints;
-    }
-    public void incBluePlayerPoints(){
-        this.bluePlayerPoints++;
-    }
-
-    public int getCyanPlayerPoints(){
-        return this.cyanPlayerPoints;
-    }
-    public void incCyanPlayerPoints(){
-        this.cyanPlayerPoints++;
-    }
-
-    public List<String> getPlayerNames(){
-        return this.playerNames;
-    }
     public void setPlayerNames(List<String> playerNames) {
         this.playerNames = playerNames;
     }
@@ -161,9 +141,9 @@ public class TrifleStageModel extends GameStageModel {
     /**
      * Create or update the TextElement which store the number of points for each player
      */
-    public void updatePlayerPoints() {
-        String text = playerNames.get(0) + ": " + this.getBluePlayerPoints()
-                + "   " + playerNames.get(1) + ": " + this.getCyanPlayerPoints();
+    public void updatePlayerPoints(int bluePlayerPoints, int cyanPlayerPoints) {
+        String text = playerNames.get(0) + ": " + bluePlayerPoints
+                + "   " + playerNames.get(1) + ": " + cyanPlayerPoints;
 
         if (this.getPlayerPoints() == null) {
             TextElement playerPointsCounter = new TextElement(text, this);
