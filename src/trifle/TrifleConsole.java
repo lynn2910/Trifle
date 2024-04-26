@@ -79,7 +79,7 @@ public class TrifleConsole {
                     break;
                 }
                 default: {
-                    System.out.println("Le gameMode de jeu que vous souhaitez jouer (" + externalArgs.get(0) + ") n'est pas compris en 0 et 2 (inclus).\nLe gameMode de jeu a été automatiquement passé en Humain vs Humain.");
+                    System.out.println("The gameMode you wish to play (" + externalArgs.get(0) + ") is not between 0 and 2 (inclusive).\nThe gameMode has been automatically changed to Human vs Human.");
                 }
             }
         }
@@ -105,7 +105,7 @@ public class TrifleConsole {
                 break;
             }
             default: {
-                System.out.println(RED + "Un problème est survenue dans la configuration du gameMode de jeux." + RESET);
+                System.out.println(RED + "A problem has occurred in the gameMode configuration." + RESET);
                 System.exit(1);
             }
         }
