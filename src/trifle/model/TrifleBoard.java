@@ -90,7 +90,7 @@ public class TrifleBoard extends ContainerElement {
             // check on the right diagonal
             int x = coords.x, y = coords.y;
 
-            while (x < 7 && y >= 0) {
+            while (x < 7 && y > 0) {
                 x++;
                 y--; // +
                 if (getElement(y, x) == null) {
@@ -100,7 +100,7 @@ public class TrifleBoard extends ContainerElement {
 
             // now reset x and y, and do the left diagonal
             x = coords.x; y = coords.y;
-            while (x > 0 && y >= 0) { // +
+            while (x > 0 && y > 0) { // +
                 x--;
                 y--; // +
                 if (getElement(y, x) == null) {
