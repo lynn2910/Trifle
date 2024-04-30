@@ -1,8 +1,8 @@
-package trifle.boardifier.view;
+package boardifier.view;
 
-import trifle.boardifier.model.GameElement;
+import boardifier.model.GameElement;
 
-import trifle.boardifier.model.Model;
+import boardifier.model.Model;
 
 public class View {
 

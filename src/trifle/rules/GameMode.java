@@ -22,7 +22,7 @@ public enum GameMode {
      */
     public String toString() {
         return switch (this) {
-            case Fast -> "Rapide";
+            case Fast     -> "Fast";
             case Standard -> "Standard";
             case Marathon -> "Marathon";
         };
@@ -31,8 +31,22 @@ public enum GameMode {
     public String getDescription(){
         // TODO ajouter les descriptions des différents modes de jeu
         return switch (this) {
-            case Fast ->  "Une manche";
-            default -> "";
+            case Fast     -> "One set";
+            case Standard -> "3 sets";
+            default       -> "";
         };
+    }
+
+    public int numberOfRounds(){
+        // FIXME heu je ne connais pas les valeurs moi!
+        return switch (this) {
+            case Fast -> 1;
+            case Standard -> 3;
+            case Marathon -> 5;
+        };
+    }
+
+    public static GameMode defaultValue() {
+        return Fast;
     }
 }

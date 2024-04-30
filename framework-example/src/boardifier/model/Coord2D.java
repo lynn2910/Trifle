@@ -1,4 +1,4 @@
-package trifle.boardifier.model;
+package boardifier.model;
 
 public class Coord2D {
     private double x;

@@ -1,8 +1,8 @@
-package trifle.boardifier.model.action;
+package boardifier.model.action;
 
-import trifle.boardifier.model.*;
-import trifle.boardifier.model.animation.AnimationTypes;
-import trifle.boardifier.model.animation.CyclicFaceAnimation;
+import boardifier.model.*;
+import boardifier.model.animation.AnimationTypes;
+import boardifier.model.animation.CyclicFaceAnimation;
 
 import java.util.Calendar;
 import java.util.Random;

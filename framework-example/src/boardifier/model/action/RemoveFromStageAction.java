@@ -1,7 +1,7 @@
-package trifle.boardifier.model.action;
+package boardifier.model.action;
 
-import trifle.boardifier.model.GameElement;
-import trifle.boardifier.model.Model;
+import boardifier.model.GameElement;
+import boardifier.model.Model;
 
 public class RemoveFromStageAction extends GameAction {
 

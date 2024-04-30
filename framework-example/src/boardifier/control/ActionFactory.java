@@ -1,9 +1,9 @@
-package trifle.boardifier.control;
+package boardifier.control;
 
-import trifle.boardifier.model.ContainerElement;
-import trifle.boardifier.model.GameElement;
-import trifle.boardifier.model.Model;
-import trifle.boardifier.model.action.*;
+import boardifier.model.ContainerElement;
+import boardifier.model.GameElement;
+import boardifier.model.Model;
+import boardifier.model.action.*;
 
 /**
  * this class provides static methods to ease the creation of action lists.

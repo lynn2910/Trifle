@@ -1,4 +1,4 @@
-package trifle.boardifier.model.animation;
+package boardifier.model.animation;
 
 public class AnimationState {
     // the possibles states of the animation : started, paused, no animation

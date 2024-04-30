@@ -1,7 +1,7 @@
-package trifle.boardifier.view;
+package boardifier.view;
 
-import trifle.boardifier.control.Logger;
-import trifle.boardifier.model.GameElement;
+import boardifier.control.Logger;
+import boardifier.model.GameElement;
 
 public abstract class ElementLook {
 

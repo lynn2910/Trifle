@@ -1,6 +1,6 @@
-package trifle.boardifier.model.animation;
+package boardifier.model.animation;
 
-import trifle.boardifier.model.Model;
+import boardifier.model.Model;
 
 public class WaitAnimation extends Animation {
     protected int nbFrames;

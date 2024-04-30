@@ -1,4 +1,4 @@
-package trifle.boardifier.model.animation;
+package boardifier.model.animation;
 
 import java.util.ArrayList;
 import java.util.List;

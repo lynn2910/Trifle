@@ -1,10 +1,10 @@
-package trifle.boardifier.model.action;
+package boardifier.model.action;
 
-import trifle.boardifier.model.GameElement;
-import trifle.boardifier.model.Model;
-import trifle.boardifier.model.animation.Animation;
-import trifle.boardifier.model.animation.AnimationCallback;
-import trifle.boardifier.model.animation.AnimationTypes;
+import boardifier.model.GameElement;
+import boardifier.model.Model;
+import boardifier.model.animation.Animation;
+import boardifier.model.animation.AnimationCallback;
+import boardifier.model.animation.AnimationTypes;
 
 public abstract class GameAction {
     protected Model model;

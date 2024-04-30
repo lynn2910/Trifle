@@ -25,10 +25,4 @@ public class Utils {
         fr.close();
         return sb.toString();
     }
-
-    public static void writeFile(File f, String content) throws IOException {
-        FileWriter fw = new FileWriter(f);
-        fw.write(content);
-        fw.close();
-    }
 }

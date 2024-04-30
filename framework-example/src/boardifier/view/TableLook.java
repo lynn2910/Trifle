@@ -1,7 +1,7 @@
-package trifle.boardifier.view;
+package boardifier.view;
 
-import trifle.boardifier.control.Logger;
-import trifle.boardifier.model.ContainerElement;
+import boardifier.control.Logger;
+import boardifier.model.ContainerElement;
 
 public class TableLook extends ContainerLook {
 

@@ -1,8 +1,8 @@
-package trifle.boardifier.control;
+package boardifier.control;
 
-import trifle.boardifier.model.*;
-import trifle.boardifier.model.action.ActionList;
-import trifle.boardifier.model.action.GameAction;
+import boardifier.model.*;
+import boardifier.model.action.ActionList;
+import boardifier.model.action.GameAction;
 import java.util.List;
 
 

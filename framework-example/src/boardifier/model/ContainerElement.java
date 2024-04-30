@@ -1,7 +1,7 @@
-package trifle.boardifier.model;
+package boardifier.model;
 
-import trifle.boardifier.control.Logger;
-import trifle.boardifier.view.ElementLook;
+import boardifier.control.Logger;
+import boardifier.view.ElementLook;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package trifle.boardifier.model;
+package boardifier.model;
 
 public final class Event {
 

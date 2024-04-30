@@ -1,7 +1,7 @@
-package trifle.boardifier.control;
+package boardifier.control;
 
-import trifle.boardifier.model.action.ActionList;
-import trifle.boardifier.model.Model;
+import boardifier.model.action.ActionList;
+import boardifier.model.Model;
 
 public abstract class Decider {
     protected Model model;

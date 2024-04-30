@@ -1,7 +1,7 @@
-package trifle.boardifier.control;
+package boardifier.control;
 
-import trifle.boardifier.model.*;
-import trifle.boardifier.view.*;
+import boardifier.model.*;
+import boardifier.view.*;
 
 import java.util.HashMap;
 import java.util.Map;

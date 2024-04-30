@@ -17,12 +17,27 @@ public enum PlayerMode {
      */
     ComputerVsComputer;
 
+    public static PlayerMode defaultValue() {
+        return HumanVsHuman;
+    }
+
     public String toString() {
         return switch (this) {
-            case HumanVsHuman -> "Joueur contre Joueur";
-            case HumanVsComputer -> "Joueur contre Ordinateur";
-            case ComputerVsComputer -> "Ordinateur contre Ordinateur";
-            default -> "Mode inconnu";
+            case HumanVsHuman       -> "Player vs Player";
+            case HumanVsComputer    -> "Player vs Computer";
+            case ComputerVsComputer -> "Computer vs Computer";
         };
+    }
+
+    public int getBotNumber(){
+        return switch (this) {
+            case HumanVsHuman       -> 0;
+            case HumanVsComputer    -> 1;
+            case ComputerVsComputer -> 2;
+        };
+    }
+
+    public int getHumanNumber() {
+        return 2 - getBotNumber();
     }
 }
