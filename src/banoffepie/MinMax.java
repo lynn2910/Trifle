@@ -1,6 +1,5 @@
 package banoffepie;
 
-import banoffepie.tree.Node;
 import banoffepie.tree.Tree;
 import trifle.model.TrifleBoard;
 
@@ -13,10 +12,13 @@ import java.util.List;
  * It implements the MinMax algorithm with either a neural network or a deterministic algorithm
  */
 public class MinMax extends Tree {
-    public static int DEPTH = 0;
+    public static int DEPTH = 3;
+
+    private MinMaxStatsTracker tracker;
 
     public MinMax(){
         super();
+        this.tracker = new MinMaxStatsTracker();
     }
 
     public void buildCurrentTree(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement) {
@@ -29,6 +31,10 @@ public class MinMax extends Tree {
      * @param boardStatus The current status of the board
      */
     public void buildCurrentTree(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement, int depth) {
+        this.tracker.setDepth(depth);
+        this.tracker.startCounter();
+
+
         List<Point> movablePawns = determineWhichPawnsCanBeMove(boardStatus, currentPlayerId, lastOpponentMovement);
 
         assert movablePawns != null;
@@ -47,12 +53,16 @@ public class MinMax extends Tree {
             System.out.println("movesAllowed size = " + movesAllowed.size());
 
             for (Point move : movesAllowed) {
+                this.tracker.newNode();
+
                 MinMaxNode node = new MinMaxNode(movablePawn, move, currentPlayerId);
-                node.buildTree(boardStatus, depth);
+                node.buildTree(boardStatus, depth, tracker);
                 this.getRoot().add(node);
             }
-            System.out.println();
         }
+
+
+        this.tracker.endTimer();
     }
 
     private List<Point> determineWhichPawnsCanBeMove(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement){
@@ -78,6 +88,10 @@ public class MinMax extends Tree {
             }
         }
         return null;
+    }
+
+    private MinMaxStatsTracker getTracker() {
+        return tracker;
     }
 
     public static void main(String[] args) {
@@ -108,5 +122,7 @@ public class MinMax extends Tree {
         minMax.buildCurrentTree(boardStatus, currentPlayerId, lastMove);
 
 //        minMax.getRoot().stream().map(Node::formatToString).forEach(System.out::println);
+
+        minMax.getTracker().displayStatistics();
     }
 }

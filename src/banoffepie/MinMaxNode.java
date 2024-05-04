@@ -39,9 +39,14 @@ public class MinMaxNode extends Node {
         return weight;
     }
 
-    public void buildTree(BoardStatus boardStatus, int depth) {
+    public void buildTree(BoardStatus boardStatus, int depth, MinMaxStatsTracker tracker) {
+        long beforeWeight = System.nanoTime();
+
         // Determine the current weight
         this.weight = DeterministicAlgorithm.determineWeight(boardStatus, this.playerID, this.pawn, this.moveDone);
+
+        long afterWeight = System.nanoTime();
+        tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
 
         // If the depth is at 0, we don't want to have another layout, so we return
         if (depth < 1)
@@ -85,8 +90,9 @@ public class MinMaxNode extends Node {
         possibleMoves.stream()
                 .parallel()
                 .forEach(moveToDo -> {
+                    tracker.newNode();
                     MinMaxNode opponentNode = new MinMaxNode(opponentPawn, moveToDo, opponentID);
-                    opponentNode.buildTree(newBoardStatus, depth - 1);
+                    opponentNode.buildTree(newBoardStatus, depth - 1, tracker);
                     this.addChild(opponentNode);
                 });
     }
