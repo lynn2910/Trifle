@@ -64,7 +64,7 @@ public class DeterministicAlgorithm {
         ).size();
         int opponentMovesAfter = MinMaxNode.determinePossibleMoves(
                 opponentPawns.get(0),
-                boardStatus.clone().movePawn(playerID, pawn, move),
+                boardStatus.cloneBoard().movePawn(playerID, pawn, move),
                 (playerID + 1) % 2
         ).size();
         weight += (opponentMovesBefore - opponentMovesAfter) * 2;
