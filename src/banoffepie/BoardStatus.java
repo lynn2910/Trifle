@@ -5,35 +5,16 @@ import java.util.List;
 
 /**
  * This class is a "container" to store the game status.
+ *
+ * @param bluePawns The index of the pawn is the ID.
+ * @param cyanPawns The index of the pawn is the ID.
  */
-public class BoardStatus {
-    /**
-     * The index of the pawn is the ID.
-     */
-    private List<Point> bluePawns;
-    /**
-     * The index of the pawn is the ID.
-     */
-    private List<Point> cyanPawns;
-
-    public BoardStatus(List<Point> bluePawns, List<Point> cyanPawns) {
-        this.bluePawns = bluePawns;
-        this.cyanPawns = cyanPawns;
-    }
-
-    public List<Point> getBluePawns() {
-        return bluePawns;
-    }
-
-    public List<Point> getCyanPawns() {
-        return cyanPawns;
-    }
-
+public record BoardStatus(List<Point> bluePawns, List<Point> cyanPawns) {
     public List<Point> getPawns(int playerID) {
         if (playerID == 0)
-            return getBluePawns();
+            return bluePawns();
         else
-            return getCyanPawns();
+            return cyanPawns();
     }
 
     public BoardStatus movePawn(int playerID, Point pawn, Point move) {
@@ -42,7 +23,7 @@ public class BoardStatus {
         return this;
     }
 
-    public int[][] generateMatrix(){
+    public int[][] generateMatrix() {
         int[][] matrix = new int[8][8];
 
         for (Point p : bluePawns) {
@@ -55,7 +36,7 @@ public class BoardStatus {
         return matrix;
     }
 
-    public BoardStatus clone(){
+    public BoardStatus cloneBoard() {
         return new BoardStatus(
                 new ArrayList<>(bluePawns),
                 new ArrayList<>(cyanPawns)
