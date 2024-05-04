@@ -61,32 +61,50 @@ public class MinMaxStatsTracker {
         for (Long time : this.timeToCalculateWeight) { totalWeightCalculationTime += time;}
         System.out.println("  Total time to calculate weight:  " + formatTime(totalWeightCalculationTime));
 
+        long median = totalWeightCalculationTime / this.timeToCalculateWeight.size();
         System.out.println("  Median time to calculate weight: "
-                + formatTime(totalWeightCalculationTime / this.timeToCalculateWeight.size()));
+                + formatTime(median));
     }
 
 
-    private String formatTime(long time){
-        String t = "";
+    /**
+     * Format the given time
+     * @param nanoseconds The time in nanoseconds
+     * @return The formatted time
+     */
+    public String formatTime(long nanoseconds) {
+        long hours = nanoseconds / (3600L * 1_000_000_000L);
+        long minutes = (nanoseconds % (3600L * 1_000_000_000L)) / (60L * 1_000_000_000L);
+        long seconds = (nanoseconds % (60L * 1_000_000_000L)) / (1_000_000_000L);
+        long milliseconds = (nanoseconds % (1_000_000_000L)) / 1_000_000L;
+        long remainingNanos = nanoseconds % 1_000_000L;
 
-        long hours = (long) (time / 1e6 / 1000 / 60 / 60 % 24);
-        if (hours > 0)
-            t += hours+"h ";
+        StringBuilder sb = new StringBuilder();
+        if (hours > 0) {
+            sb.append(hours).append("h ");
+        }
+        if (minutes > 0) {
+            sb.append(minutes).append("m ");
+        }
+        if (seconds > 0) {
+            sb.append(seconds).append("s ");
+        }
+        if (milliseconds > 0) {
+            sb.append(milliseconds);
+            if (remainingNanos > 0 || sb.isEmpty()) {
+                sb.append('.').append(remainingNanos % 10000);
+            }
 
-        long minutes = (long) (time / 1e6 / 1000 / 60 % 60);
-        if (minutes > 0)
-            t += minutes+"m ";
+            sb.append("ms ");
+        }
 
-        long seconds = (long) (time / 1e6 / 1000 % 60);
-        if (seconds > 0)
-            t += seconds+"s";
+        if (sb.isEmpty() && remainingNanos > 0) {
+            sb.append(remainingNanos).append("ns");
+        }
 
-        long nanos = time % 1000;
-        if (t.isEmpty() && nanos > 0)
-            t += nanos+"ns";
-
-        return t.trim();
+        return sb.toString().trim();
     }
+
 
     public void reset(){
         this.startTime = 0;
