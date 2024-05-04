@@ -39,6 +39,12 @@ public class MinMaxNode extends Node {
         return weight;
     }
 
+    /**
+     * Calculate the weight for this node and, based on the depth, it may also create children
+     * @param boardStatus The current status of the board
+     * @param depth The current depth
+     * @param tracker The tracker, used for statistics purposes
+     */
     public void buildTree(BoardStatus boardStatus, int depth, MinMaxStatsTracker tracker) {
         long beforeWeight = System.nanoTime();
 
@@ -57,24 +63,9 @@ public class MinMaxNode extends Node {
 
         // Move the pawn (by this node)
         if (this.playerID == 0) {
-            // FIXME peut être changer à `x`?
-            for (Point pawn: boardStatus.getBluePawns()) {
-                if (pawn == this.pawn) {
-                    pawn.x = this.moveDone.x;
-                    pawn.y = this.moveDone.y;
-                    break;
-                }
-            }
-        }
-        else {
-            // FIXME peut être changer à `x`?
-            for (Point pawn: boardStatus.getCyanPawns()) {
-                if (pawn == this.pawn) {
-                    pawn.x = this.moveDone.x;
-                    pawn.y = this.moveDone.y;
-                    break;
-                }
-            }
+            newBoardStatus.getBluePawns().set(this.pawn.y, moveDone);
+        } else {
+            newBoardStatus.getCyanPawns().set(this.pawn.y, moveDone);
         }
 
 
@@ -87,14 +78,12 @@ public class MinMaxNode extends Node {
 
         List<Point> possibleMoves = determinePossibleMoves(opponentPawn, boardStatus, opponentID);
 
-        possibleMoves.stream()
-                .parallel()
-                .forEach(moveToDo -> {
-                    tracker.newNode();
-                    MinMaxNode opponentNode = new MinMaxNode(opponentPawn, moveToDo, opponentID);
-                    opponentNode.buildTree(newBoardStatus, depth - 1, tracker);
-                    this.addChild(opponentNode);
-                });
+        for (Point moveToDo: possibleMoves) {
+            tracker.newNode();
+            MinMaxNode opponentNode = new MinMaxNode(opponentPawn, moveToDo, opponentID);
+            opponentNode.buildTree(newBoardStatus, depth - 1, tracker);
+            this.addChild(opponentNode);
+        }
     }
 
     /**
