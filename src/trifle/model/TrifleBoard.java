@@ -39,6 +39,12 @@ public class TrifleBoard extends ContainerElement {
         }
     }
 
+    /**
+     * IMPORTANT If any update is made in this method, it should also be done for the MinMax!
+     * @param coords the coordinates of the move wanted
+     * @param playerId The current player ID
+     * @return The list of allowed moves
+     */
     public List<Point> computeValidCells(Point coords, int playerId) {
         List<Point> validCells = new ArrayList<>();
 
