@@ -5,7 +5,6 @@ import trifle.model.TrifleBoard;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -59,13 +58,13 @@ public class MinMaxNode extends Node {
             return;
 
         // Clone the board
-        BoardStatus newBoardStatus = boardStatus.clone();
+        BoardStatus newBoardStatus = boardStatus.cloneBoard();
 
         // Move the pawn (by this node)
         if (this.playerID == 0) {
-            newBoardStatus.getBluePawns().set(this.pawn.y, moveDone);
+            newBoardStatus.bluePawns().set(this.pawn.y, moveDone);
         } else {
-            newBoardStatus.getCyanPawns().set(this.pawn.y, moveDone);
+            newBoardStatus.cyanPawns().set(this.pawn.y, moveDone);
         }
 
 
@@ -73,8 +72,8 @@ public class MinMaxNode extends Node {
         int moveColorIndexPosition = TrifleBoard.BOARD[this.moveDone.y][this.moveDone.x];
 
         Point opponentPawn = opponentID == 0 ?
-                newBoardStatus.getBluePawns().get(moveColorIndexPosition)
-                : newBoardStatus.getCyanPawns().get(7 - moveColorIndexPosition);
+                newBoardStatus.bluePawns().get(moveColorIndexPosition)
+                : newBoardStatus.cyanPawns().get(7 - moveColorIndexPosition);
 
         List<Point> possibleMoves = determinePossibleMoves(opponentPawn, boardStatus, opponentID);
 

@@ -14,7 +14,7 @@ import java.util.List;
 public class MinMax extends Tree {
     public static int DEPTH = 4;
 
-    private MinMaxStatsTracker tracker;
+    private final MinMaxStatsTracker tracker;
 
     public MinMax(){
         super();
@@ -66,20 +66,20 @@ public class MinMax extends Tree {
     }
 
     private List<Point> determineWhichPawnsCanBeMove(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement){
-        if (boardStatus.getBluePawns().stream().allMatch(p -> p.x == 0)
-            && boardStatus.getCyanPawns().stream().allMatch(p -> p.x == 7)) {
+        if (boardStatus.bluePawns().stream().allMatch(p -> p.x == 0)
+            && boardStatus.cyanPawns().stream().allMatch(p -> p.x == 7)) {
 
             // No one has moved his pawns, so open bar, all pawns can be moved!
             if (currentPlayerId == 0){
-                return boardStatus.getBluePawns();
+                return boardStatus.bluePawns();
             } else {
-                return boardStatus.getCyanPawns();
+                return boardStatus.cyanPawns();
             }
         } else {
             int opponentLastMovePawnColorIndices = TrifleBoard.BOARD[lastOpponentMovement.y][lastOpponentMovement.x];
 
             // return which pawn have this color
-            List<Point> pawns =  currentPlayerId == 0 ? boardStatus.getBluePawns() : boardStatus.getCyanPawns();
+            List<Point> pawns =  currentPlayerId == 0 ? boardStatus.bluePawns() : boardStatus.cyanPawns();
             for (Point p: pawns) {
                 int thisColor = TrifleBoard.BOARD[p.y][p.x];
                 if (thisColor == opponentLastMovePawnColorIndices) {
