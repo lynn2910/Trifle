@@ -96,11 +96,7 @@ public class MinMaxNode extends Node {
     public static List<Point> determinePossibleMoves(Point pawn, BoardStatus boardStatus, int playerID){
         List<Point> possibleMoves = new ArrayList<>();
 
-//        System.out.println("pawn = " + pawn);
         int[][] boardMatrix = boardStatus.generateMatrix();
-//        for (int[] row: boardMatrix) {
-//            System.out.println(Arrays.toString(row));
-//        }
 
         if (playerID == 0) {
             // check on the vertical

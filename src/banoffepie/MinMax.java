@@ -31,6 +31,7 @@ public class MinMax extends Tree {
      * @param boardStatus The current status of the board
      */
     public void buildCurrentTree(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement, int depth) {
+        this.tracker.reset();
         this.tracker.setDepth(depth);
         this.tracker.startCounter();
 
@@ -39,18 +40,8 @@ public class MinMax extends Tree {
 
         assert movablePawns != null;
 
-        System.out.println("movablePawns: ");
-        for (Point movablePawn : movablePawns) {
-            System.out.println(movablePawn);
-        }
-        System.out.println();
-
         for (Point movablePawn: movablePawns) {
             List<Point> movesAllowed = MinMaxNode.determinePossibleMoves(movablePawn, boardStatus, currentPlayerId);
-
-            System.out.println("movablePawn  = " + movablePawn);
-            System.out.println("movesAllowed = " + movesAllowed);
-            System.out.println("movesAllowed size = " + movesAllowed.size());
 
             for (Point move : movesAllowed) {
                 this.tracker.newNode();
@@ -90,7 +81,7 @@ public class MinMax extends Tree {
         return null;
     }
 
-    private MinMaxStatsTracker getTracker() {
+    public MinMaxStatsTracker getTracker() {
         return tracker;
     }
 
@@ -109,11 +100,8 @@ public class MinMax extends Tree {
         cyanPawns.get(2).x = 6;
         bluePawns.get(4).x = 3;
 
-//        Point lastMove = new Point(1, 0);
-//        Point lastMove = new Point(6, 2);
         Point lastMove = new Point(3, 4);
 
-//        int currentPlayerId = 0;
         int currentPlayerId = 1;
 
         BoardStatus boardStatus = new BoardStatus(bluePawns, cyanPawns);
