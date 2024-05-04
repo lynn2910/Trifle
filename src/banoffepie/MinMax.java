@@ -44,6 +44,7 @@ public class MinMax extends Tree {
 
             System.out.println("movablePawn  = " + movablePawn);
             System.out.println("movesAllowed = " + movesAllowed);
+            System.out.println("movesAllowed size = " + movesAllowed.size());
 
             for (Point move : movesAllowed) {
                 MinMaxNode node = new MinMaxNode(movablePawn, move, currentPlayerId);
@@ -91,12 +92,20 @@ public class MinMax extends Tree {
         }
 
         bluePawns.get(0).x++;
-        int currentPlayerId = 1; // 0
+        cyanPawns.get(2).x = 6;
+        bluePawns.get(4).x = 3;
+
+//        Point lastMove = new Point(1, 0);
+//        Point lastMove = new Point(6, 2);
+        Point lastMove = new Point(3, 4);
+
+//        int currentPlayerId = 0;
+        int currentPlayerId = 1;
 
         BoardStatus boardStatus = new BoardStatus(bluePawns, cyanPawns);
 
         MinMax minMax = new MinMax();
-        minMax.buildCurrentTree(boardStatus, currentPlayerId, new Point(1, 0));
+        minMax.buildCurrentTree(boardStatus, currentPlayerId, lastMove);
 
 //        minMax.getRoot().stream().map(Node::formatToString).forEach(System.out::println);
     }

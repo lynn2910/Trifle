@@ -115,19 +115,64 @@ public class MinMaxNode extends Node {
                     possibleMoves.add(new Point(x, pawn.y));
                 else break;
             }
+
+            int x = pawn.x, y = pawn.y;
+
+            // check for the right diagonal
+            while (x < 7 && y < 7){
+                x++;
+                y++;
+
+                if (boardMatrix[x][y] == 0)
+                    possibleMoves.add(new Point(x, y));
+                else break;
+            }
+
+            x = pawn.x;
+            y = pawn.y;
+
+            // check for the left diagonal
+            while (x < 7 && y > 0) {
+                x++;
+                y--;
+
+                if (boardMatrix[x][y] == 0)
+                    possibleMoves.add(new Point(x, y));
+                else break;
+            }
         } else {
             // check on the vertical
             for (int x = pawn.x - 1; x >= 0; x--) {
                 if (boardMatrix[x][pawn.y] == 0)
                     possibleMoves.add(new Point(x, pawn.y));
                 else break;
-//                for (Point opponentPawn: boardStatus.getBluePawns()) {
-//                    if (opponentPawn.y > y){
-//                        possibleMoves.add(new Point(pawn.x, y));
-//                        break;
-//                    }
-//                }
             }
+
+            int x = pawn.x, y = pawn.y;
+
+            // check right diagonal
+            while (x > 0 && y < 7) {
+                x--;
+                y++;
+
+                if (boardMatrix[x][y] == 0)
+                    possibleMoves.add(new Point(x, y));
+                else break;
+            }
+
+            x = pawn.x;
+            y = pawn.y;
+
+            // check left diagonal
+            while (x > 0 && y > 0) {
+                x--;
+                y--;
+
+                if (boardMatrix[x][y] == 0)
+                    possibleMoves.add(new Point(x, y));
+                else break;
+            }
+
         }
 
         return possibleMoves;
