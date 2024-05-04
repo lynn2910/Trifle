@@ -29,6 +29,19 @@ public class BoardStatus {
         return cyanPawns;
     }
 
+    public List<Point> getPawns(int playerID) {
+        if (playerID == 0)
+            return getBluePawns();
+        else
+            return getCyanPawns();
+    }
+
+    public BoardStatus movePawn(int playerID, Point pawn, Point move) {
+        List<Point> pawns = getPawns(playerID);
+        pawns.set(pawn.y, move);
+        return this;
+    }
+
     public int[][] generateMatrix(){
         int[][] matrix = new int[8][8];
 
