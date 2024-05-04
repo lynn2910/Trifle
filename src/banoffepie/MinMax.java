@@ -12,7 +12,7 @@ import java.util.List;
  * It implements the MinMax algorithm with either a neural network or a deterministic algorithm
  */
 public class MinMax extends Tree {
-    public static int DEPTH = 3;
+    public static int DEPTH = 4;
 
     private MinMaxStatsTracker tracker;
 
@@ -120,8 +120,6 @@ public class MinMax extends Tree {
 
         MinMax minMax = new MinMax();
         minMax.buildCurrentTree(boardStatus, currentPlayerId, lastMove);
-
-//        minMax.getRoot().stream().map(Node::formatToString).forEach(System.out::println);
 
         minMax.getTracker().displayStatistics();
     }
