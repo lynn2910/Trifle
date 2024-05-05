@@ -7,6 +7,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static banoffepie.MinMax.MAX_WEIGHT;
+import static banoffepie.MinMax.MIN_WEIGHT;
+
 /**
  * This class will be used to represent a move made by one of the players.
  * It can store the board status and the information related to what move was done.
@@ -42,6 +45,39 @@ public class MinMaxNode extends Node {
 
     public Point getMoveDone(){
         return moveDone;
+    }
+
+    public boolean isMaximizingPlayer(int botPlayerID) {
+        return botPlayerID == playerID;
+    }
+
+    /**
+     * The MiniMax algorithm
+     * <br>The tree must have been built before using the `buildTree` method.
+     * @param botPlayerID The ID of the bot
+     * @return The weight
+     */
+    public double minimax(int botPlayerID) {
+        if (getChildren().isEmpty())
+            return getWeight();
+
+        if (isMaximizingPlayer(botPlayerID)) {
+            double maxEval = MIN_WEIGHT;
+
+            for (Node children: getChildren()) {
+                double evaluated = ((MinMaxNode) children).minimax(botPlayerID);
+                maxEval = Math.max(maxEval, evaluated);
+            }
+            return maxEval;
+        } else {
+            double minEval = MAX_WEIGHT;
+
+            for (Node children: getChildren()) {
+                double evaluated = ((MinMaxNode) children).minimax(botPlayerID);
+                minEval = Math.min(minEval, evaluated);
+            }
+            return minEval;
+        }
     }
 
     /**

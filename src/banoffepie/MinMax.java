@@ -1,5 +1,6 @@
 package banoffepie;
 
+import banoffepie.tree.Node;
 import banoffepie.tree.Tree;
 import trifle.model.TrifleBoard;
 
@@ -14,6 +15,9 @@ import java.util.List;
 public class MinMax extends Tree {
     public static int DEPTH = 50;
 
+    public static double MAX_WEIGHT = 100;
+    public static double MIN_WEIGHT = -100;
+
     private final MinMaxStatsTracker tracker;
 
     public MinMax(){
@@ -21,6 +25,10 @@ public class MinMax extends Tree {
         this.tracker = new MinMaxStatsTracker();
     }
 
+    /**
+     * Determine which moves can be done
+     * @param boardStatus The current status of the board
+     */
     public void buildCurrentTree(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement) {
         this.buildCurrentTree(boardStatus, currentPlayerId, lastOpponentMovement, DEPTH);
     }
@@ -55,6 +63,27 @@ public class MinMax extends Tree {
         this.tracker.endTimer();
     }
 
+    public MinMaxNode minimax(int botID) {
+        // We are maximizing the player
+        MinMaxNode max = (MinMaxNode) this.getRoot().get(0);
+        max.minimax(botID);
+
+        for (Node node: this.getRoot()) {
+            double evaluated = ((MinMaxNode) node).minimax(botID);
+            if (max.getWeight() < evaluated) {
+                max = (MinMaxNode) node;
+            }
+        }
+        return max;
+    }
+
+    /**
+     * Determine which pawns can be moved based on the board, the player ID and which move the last opponent did
+     * @param boardStatus The current status of the board
+     * @param currentPlayerId The ID of the bot
+     * @param lastOpponentMovement The last move played by the opponent. Can be null.
+     * @return The list of movable pawns
+     */
     private List<MinMaxPawn> determineWhichMinMaxPawnsCanBeMove(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement){
         if (boardStatus.bluePawns().stream().allMatch(p -> p.getCoords().x == 0)
             && boardStatus.cyanPawns().stream().allMatch(p -> p.getCoords().x == 7)) {
@@ -106,6 +135,11 @@ public class MinMax extends Tree {
 
         MinMax minMax = new MinMax();
         minMax.buildCurrentTree(boardStatus, currentPlayerId, lastMove);
+
+        MinMaxNode nextMove = minMax.minimax(currentPlayerId);
+        System.out.println("nextMove: ");
+        System.out.println("  pawn: " + nextMove.getPawn());
+        System.out.println("  move: " + nextMove.getMoveDone());
 
         minMax.getTracker().displayStatistics();
     }

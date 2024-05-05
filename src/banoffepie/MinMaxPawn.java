@@ -36,4 +36,11 @@ public class MinMaxPawn {
     public int getPlayerNumber(){
         return playerNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Pawn { id: " + this.colorIndex
+                + ", player: " + this.playerNumber
+                + ", coordinates: (" + this.coords.x + ", " + this.coords.y + ") }";
+    }
 }
