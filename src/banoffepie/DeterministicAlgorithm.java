@@ -20,7 +20,7 @@ public class DeterministicAlgorithm {
     public static double determineWeight(
             BoardStatus boardStatus,
             int playerID,
-            Point pawn,
+            MinMaxPawn pawn,
             Point move
     )
     {
@@ -33,9 +33,9 @@ public class DeterministicAlgorithm {
         weight += distanceToGoal;
 
         // How is the opponent a threat or not
-        List<Point> opponentPawns = boardStatus.getPawns((playerID + 1) % 2);
-        for (Point opponentPawn : opponentPawns) {
-            if (canWin(matrix, move, opponentPawn, (playerID + 1) % 2)) {
+        List<MinMaxPawn> opponentPawns = boardStatus.getPawns((playerID + 1) % 2);
+        for (MinMaxPawn opponentPawn : opponentPawns) {
+            if (canWin(matrix, move, opponentPawn.getCoords(), (playerID + 1) % 2)) {
                 weight -= 20; // Significant penalty for being captured
             }
         }
@@ -58,13 +58,14 @@ public class DeterministicAlgorithm {
 
         // Opponent movement restriction (bonus for limiting opponent options)
         int opponentMovesBefore = MinMaxNode.determinePossibleMoves(
-                opponentPawns.get(0),
+                opponentPawns.get(0).getCoords(),
                 boardStatus,
                 (playerID + 1) % 2
         ).size();
+
         int opponentMovesAfter = MinMaxNode.determinePossibleMoves(
-                opponentPawns.get(0),
-                boardStatus.cloneBoard().movePawn(playerID, pawn, move),
+                opponentPawns.get(0).getCoords(),
+                boardStatus.cloneBoard().movePawn(playerID, pawn.getColorIndex(), move),
                 (playerID + 1) % 2
         ).size();
         weight += (opponentMovesBefore - opponentMovesAfter) * 2;

@@ -12,7 +12,7 @@ import java.util.List;
  * It implements the MinMax algorithm with either a neural network or a deterministic algorithm
  */
 public class MinMax extends Tree {
-    public static int DEPTH = 4;
+    public static int DEPTH = 16;
 
     private final MinMaxStatsTracker tracker;
 
@@ -35,18 +35,17 @@ public class MinMax extends Tree {
         this.tracker.setDepth(depth);
         this.tracker.startCounter();
 
+        List<MinMaxPawn> movableMinMaxPawns = determineWhichMinMaxPawnsCanBeMove(boardStatus, currentPlayerId, lastOpponentMovement);
 
-        List<Point> movablePawns = determineWhichPawnsCanBeMove(boardStatus, currentPlayerId, lastOpponentMovement);
+        assert movableMinMaxPawns != null;
 
-        assert movablePawns != null;
-
-        for (Point movablePawn: movablePawns) {
-            List<Point> movesAllowed = MinMaxNode.determinePossibleMoves(movablePawn, boardStatus, currentPlayerId);
+        for (MinMaxPawn movableMinMaxPawn: movableMinMaxPawns) {
+            List<Point> movesAllowed = MinMaxNode.determinePossibleMoves(movableMinMaxPawn.getCoords(), boardStatus, currentPlayerId);
 
             for (Point move : movesAllowed) {
-                this.tracker.newNode();
+                this.tracker.newNode(0);
 
-                MinMaxNode node = new MinMaxNode(movablePawn, move, currentPlayerId);
+                MinMaxNode node = new MinMaxNode(movableMinMaxPawn, move, currentPlayerId);
                 node.buildTree(boardStatus, depth, tracker);
                 this.getRoot().add(node);
             }
@@ -56,9 +55,9 @@ public class MinMax extends Tree {
         this.tracker.endTimer();
     }
 
-    private List<Point> determineWhichPawnsCanBeMove(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement){
-        if (boardStatus.bluePawns().stream().allMatch(p -> p.x == 0)
-            && boardStatus.cyanPawns().stream().allMatch(p -> p.x == 7)) {
+    private List<MinMaxPawn> determineWhichMinMaxPawnsCanBeMove(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement){
+        if (boardStatus.bluePawns().stream().allMatch(p -> p.getCoords().x == 0)
+            && boardStatus.cyanPawns().stream().allMatch(p -> p.getCoords().x == 7)) {
 
             // No one has moved his pawns, so open bar, all pawns can be moved!
             if (currentPlayerId == 0){
@@ -67,14 +66,13 @@ public class MinMax extends Tree {
                 return boardStatus.cyanPawns();
             }
         } else {
-            int opponentLastMovePawnColorIndices = TrifleBoard.BOARD[lastOpponentMovement.y][lastOpponentMovement.x];
+            int opponentLastMoveMinMaxPawnColorIndices = TrifleBoard.BOARD[lastOpponentMovement.y][lastOpponentMovement.x];
 
             // return which pawn have this color
-            List<Point> pawns =  currentPlayerId == 0 ? boardStatus.bluePawns() : boardStatus.cyanPawns();
-            for (Point p: pawns) {
-                int thisColor = TrifleBoard.BOARD[p.y][p.x];
-                if (thisColor == opponentLastMovePawnColorIndices) {
-                    return List.of(new Point(p.x, p.y));
+            List<MinMaxPawn> pawns =  currentPlayerId == 0 ? boardStatus.bluePawns() : boardStatus.cyanPawns();
+            for (MinMaxPawn p: pawns) {
+                if (p.getColorIndex() == opponentLastMoveMinMaxPawnColorIndices) {
+                    return List.of(new MinMaxPawn(p));
                 }
             }
         }
@@ -86,19 +84,19 @@ public class MinMax extends Tree {
     }
 
     public static void main(String[] args) {
-        List<Point> bluePawns = new ArrayList<>();
+        List<MinMaxPawn> bluePawns = new ArrayList<>();
         for (int y = 0; y < 8; y++) {
-            bluePawns.add(new Point(0, y));
+            bluePawns.add(new MinMaxPawn(y, 0, 0, y));
         }
 
-        List<Point> cyanPawns = new ArrayList<>();
+        List<MinMaxPawn> cyanPawns = new ArrayList<>();
         for (int y = 0; y < 8; y++) {
-            cyanPawns.add(new Point(7, y));
+            cyanPawns.add(new MinMaxPawn(y, 1, 7, y));
         }
 
-        bluePawns.get(0).x++;
-        cyanPawns.get(2).x = 6;
-        bluePawns.get(4).x = 3;
+        bluePawns.get(0).getCoords().x++;
+        cyanPawns.get(2).getCoords().x = 6;
+        bluePawns.get(4).getCoords().x = 3;
 
         Point lastMove = new Point(3, 4);
 

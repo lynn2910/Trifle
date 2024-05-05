@@ -16,6 +16,8 @@ public class MinMaxStatsTracker {
     private long totalTime;
     private int numberOfNodes;
     private int depth;
+    private int[] numberOfNodesPerLayout;
+
     /**
      * Contains each time of calculation used by the chosen algorithm to calculate the weight with the state given.
      * <br>
@@ -32,14 +34,22 @@ public class MinMaxStatsTracker {
 
     public void setDepth(int depth) {
         this.depth = depth;
+        this.numberOfNodesPerLayout = new int[depth];
     }
 
     public void startCounter(){
         this.startTime = System.nanoTime();
     }
 
-    public void newNode(){
+//    public void newNode(){
+//        this.numberOfNodes++;
+//    }
+
+    public void newNode(int layout){
         this.numberOfNodes++;
+
+        if (layout < depth)
+            this.numberOfNodesPerLayout[depth - 1 - layout]++;
     }
 
     public void addTimeToCalculateWeight(long time){
@@ -60,10 +70,27 @@ public class MinMaxStatsTracker {
         long totalWeightCalculationTime = 0;
         for (Long time : this.timeToCalculateWeight) { totalWeightCalculationTime += time;}
         System.out.println("  Total time to calculate weight:  " + formatTime(totalWeightCalculationTime));
+        System.out.println("  Number of leaf nodes:            " + this.timeToCalculateWeight.size());
 
         long median = totalWeightCalculationTime / this.timeToCalculateWeight.size();
         System.out.println("  Median time to calculate weight: "
                 + formatTime(median));
+        System.out.println();
+
+//        System.out.println("  Number of nodes per Layout: ");
+//        for (int layoutId = 0; layoutId < this.numberOfNodesPerLayout.length; layoutId++) {
+//            if (layoutId % 2 == 0) System.out.print(ConsoleColor.GREEN);
+//            else System.out.print(ConsoleColor.RED);
+//
+//            String layoutIdFormatted = "" + layoutId;
+//            if (layoutIdFormatted.length() < 2)
+//                layoutIdFormatted = " " + layoutIdFormatted;
+//
+//            System.out.print("    " + layoutIdFormatted + " - " + this.numberOfNodesPerLayout[layoutId]);
+//
+//            System.out.println(ConsoleColor.RESET);
+//        }
+//        System.out.println();
     }
 
 

@@ -1,4 +1,5 @@
 package banoffepie;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,28 +10,28 @@ import java.util.List;
  * @param bluePawns The index of the pawn is the ID.
  * @param cyanPawns The index of the pawn is the ID.
  */
-public record BoardStatus(List<Point> bluePawns, List<Point> cyanPawns) {
-    public List<Point> getPawns(int playerID) {
+public record BoardStatus(List<MinMaxPawn> bluePawns, List<MinMaxPawn> cyanPawns) {
+    public List<MinMaxPawn> getPawns(int playerID) {
         if (playerID == 0)
             return bluePawns();
         else
             return cyanPawns();
     }
 
-    public BoardStatus movePawn(int playerID, Point pawn, Point move) {
-        List<Point> pawns = getPawns(playerID);
-        pawns.set(pawn.y, move);
+    public BoardStatus movePawn(int playerID, int pawnIndex, Point move) {
+        List<MinMaxPawn> pawns = getPawns(playerID);
+        pawns.get(pawnIndex).setCoords(move);
         return this;
     }
 
     public int[][] generateMatrix() {
         int[][] matrix = new int[8][8];
 
-        for (Point p : bluePawns) {
-            matrix[p.x][p.y] = 1;
+        for (MinMaxPawn p : bluePawns) {
+            matrix[p.getCoords().x][p.getCoords().y] = 1;
         }
-        for (Point p : cyanPawns) {
-            matrix[p.x][p.y] = 2;
+        for (MinMaxPawn p : cyanPawns) {
+            matrix[p.getCoords().x][p.getCoords().y] = 2;
         }
 
         return matrix;

@@ -18,12 +18,12 @@ public class MinMaxNode extends Node {
      * What move has been lastly played to be here
      */
     private Point moveDone;
-    private Point pawn;
+    private MinMaxPawn pawn;
     private int playerID;
 
     private double weight = 0.0;
 
-    public MinMaxNode(Point pawn, Point moveDone, int playerID) {
+    public MinMaxNode(MinMaxPawn pawn, Point moveDone, int playerID) {
         super();
         this.pawn = pawn;
         this.moveDone = moveDone;
@@ -45,44 +45,41 @@ public class MinMaxNode extends Node {
      * @param tracker The tracker, used for statistics purposes
      */
     public void buildTree(BoardStatus boardStatus, int depth, MinMaxStatsTracker tracker) {
-        long beforeWeight = System.nanoTime();
+        tracker.newNode(depth);
 
-        // Determine the current weight
-        this.weight = DeterministicAlgorithm.determineWeight(boardStatus, this.playerID, this.pawn, this.moveDone);
+        // If the depth is at 0, we don't want to have another layout, so we return,
+        // But first we calculate the weight!
+        if (depth < 1) {
+            long beforeWeight = System.nanoTime();
 
-        long afterWeight = System.nanoTime();
-        tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
+            // Determine the current weight
+            this.weight = DeterministicAlgorithm.determineWeight(boardStatus, this.playerID, this.pawn, this.moveDone);
 
-        // If the depth is at 0, we don't want to have another layout, so we return
-        if (depth < 1)
+            long afterWeight = System.nanoTime();
+            tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
             return;
-
-        // Clone the board
-        BoardStatus newBoardStatus = boardStatus.cloneBoard();
-
-        // Move the pawn (by this node)
-        if (this.playerID == 0) {
-            newBoardStatus.bluePawns().set(this.pawn.y, moveDone);
-        } else {
-            newBoardStatus.cyanPawns().set(this.pawn.y, moveDone);
         }
 
+        // Move the pawn in question
+        boardStatus.movePawn(playerID, pawn.getColorIndex(), moveDone);
 
-        int opponentID = this.playerID == 0 ? 1 : 0;
+        int opponentID = (this.playerID + 1) % 2;
         int moveColorIndexPosition = TrifleBoard.BOARD[this.moveDone.y][this.moveDone.x];
 
-        Point opponentPawn = opponentID == 0 ?
-                newBoardStatus.bluePawns().get(moveColorIndexPosition)
-                : newBoardStatus.cyanPawns().get(7 - moveColorIndexPosition);
+        MinMaxPawn opponentPawn = opponentID == 0 ?
+                boardStatus.bluePawns().get(moveColorIndexPosition)
+                : boardStatus.cyanPawns().get(7 - moveColorIndexPosition);
 
-        List<Point> possibleMoves = determinePossibleMoves(opponentPawn, boardStatus, opponentID);
+        List<Point> possibleMoves = determinePossibleMoves(opponentPawn.getCoords(), boardStatus, opponentID);
 
         for (Point moveToDo: possibleMoves) {
-            tracker.newNode();
             MinMaxNode opponentNode = new MinMaxNode(opponentPawn, moveToDo, opponentID);
-            opponentNode.buildTree(newBoardStatus, depth - 1, tracker);
+            opponentNode.buildTree(boardStatus, depth - 1, tracker);
             this.addChild(opponentNode);
         }
+
+        // Move back the pawn :D
+        boardStatus.movePawn(playerID, pawn.getColorIndex(), pawn.getCoords());
     }
 
     /**
@@ -171,7 +168,7 @@ public class MinMaxNode extends Node {
     @Override
     public String toString(){
         return "Node (" + this.getId() + ", " + this.weight
-                + ", (" + this.pawn.x + "," + this.pawn.y + "), "
+                + ", (" + this.pawn.getCoords().x + "," + this.pawn.getCoords().y + "), "
                 + "(" + this.moveDone.x + "," + this.moveDone.y + "))";
     }
 }
