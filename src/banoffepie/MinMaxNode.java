@@ -10,8 +10,6 @@ import java.util.List;
 /**
  * This class will be used to represent a move made by one of the players.
  * It can store the board status and the information related to what move was done.
- * <br><br>
- * It'll eat the ram like nothing else, later optimizations should be done
  */
 public class MinMaxNode extends Node {
     /**
@@ -36,6 +34,14 @@ public class MinMaxNode extends Node {
 
     public double getWeight() {
         return weight;
+    }
+
+    public MinMaxPawn getPawn(){
+        return pawn;
+    }
+
+    public Point getMoveDone(){
+        return moveDone;
     }
 
     /**
