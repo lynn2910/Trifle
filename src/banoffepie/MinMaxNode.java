@@ -47,9 +47,11 @@ public class MinMaxNode extends Node {
     public void buildTree(BoardStatus boardStatus, int depth, MinMaxStatsTracker tracker) {
         tracker.newNode(depth);
 
-        // If the depth is at 0, we don't want to have another layout, so we return,
+        // If the depth is at 0 or if the player can win, we don't want to have another layout, so we return,
         // But first we calculate the weight!
-        if (depth < 1) {
+        if (depth < 1
+                ||((playerID == 0 && moveDone.x == 7) || (playerID == 1 && moveDone.x == 0)))
+        {
             long beforeWeight = System.nanoTime();
 
             // Determine the current weight
