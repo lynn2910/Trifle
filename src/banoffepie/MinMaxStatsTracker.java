@@ -13,10 +13,13 @@ public class MinMaxStatsTracker {
      * The time is stored as nanoseconds, allowing for high-precision values
      */
     private long startTime;
-    private long totalTime;
+    private long endTime;
     private int numberOfNodes;
     private int depth;
     private int[] numberOfNodesPerLayout;
+
+    private long pathFinderStart;
+    private long pathFinderEnd;
 
     /**
      * Contains each time of calculation used by the chosen algorithm to calculate the weight with the state given.
@@ -27,7 +30,9 @@ public class MinMaxStatsTracker {
 
     public MinMaxStatsTracker() {
         this.startTime = 0;
-        this.totalTime = 0;
+        this.endTime = 0;
+        this.pathFinderStart = 0;
+        this.pathFinderEnd = 0;
         this.numberOfNodes = 0;
         this.timeToCalculateWeight = new ArrayList<>();
     }
@@ -41,9 +46,9 @@ public class MinMaxStatsTracker {
         this.startTime = System.nanoTime();
     }
 
-//    public void newNode(){
-//        this.numberOfNodes++;
-//    }
+    public void newNode(){
+        this.numberOfNodes++;
+    }
 
     public void newNode(int layout){
         this.numberOfNodes++;
@@ -52,19 +57,42 @@ public class MinMaxStatsTracker {
             this.numberOfNodesPerLayout[depth - 1 - layout]++;
     }
 
+    public int[] getNumberOfNodesPerLayout(){
+        return numberOfNodesPerLayout;
+    }
+
     public void addTimeToCalculateWeight(long time){
         this.timeToCalculateWeight.add(time);
     }
 
     public void endTimer(){
-        this.totalTime = System.nanoTime() - this.startTime;
+        this.endTime = System.nanoTime();
+    }
+
+    public long getTotalTreeBuilderTime(){
+        return this.endTime - this.startTime;
+    }
+
+    public void startPathFinder(){
+        this.pathFinderStart = System.nanoTime();
+    }
+
+    public void endPathFinder(){
+        this.pathFinderEnd = System.nanoTime();
+    }
+
+    public long getPathFinderTime(){
+        return this.pathFinderEnd - this.pathFinderStart;
     }
 
     public void displayStatistics() {
         System.out.println("\nMin-Max performances stats: ");
-        System.out.println("  Time:  " + formatTime(this.totalTime));
+        System.out.println("  Time:  " + formatTime(getTotalTreeBuilderTime()));
         System.out.println("  Nodes: " + this.numberOfNodes);
         System.out.println("  Depth: " + this.depth);
+        System.out.println();
+
+        System.out.println("  Time to find the better path: " + formatTime(getPathFinderTime()));
         System.out.println();
 
         long totalWeightCalculationTime = 0;
@@ -126,7 +154,7 @@ public class MinMaxStatsTracker {
         }
 
         if (sb.isEmpty() && remainingNanos > 0) {
-            sb.append(remainingNanos).append("ns");
+            sb.append("0.").append(remainingNanos % 10000).append("ms");
         }
 
         return sb.toString().trim();
@@ -137,6 +165,8 @@ public class MinMaxStatsTracker {
         this.startTime = 0;
         this.numberOfNodes = 0;
         this.timeToCalculateWeight.clear();
-        this.totalTime = 0;
+        this.endTime = 0;
+        this.depth = 1;
+        this.numberOfNodesPerLayout = new int[1];
     }
 }

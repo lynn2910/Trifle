@@ -64,6 +64,8 @@ public class MinMax extends Tree {
     }
 
     public MinMaxNode minimax(int botID) {
+        tracker.startPathFinder();
+
         // We are maximizing the player
         MinMaxNode max = (MinMaxNode) this.getRoot().get(0);
         max.minimax(botID);
@@ -74,6 +76,9 @@ public class MinMax extends Tree {
                 max = (MinMaxNode) node;
             }
         }
+
+        tracker.endPathFinder();
+
         return max;
     }
 
