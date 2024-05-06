@@ -210,30 +210,30 @@ public class MinMaxNode extends Node {
                 else break;
             }
 
-//            int x = pawn.x, y = pawn.y;
+            int x = pawn.x, y = pawn.y;
 
             // check right diagonal
-//            while (x > 0 && y < 7) {
-//                x--;
-//                y++;
-//
-//                if (boardMatrix[x][y] == 0)
-//                    possibleMoves.add(new Point(x, y));
-//                else break;
-//            }
+            while (x > 0 && y < 7) {
+                x--;
+                y++;
 
-//            x = pawn.x;
-//            y = pawn.y;
+                if (boardMatrix[x][y] == 0)
+                    possibleMoves.add(new Point(x, y));
+                else break;
+            }
+
+            x = pawn.x;
+            y = pawn.y;
 
             // check left diagonal
-//            while (x > 0 && y > 0) {
-//                x--;
-//                y--;
-//
-//                if (boardMatrix[x][y] == 0)
-//                    possibleMoves.add(new Point(x, y));
-//                else break;
-//            }
+            while (x > 0 && y > 0) {
+                x--;
+                y--;
+
+                if (boardMatrix[x][y] == 0)
+                    possibleMoves.add(new Point(x, y));
+                else break;
+            }
         }
 
         return possibleMoves;
