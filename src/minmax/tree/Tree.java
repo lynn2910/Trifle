@@ -1,4 +1,4 @@
-package banoffepie.tree;
+package minmax.tree;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
-package banoffepie;
+package minmax;
 
-import banoffepie.tree.Node;
-import banoffepie.tree.Tree;
+import minmax.tree.Node;
+import minmax.tree.Tree;
 import trifle.model.TrifleBoard;
 
 import java.awt.*;

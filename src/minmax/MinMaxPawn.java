@@ -1,7 +1,4 @@
-package banoffepie;
-
-import trifle.boardifier.model.ElementTypes;
-import trifle.boardifier.model.GameStageModel;
+package minmax;
 
 import java.awt.*;
 

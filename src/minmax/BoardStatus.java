@@ -1,4 +1,4 @@
-package banoffepie;
+package minmax;
 
 import java.awt.*;
 import java.util.ArrayList;

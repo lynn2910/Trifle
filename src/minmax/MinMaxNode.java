@@ -1,14 +1,14 @@
-package banoffepie;
+package minmax;
 
-import banoffepie.tree.Node;
+import minmax.tree.Node;
 import trifle.model.TrifleBoard;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static banoffepie.MinMax.MAX_WEIGHT;
-import static banoffepie.MinMax.MIN_WEIGHT;
+import static minmax.MinMax.MAX_WEIGHT;
+import static minmax.MinMax.MIN_WEIGHT;
 
 /**
  * This class will be used to represent a move made by one of the players.
