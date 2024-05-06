@@ -5,6 +5,7 @@ import trifle.model.TrifleBoard;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static minmax.MinMax.MAX_WEIGHT;
@@ -198,6 +199,7 @@ public class MinMaxNode extends Node {
                     possibleMoves.add(new Point(x, y));
                 else break;
             }
+
         } else {
             // check on the vertical
             for (int x = pawn.x - 1; x >= 0; x--) {
@@ -230,7 +232,6 @@ public class MinMaxNode extends Node {
                     possibleMoves.add(new Point(x, y));
                 else break;
             }
-
         }
 
         return possibleMoves;

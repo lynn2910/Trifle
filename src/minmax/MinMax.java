@@ -51,6 +51,7 @@ public class MinMax extends Tree {
         this.tracker.startCounter();
 
         List<MinMaxPawn> movableMinMaxPawns = determineWhichMinMaxPawnsCanBeMove(boardStatus, currentPlayerId, lastOpponentMovement);
+        System.out.println(movableMinMaxPawns);
 
         assert movableMinMaxPawns != null;
 
@@ -116,10 +117,14 @@ public class MinMax extends Tree {
                 return boardStatus.cyanPawns();
             }
         } else {
-            int opponentLastMoveMinMaxPawnColorIndices = TrifleBoard.BOARD[lastOpponentMovement.y][lastOpponentMovement.x];
+            int x = lastOpponentMovement.x;
+            if (currentPlayerId == 1)
+                x = 7 - x;
+
+            int opponentLastMoveMinMaxPawnColorIndices = TrifleBoard.BOARD[lastOpponentMovement.y][x];
 
             // return which pawn have this color
-            List<MinMaxPawn> pawns =  currentPlayerId == 0 ? boardStatus.bluePawns() : boardStatus.cyanPawns();
+            List<MinMaxPawn> pawns = boardStatus.getPawns(currentPlayerId);
             for (MinMaxPawn p: pawns) {
                 if (p.getColorIndex() == opponentLastMoveMinMaxPawnColorIndices) {
                     return List.of(new MinMaxPawn(p));

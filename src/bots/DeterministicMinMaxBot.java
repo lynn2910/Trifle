@@ -59,12 +59,14 @@ public class DeterministicMinMaxBot extends TrifleDecider {
             x = 7 - x;
         }
 
+        pawnInvolved.setCoords(nextMove.getMoveDone());
+
         ActionList actions = ActionFactory.generatePutInContainer(
                 model,
                 pawnInvolved,
                 TrifleBoard.BOARD_ID,
-                y,
-                x
+                x,
+                y
         );
         actions.setDoEndOfTurn(true);
 

@@ -28,10 +28,10 @@ public record BoardStatus(List<MinMaxPawn> bluePawns, List<MinMaxPawn> cyanPawns
         int[][] matrix = new int[8][8];
 
         for (MinMaxPawn p : bluePawns) {
-            matrix[p.getCoords().x][p.getCoords().y] = 1;
+            matrix[p.getCoords().y][p.getCoords().x] = 1;
         }
         for (MinMaxPawn p : cyanPawns) {
-            matrix[p.getCoords().x][p.getCoords().y] = 2;
+            matrix[p.getCoords().y][p.getCoords().x] = 2;
         }
 
         return matrix;
