@@ -133,6 +133,10 @@ public class MinMax extends Tree {
         return tracker;
     }
 
+    public void reset(){
+        this.getRoot().clear();
+    }
+
     public static void main(String[] args) {
         List<MinMaxPawn> bluePawns = new ArrayList<>();
         for (int y = 0; y < 8; y++) {
