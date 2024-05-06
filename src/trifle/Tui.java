@@ -340,8 +340,8 @@ public class Tui {
             System.out.println("The strategies are:");
             System.out.println("(a). " + BotStrategy.BanoffeePie);
             System.out.println("    " + BotStrategy.BanoffeePie.getDescription());
-            System.out.println("(b). " + BotStrategy.SecondStrategy);
-            System.out.println("    " + BotStrategy.SecondStrategy.getDescription());
+            System.out.println("(b). " + BotStrategy.MinMaxDeterministic);
+            System.out.println("    " + BotStrategy.MinMaxDeterministic.getDescription());
             System.out.print("What will be bot n°" + n + "'s strategy? ");
 
             String l = scanner.nextLine().trim().toLowerCase();
@@ -353,8 +353,8 @@ public class Tui {
                     return true;
                 }
                 case "b": {
-                    this.botStrategies.add(BotStrategy.SecondStrategy);
-                    System.out.println("Bot no." + n + " strategy will be " + ConsoleColor.WHITE_BOLD + BotStrategy.SecondStrategy + ConsoleColor.RESET);
+                    this.botStrategies.add(BotStrategy.MinMaxDeterministic);
+                    System.out.println("Bot no." + n + " strategy will be " + ConsoleColor.WHITE_BOLD + BotStrategy.MinMaxDeterministic + ConsoleColor.RESET);
                     return false;
                 }
                 case "exit": {

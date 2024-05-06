@@ -68,7 +68,7 @@ public class TrifleController extends Controller {
         switch (this.playerMode) {
             case HumanVsHuman: { break; }
             case HumanVsComputer: {
-                this.firstComputer = botStrategies.get(0).initComputer(model, this);
+                this.secondComputer = botStrategies.get(0).initComputer(model, this);
                 break;
             }
             case ComputerVsComputer: {
