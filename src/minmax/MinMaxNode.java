@@ -80,13 +80,26 @@ public class MinMaxNode extends Node {
         }
     }
 
+    public void buildTree(BoardStatus boardStatus, int depth, MinMaxStatsTracker tracker) {
+        buildTree(boardStatus, depth, tracker, false);
+    }
+
+    private void computeWeight(BoardStatus boardStatus, MinMaxStatsTracker tracker){
+        // Determine the current weight
+        long beforeWeight = System.nanoTime();
+        this.weight = DeterministicAlgorithm.determineWeight(boardStatus, this.playerID, this.pawn, this.moveDone);
+        long afterWeight = System.nanoTime();
+
+        tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
+    }
+
     /**
      * Calculate the weight for this node and, based on the depth, it may also create children
      * @param boardStatus The current status of the board
      * @param depth The current depth
      * @param tracker The tracker, used for statistics purposes
      */
-    public void buildTree(BoardStatus boardStatus, int depth, MinMaxStatsTracker tracker) {
+    public void buildTree(BoardStatus boardStatus, int depth, MinMaxStatsTracker tracker, boolean calculateAllNodes) {
         tracker.newNode(depth);
 
         // If the depth is at 0 or if the player can win, we don't want to have another layout, so we return,
@@ -94,15 +107,14 @@ public class MinMaxNode extends Node {
         if (depth < 1
                 ||((playerID == 0 && moveDone.x == 7) || (playerID == 1 && moveDone.x == 0)))
         {
-            long beforeWeight = System.nanoTime();
-
-            // Determine the current weight
-            this.weight = DeterministicAlgorithm.determineWeight(boardStatus, this.playerID, this.pawn, this.moveDone);
-
-            long afterWeight = System.nanoTime();
-            tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
+            this.computeWeight(boardStatus, tracker);
             return;
         }
+
+        if (calculateAllNodes) {
+            this.computeWeight(boardStatus, tracker);
+        }
+
 
         // Move the pawn in question
         boardStatus.movePawn(playerID, pawn.getColorIndex(), moveDone);
@@ -118,7 +130,7 @@ public class MinMaxNode extends Node {
 
         for (Point moveToDo: possibleMoves) {
             MinMaxNode opponentNode = new MinMaxNode(opponentPawn, moveToDo, opponentID);
-            opponentNode.buildTree(boardStatus, depth - 1, tracker);
+            opponentNode.buildTree(boardStatus, depth - 1, tracker, calculateAllNodes);
             this.addChild(opponentNode);
         }
 

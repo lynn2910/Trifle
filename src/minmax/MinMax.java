@@ -33,12 +33,16 @@ public class MinMax extends Tree {
         this.buildCurrentTree(boardStatus, currentPlayerId, lastOpponentMovement, DEPTH);
     }
 
+    public void buildCurrentTree(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement, int depth) {
+        buildCurrentTree(boardStatus, currentPlayerId, lastOpponentMovement, depth, false);
+    }
+
     /**
      * Determine which moves can be done
      * @param depth The current depth, we decrease the depth each time we get on a deeper level
      * @param boardStatus The current status of the board
      */
-    public void buildCurrentTree(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement, int depth) {
+    public void buildCurrentTree(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement, int depth, boolean calculateAllNodes) {
         this.tracker.reset();
         this.tracker.setDepth(depth);
         this.tracker.startCounter();
@@ -54,7 +58,7 @@ public class MinMax extends Tree {
                 this.tracker.newNode(0);
 
                 MinMaxNode node = new MinMaxNode(movableMinMaxPawn, move, currentPlayerId);
-                node.buildTree(boardStatus, depth, tracker);
+                node.buildTree(boardStatus, depth, tracker, calculateAllNodes);
                 this.getRoot().add(node);
             }
         }
@@ -139,7 +143,7 @@ public class MinMax extends Tree {
         BoardStatus boardStatus = new BoardStatus(bluePawns, cyanPawns);
 
         MinMax minMax = new MinMax();
-        minMax.buildCurrentTree(boardStatus, currentPlayerId, lastMove);
+        minMax.buildCurrentTree(boardStatus, currentPlayerId, lastMove, DEPTH, true);
 
         MinMaxNode nextMove = minMax.minimax(currentPlayerId);
         System.out.println("nextMove: ");

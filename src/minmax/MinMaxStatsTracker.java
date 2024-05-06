@@ -98,7 +98,7 @@ public class MinMaxStatsTracker {
         long totalWeightCalculationTime = 0;
         for (Long time : this.timeToCalculateWeight) { totalWeightCalculationTime += time;}
         System.out.println("  Total time to calculate weight:  " + formatTime(totalWeightCalculationTime));
-        System.out.println("  Number of leaf nodes:            " + this.timeToCalculateWeight.size());
+        System.out.println("  Number of weights:            :  " + this.timeToCalculateWeight.size());
 
         long median = totalWeightCalculationTime / this.timeToCalculateWeight.size();
         System.out.println("  Median time to calculate weight: "
