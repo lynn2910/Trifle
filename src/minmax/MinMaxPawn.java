@@ -1,5 +1,7 @@
 package minmax;
 
+import trifle.model.Pawn;
+
 import java.awt.*;
 
 public class MinMaxPawn {
@@ -9,6 +11,10 @@ public class MinMaxPawn {
     private Point coords;
 
     public MinMaxPawn(MinMaxPawn pawn) {
+        this(pawn.getColorIndex(), pawn.getPlayerNumber(), pawn.getCoords().x, pawn.getCoords().y);
+    }
+
+    public MinMaxPawn(Pawn pawn) {
         this(pawn.getColorIndex(), pawn.getPlayerNumber(), pawn.getCoords().x, pawn.getCoords().y);
     }
 
