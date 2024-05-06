@@ -165,8 +165,9 @@ public class MinMaxNode extends Node {
     public static List<Point> determinePossibleMoves(Point pawn, BoardStatus boardStatus, int playerID){
         List<Point> possibleMoves = new ArrayList<>();
 
-        int[][] boardMatrix = boardStatus.generateMatrix();
+        System.out.println("pawn = " + pawn);
 
+        int[][] boardMatrix = boardStatus.generateMatrix();
         if (playerID == 0) {
             // check on the vertical
             for (int x = pawn.x + 1; x < 8; x++) {
@@ -200,7 +201,8 @@ public class MinMaxNode extends Node {
                 else break;
             }
 
-        } else {
+        }
+        else {
             // check on the vertical
             for (int x = pawn.x - 1; x >= 0; x--) {
                 if (boardMatrix[x][pawn.y] == 0)
@@ -208,30 +210,30 @@ public class MinMaxNode extends Node {
                 else break;
             }
 
-            int x = pawn.x, y = pawn.y;
+//            int x = pawn.x, y = pawn.y;
 
             // check right diagonal
-            while (x > 0 && y < 7) {
-                x--;
-                y++;
+//            while (x > 0 && y < 7) {
+//                x--;
+//                y++;
+//
+//                if (boardMatrix[x][y] == 0)
+//                    possibleMoves.add(new Point(x, y));
+//                else break;
+//            }
 
-                if (boardMatrix[x][y] == 0)
-                    possibleMoves.add(new Point(x, y));
-                else break;
-            }
-
-            x = pawn.x;
-            y = pawn.y;
+//            x = pawn.x;
+//            y = pawn.y;
 
             // check left diagonal
-            while (x > 0 && y > 0) {
-                x--;
-                y--;
-
-                if (boardMatrix[x][y] == 0)
-                    possibleMoves.add(new Point(x, y));
-                else break;
-            }
+//            while (x > 0 && y > 0) {
+//                x--;
+//                y--;
+//
+//                if (boardMatrix[x][y] == 0)
+//                    possibleMoves.add(new Point(x, y));
+//                else break;
+//            }
         }
 
         return possibleMoves;

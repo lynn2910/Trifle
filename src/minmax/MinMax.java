@@ -13,7 +13,7 @@ import java.util.List;
  * It implements the MinMax algorithm with either a neural network or a deterministic algorithm
  */
 public class MinMax extends Tree {
-    public static int DEPTH = 50;
+    public static int DEPTH = 1;
 
     public static double MAX_WEIGHT = 100;
     public static double MIN_WEIGHT = -100;
@@ -51,12 +51,22 @@ public class MinMax extends Tree {
         this.tracker.startCounter();
 
         List<MinMaxPawn> movableMinMaxPawns = determineWhichMinMaxPawnsCanBeMove(boardStatus, currentPlayerId, lastOpponentMovement);
-        System.out.println(movableMinMaxPawns);
+        System.out.println("movableMinMaxPawn:\n" + movableMinMaxPawns);
 
         assert movableMinMaxPawns != null;
 
         for (MinMaxPawn movableMinMaxPawn: movableMinMaxPawns) {
-            List<Point> movesAllowed = MinMaxNode.determinePossibleMoves(movableMinMaxPawn.getCoords(), boardStatus, currentPlayerId);
+            List<Point> movesAllowed = MinMaxNode.determinePossibleMoves(
+                    new Point(
+                            movableMinMaxPawn.getCoords().y,
+                            movableMinMaxPawn.getCoords().x
+                    ),
+                    boardStatus,
+                    currentPlayerId
+            );
+
+            System.out.println("movesAllowed:\n" + movesAllowed);
+            System.out.println();
 
             for (Point move : movesAllowed) {
                 this.tracker.newNode(0);
@@ -127,7 +137,15 @@ public class MinMax extends Tree {
             List<MinMaxPawn> pawns = boardStatus.getPawns(currentPlayerId);
             for (MinMaxPawn p: pawns) {
                 if (p.getColorIndex() == opponentLastMoveMinMaxPawnColorIndices) {
-                    return List.of(new MinMaxPawn(p));
+                    return List.of(
+                        new MinMaxPawn(
+                                p.getColorIndex(),
+                                currentPlayerId,
+                                currentPlayerId == 0 ? p.getCoords().x
+                                    : 7 - p.getCoords().x,
+                                p.getCoords().y
+                            )
+                    );
                 }
             }
         }

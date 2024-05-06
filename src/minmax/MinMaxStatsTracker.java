@@ -85,6 +85,10 @@ public class MinMaxStatsTracker {
         return this.pathFinderEnd - this.pathFinderStart;
     }
 
+    public int getNumberOfNodes(){
+        return this.numberOfNodes;
+    }
+
     public void displayStatistics() {
         System.out.println("\nMin-Max performances stats: ");
         System.out.println("  Time:  " + formatTime(getTotalTreeBuilderTime()));
