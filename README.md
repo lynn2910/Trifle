@@ -16,9 +16,6 @@ Source: [en.wikipedia.org](https://en.wikipedia.org/wiki/Trifle)
 The project members are:
 - Cédric Colin
 - Marvyn Levin
-
-There are also three other members that didn't want to participate at all,
-their name will be listed below as long as they aren't involved in the project:
 - Hugues Estrade
 - Timothée Meyer
 - Baptiste Dulieux
