@@ -7,7 +7,9 @@ import trifle.boardifier.model.Model;
 import static trifle.boardifier.view.ConsoleColor.*;
 import trifle.boardifier.view.View;
 import trifle.control.TrifleController;
+import trifle.rules.BotStrategy;
 import trifle.rules.GameMode;
+import trifle.rules.PlayerMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -88,18 +90,19 @@ public class TrifleConsole {
 
         // Add the players to the model
         List<String> playerNames = getPlayerNames(tui, gameMode);
-        switch (getPlayerMode(tui, gameMode, externalArgs.isEmpty())) {
-            case 0: {
+        PlayerMode playerMode = getPlayerMode(tui, externalArgs.isEmpty() ? null : externalArgs.get(0), externalArgs.isEmpty());
+        switch (playerMode) {
+            case HumanVsHuman: {
                 model.addHumanPlayer(playerNames.get(0));
                 model.addHumanPlayer(playerNames.get(1));
                 break;
             }
-            case 1: {
+            case HumanVsComputer: {
                 model.addHumanPlayer(playerNames.get(0));
                 model.addComputerPlayer(playerNames.get(1));
                 break;
             }
-            case 2: {
+            case ComputerVsComputer: {
                 model.addComputerPlayer(playerNames.get(0));
                 model.addComputerPlayer(playerNames.get(1));
                 break;
@@ -113,8 +116,13 @@ public class TrifleConsole {
         // Initiate the required instances, such as the view, StageFactory and the controller
         StageFactory.registerModelAndView("trifle", "trifle.model.TrifleStageModel", "trifle.view.TrifleStageView");
         View view = new View(model);
-        TrifleController controller = new TrifleController(model, view, gameMode, playerNames);
+        TrifleController controller = new TrifleController(model, view, gameMode, playerMode, playerNames);
         controller.setFirstStageName("trifle");
+
+        if (playerMode != PlayerMode.HumanVsHuman) {
+            List<BotStrategy> botStrategies = tui.getBotStrategies();
+            controller.defineBots(botStrategies);
+        }
 
         if (outputMovesDir.isPresent()) {
             try {
@@ -166,10 +174,15 @@ public class TrifleConsole {
      * @param tuiEnabled If whether the tui was called
      * @return The player mode (between zero and two, included)
      */
-    private static int getPlayerMode(Tui tui, GameMode mode, boolean tuiEnabled) {
+    private static PlayerMode getPlayerMode(Tui tui, String mode, boolean tuiEnabled) {
         if (tuiEnabled)
-            return tui.getPlayerMode().ordinal();
-        else return mode.ordinal();
+            return tui.getPlayerMode();
+        else return switch (mode) {
+            case "0" -> PlayerMode.HumanVsHuman;
+            case "1" -> PlayerMode.HumanVsComputer;
+            case "2" -> PlayerMode.ComputerVsComputer;
+            default -> throw new IllegalStateException("Unexpected value: " + mode);
+        };
     }
 
     /**

@@ -487,5 +487,18 @@ public class Tui {
         return playerNames;
     }
 
+    public List<BotStrategy> getBotStrategies(){
+        if (this.botStrategies.size() > 1)
+            return this.botStrategies;
+
+        List<BotStrategy> botStrategies = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            if (i < this.botStrategies.size()) botStrategies.add(this.botStrategies.get(i));
+            else botStrategies.add(BotStrategy.DEFAULT);
+        }
+
+        return botStrategies;
+    }
+
     public Tui() {}
 }

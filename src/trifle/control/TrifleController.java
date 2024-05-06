@@ -13,7 +13,9 @@ import trifle.model.OldMove;
 import trifle.model.Pawn;
 import trifle.model.TrifleBoard;
 import trifle.model.TrifleStageModel;
+import trifle.rules.BotStrategy;
 import trifle.rules.GameMode;
+import trifle.rules.PlayerMode;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -26,8 +28,13 @@ import java.util.regex.Pattern;
 public class TrifleController extends Controller {
     // Store the gameMode. Useful to check how many rounds are left.
     private final GameMode gameMode;
+    private final PlayerMode playerMode;
     private final List<String> playerNames;
     private final long startTime;
+
+    // Store each computer, yet it can be null
+    private TrifleDecider firstComputer;
+    private TrifleDecider secondComputer;
 
     /**
      * Count the number of rounds currently played
@@ -45,15 +52,33 @@ public class TrifleController extends Controller {
      */
     BufferedReader consoleSysIn;
 
-    public TrifleController(Model model, View view, GameMode gameMode, List<String> playerNames) {
+    public TrifleController(Model model, View view, GameMode gameMode, PlayerMode playerMode, List<String> playerNames) {
         super(model, view);
         this.gameMode = gameMode;
+        this.playerMode = playerMode;
         this.playerNames = playerNames;
 
         this.inputStreamReader = new InputStreamReader(System.in);
         this.consoleSysIn = new BufferedReader(inputStreamReader);
 
         this.startTime = System.currentTimeMillis();
+    }
+
+    public void defineBots(List<BotStrategy> botStrategies){
+        switch (this.playerMode) {
+            case HumanVsHuman: { break; }
+            case HumanVsComputer: {
+                this.firstComputer = botStrategies.get(0).initComputer(model, this);
+                break;
+            }
+            case ComputerVsComputer: {
+                this.firstComputer = botStrategies.get(0).initComputer(model, this);
+                this.secondComputer = botStrategies.get(1).initComputer(model, this);
+                break;
+            }
+            default:
+                System.out.println(ConsoleColor.RED + "Unknown bot strategy: " + this.gameMode + ConsoleColor.RESET);
+        }
     }
 
     public void addOutputMovesFileWriter(String path) throws IOException {
@@ -298,8 +323,22 @@ public class TrifleController extends Controller {
         stageModel.updateHistory();
     }
 
+    public TrifleStageModel getStageModel(){
+        return (TrifleStageModel) model.getGameStage();
+    }
+
     private void botTurn(Player p) {
-        // TODO computer play?
+        ActionList actions;
+        if (model.getIdPlayer() == 0) actions = this.firstComputer.decide();
+        else actions = this.secondComputer.decide();
+
+
+        // Play the move
+        actions.setDoEndOfTurn(true);
+        ActionPlayer play = new ActionPlayer(model, this, actions);
+
+        play.start();
+
     }
 
     /**
@@ -361,6 +400,18 @@ public class TrifleController extends Controller {
 
         play.start();
 
+
+        this.registerMove(
+                gameStage,
+                moveCoordinates,
+                move,
+                pawn
+        );
+
+        return true;
+    }
+
+    public void registerMove(TrifleStageModel gameStage, Point moveCoordinates, String move, Pawn pawn){
         if (model.getIdPlayer() == 0) {
             gameStage.setLastBluePlayerMove(moveCoordinates);
         } else {
@@ -371,11 +422,8 @@ public class TrifleController extends Controller {
         this.addMoveToOldMoves(model.getCurrentPlayer(), pawn.getFormattedPawnId(), normalizeCoordinate(moveCoordinates, true));
         pawn.setCoords(moveCoordinates);
 
-
         // !! Last one !!
         this.detectWin();
-
-        return true;
     }
 
     /**
