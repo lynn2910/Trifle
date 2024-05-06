@@ -21,14 +21,16 @@ public class MinMaxNode extends Node {
     private final Point moveDone;
     private final MinMaxPawn pawn;
     private final int playerID;
+    private final MinMaxAlgorithm algorithm;
 
     private double weight = 0.0;
 
-    public MinMaxNode(MinMaxPawn pawn, Point moveDone, int playerID) {
+    public MinMaxNode(MinMaxPawn pawn, Point moveDone, int playerID, MinMaxAlgorithm algorithm) {
         super();
         this.pawn = pawn;
         this.moveDone = moveDone;
         this.playerID = playerID;
+        this.algorithm = algorithm;
     }
 
     public double getWeight() {
@@ -94,11 +96,16 @@ public class MinMaxNode extends Node {
 
     private void computeWeight(BoardStatus boardStatus, MinMaxStatsTracker tracker){
         // Determine the current weight
-        long beforeWeight = System.nanoTime();
-        this.weight = DeterministicAlgorithm.determineWeight(boardStatus, this.playerID, this.pawn, this.moveDone);
-        long afterWeight = System.nanoTime();
+        switch (this.algorithm) {
+            case DeterministicAlgorithm: {
+                long beforeWeight = System.nanoTime();
+                this.weight = DeterministicAlgorithm.determineWeight(boardStatus, this.playerID, this.pawn, this.moveDone);
+                long afterWeight = System.nanoTime();
 
-        tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
+                tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
+                break;
+            }
+        }
     }
 
     /**
@@ -137,7 +144,7 @@ public class MinMaxNode extends Node {
         List<Point> possibleMoves = determinePossibleMoves(opponentPawn.getCoords(), boardStatus, opponentID);
 
         for (Point moveToDo: possibleMoves) {
-            MinMaxNode opponentNode = new MinMaxNode(opponentPawn, moveToDo, opponentID);
+            MinMaxNode opponentNode = new MinMaxNode(opponentPawn, moveToDo, opponentID, this.algorithm);
             opponentNode.buildTree(boardStatus, depth - 1, tracker, calculateAllNodes);
             this.addChild(opponentNode);
         }

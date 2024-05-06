@@ -332,13 +332,11 @@ public class TrifleController extends Controller {
         if (model.getIdPlayer() == 0) actions = this.firstComputer.decide();
         else actions = this.secondComputer.decide();
 
-
         // Play the move
         actions.setDoEndOfTurn(true);
         ActionPlayer play = new ActionPlayer(model, this, actions);
 
         play.start();
-
     }
 
     /**

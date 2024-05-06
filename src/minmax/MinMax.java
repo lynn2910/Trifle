@@ -19,10 +19,13 @@ public class MinMax extends Tree {
     public static double MIN_WEIGHT = -100;
 
     private final MinMaxStatsTracker tracker;
+    private final MinMaxAlgorithm minMaxAlgorithm;
 
-    public MinMax(){
+    public MinMax(MinMaxAlgorithm algorithm){
         super();
         this.tracker = new MinMaxStatsTracker();
+
+        this.minMaxAlgorithm = algorithm;
     }
 
     /**
@@ -57,7 +60,7 @@ public class MinMax extends Tree {
             for (Point move : movesAllowed) {
                 this.tracker.newNode(0);
 
-                MinMaxNode node = new MinMaxNode(movableMinMaxPawn, move, currentPlayerId);
+                MinMaxNode node = new MinMaxNode(movableMinMaxPawn, move, currentPlayerId, minMaxAlgorithm);
                 node.buildTree(boardStatus, depth, tracker, calculateAllNodes);
                 this.getRoot().add(node);
             }
@@ -151,7 +154,7 @@ public class MinMax extends Tree {
 
         BoardStatus boardStatus = new BoardStatus(bluePawns, cyanPawns);
 
-        MinMax minMax = new MinMax();
+        MinMax minMax = new MinMax(MinMaxAlgorithm.DeterministicAlgorithm);
         minMax.buildCurrentTree(boardStatus, currentPlayerId, lastMove, DEPTH, true);
 
         MinMaxNode nextMove = minMax.minimax(currentPlayerId, true);
