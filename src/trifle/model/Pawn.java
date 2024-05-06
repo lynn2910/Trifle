@@ -23,7 +23,7 @@ public class Pawn extends GameElement {
             ConsoleColor.YELLOW,
             ConsoleColor.RED,
             ConsoleColor.GREEN,
-            ConsoleColor.BLACK
+            ConsoleColor.BLACK_BRIGHT
     };
 
     public static final String[] BG_COLORS = new String[]{
