@@ -18,9 +18,9 @@ public class MinMaxNode extends Node {
     /**
      * What move has been lastly played to be here
      */
-    private Point moveDone;
-    private MinMaxPawn pawn;
-    private int playerID;
+    private final Point moveDone;
+    private final MinMaxPawn pawn;
+    private final int playerID;
 
     private double weight = 0.0;
 
@@ -29,10 +29,6 @@ public class MinMaxNode extends Node {
         this.pawn = pawn;
         this.moveDone = moveDone;
         this.playerID = playerID;
-    }
-
-    public MinMaxNode() {
-        super();
     }
 
     public double getWeight() {
@@ -78,6 +74,18 @@ public class MinMaxNode extends Node {
             }
             return minEval;
         }
+    }
+
+    /**
+     * The MiniMax algorithm
+     * <br>This version will use the default minimax algorithm and add his own weight.
+     * <br>The tree must have been built before using the `buildTree` method.
+     * @param botPlayerID The ID of the bot
+     * @return The weight
+     */
+    public double minimaxFull(int botPlayerID) {
+        double weight = this.minimax(botPlayerID);
+        return (weight + this.weight) / 2.0;
     }
 
     public void buildTree(BoardStatus boardStatus, int depth, MinMaxStatsTracker tracker) {

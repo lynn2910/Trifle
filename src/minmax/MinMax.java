@@ -67,7 +67,13 @@ public class MinMax extends Tree {
         this.tracker.endTimer();
     }
 
-    public MinMaxNode minimax(int botID) {
+    /**
+     *
+     * @param botID The bot's ID
+     * @param isFull Whether it should use the weight of each node and not only the leafs
+     * @return The better node
+     */
+    public MinMaxNode minimax(int botID, boolean isFull) {
         tracker.startPathFinder();
 
         // We are maximizing the player
@@ -75,7 +81,10 @@ public class MinMax extends Tree {
         max.minimax(botID);
 
         for (Node node: this.getRoot()) {
-            double evaluated = ((MinMaxNode) node).minimax(botID);
+            double evaluated;
+            if (isFull) evaluated = ((MinMaxNode) node).minimaxFull(botID);
+            else evaluated = ((MinMaxNode) node).minimax(botID);
+
             if (max.getWeight() < evaluated) {
                 max = (MinMaxNode) node;
             }
@@ -145,7 +154,7 @@ public class MinMax extends Tree {
         MinMax minMax = new MinMax();
         minMax.buildCurrentTree(boardStatus, currentPlayerId, lastMove, DEPTH, true);
 
-        MinMaxNode nextMove = minMax.minimax(currentPlayerId);
+        MinMaxNode nextMove = minMax.minimax(currentPlayerId, true);
         System.out.println("nextMove: ");
         System.out.println("  pawn: " + nextMove.getPawn());
         System.out.println("  move: " + nextMove.getMoveDone());
