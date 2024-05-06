@@ -96,6 +96,11 @@ public class TrifleStageModel extends GameStageModel {
         this.lastCyanPlayerMove = lastCyanPlayerMove;
     }
 
+    public List<Pawn> getPlayerPawns(int playerID) {
+        if (playerID == 0) return getBluePlayer();
+        else return getCyanPlayer();
+    }
+
     public TextElement getPlayerName() {
         return this.playerName;
     }
