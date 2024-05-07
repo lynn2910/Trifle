@@ -24,12 +24,7 @@ public class NeuralNetwork {
     }
 
     public double compute(NNContext ctx){
-        long before = System.nanoTime();
-        double computed = this.outputNeuron.compute(ctx);
-        long after = System.nanoTime();
-
-        System.out.println("Prediction in " + MinMaxStatsTracker.formatTime(after - before));
-        return computed;
+        return this.outputNeuron.compute(ctx);
     }
 
     public static void main(String[] _args) {

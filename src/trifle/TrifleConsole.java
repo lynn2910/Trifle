@@ -99,7 +99,7 @@ public class TrifleConsole {
             }
             case HumanVsComputer: {
                 model.addHumanPlayer(playerNames.get(0));
-                model.addComputerPlayer(playerNames.get(1));
+                model.addComputerPlayer("Computer");
                 break;
             }
             case ComputerVsComputer: {
@@ -205,6 +205,10 @@ public class TrifleConsole {
             if (2 - tuiPlayerNames.size() != tui.getPlayerMode().getBotNumber()) {
                 for (int i = 0; i < 2 - tuiPlayerNames.size(); i++)
                     tuiPlayerNames.add("Computer" + (i + 1));
+            }
+
+            if (tui.getPlayerMode() == PlayerMode.HumanVsComputer && tuiPlayerNames.size() < 2) {
+                tuiPlayerNames.add("Computer");
             }
 
             return tuiPlayerNames;

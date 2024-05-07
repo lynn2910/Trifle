@@ -1,5 +1,8 @@
 package minmax;
 
+import bots.BanoffeePie;
+import bots.banoffeepie.NNContext;
+import bots.banoffeepie.NeuralNetwork;
 import minmax.tree.Node;
 import trifle.model.TrifleBoard;
 
@@ -101,6 +104,19 @@ public class MinMaxNode extends Node {
             case DeterministicAlgorithm: {
                 long beforeWeight = System.nanoTime();
                 this.weight = DeterministicAlgorithm.determineWeight(boardStatus, this.playerID, this.pawn, this.moveDone);
+                long afterWeight = System.nanoTime();
+
+                tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
+                break;
+            }
+            case NeuralNetworkAlgorithm: {
+                NeuralNetwork neuralNetwork = BanoffeePie.getNetwork();
+
+                NNContext ctx = new NNContext();
+                ctx.normalizeBoard(boardStatus, pawn.getCoords(), moveDone);
+
+                long beforeWeight = System.nanoTime();
+                this.weight = neuralNetwork.compute(ctx);
                 long afterWeight = System.nanoTime();
 
                 tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);

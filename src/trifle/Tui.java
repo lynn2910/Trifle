@@ -147,7 +147,7 @@ public class Tui {
         for (int i = 0; i < playersNb; i++) {
             boolean r = this.addPlayer(i + 1);
 
-            if (r) {
+            if (!r) {
                 System.out.println(ConsoleColor.YELLOW + "You exited this sub-menu. Registered players will not be cleared" + ConsoleColor.RESET);
                 return;
             }
