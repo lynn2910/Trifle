@@ -13,7 +13,7 @@ import java.util.List;
  * It implements the MinMax algorithm with either a neural network or a deterministic algorithm
  */
 public class MinMax extends Tree {
-    public static int DEPTH = 1;
+    public static int DEPTH = 50;
 
     public static double MAX_WEIGHT = 100;
     public static double MIN_WEIGHT = -100;

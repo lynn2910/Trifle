@@ -40,12 +40,6 @@ public class DeterministicMinMaxBot extends TrifleDecider {
             lastOpponentMove = stageModel.getLastBluePlayerMove();
         }
 
-        int[][] matrix = boardStatus.generateMatrix();
-        for (int[] m: matrix)
-            System.out.println(Arrays.toString(m));
-
-        System.out.println("lastOpponentMove = " + lastOpponentMove);
-
         this.minMax.reset();
         this.minMax.buildCurrentTree(
                 boardStatus,
@@ -56,23 +50,16 @@ public class DeterministicMinMaxBot extends TrifleDecider {
         );
 
         MinMaxNode nextMove = this.minMax.minimax(model.getIdPlayer(), true);
-        System.out.println(minMax.getTracker().getNumberOfNodes() + " nodes");
 
-        System.out.println();
-        System.out.println(nextMove.getMoveDone());
-        System.out.println(nextMove.getWeight());
-        System.out.println(nextMove.getPawn());
-        System.out.println();
+        this.minMax.getTracker().displayStatistics();
 
         List<Pawn> pawns = stageModel.getPlayerPawns(model.getIdPlayer());
         Pawn pawnInvolved = pawns.get(nextMove.getPawn().getColorIndex());
 
+        // Don't much this thing
         int tempX = nextMove.getMoveDone().x;
         nextMove.getMoveDone().x = nextMove.getMoveDone().y;
         nextMove.getMoveDone().y = tempX;
-
-
-        pawnInvolved.setCoords(nextMove.getMoveDone());
 
         ActionList actions = ActionFactory.generatePutInContainer(
                 model,
@@ -89,6 +76,9 @@ public class DeterministicMinMaxBot extends TrifleDecider {
                 "a1a2",
                 pawnInvolved
         );
+
+
+        pawnInvolved.setCoords(nextMove.getMoveDone());
 
         return actions;
     }
