@@ -131,7 +131,7 @@ public class MinMaxStatsTracker {
      * @param nanoseconds The time in nanoseconds
      * @return The formatted time
      */
-    public String formatTime(long nanoseconds) {
+    public static String formatTime(long nanoseconds) {
         long hours = nanoseconds / (3600L * 1_000_000_000L);
         long minutes = (nanoseconds % (3600L * 1_000_000_000L)) / (60L * 1_000_000_000L);
         long seconds = (nanoseconds % (60L * 1_000_000_000L)) / (1_000_000_000L);

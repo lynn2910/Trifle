@@ -1,5 +1,11 @@
 package bots.banoffeepie;
 
+import minmax.BoardStatus;
+import minmax.MinMaxPawn;
+import minmax.MinMaxStatsTracker;
+
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,13 +24,33 @@ public class NeuralNetwork {
     }
 
     public double compute(NNContext ctx){
-        return this.outputNeuron.compute(ctx);
+        long before = System.nanoTime();
+        double computed = this.outputNeuron.compute(ctx);
+        long after = System.nanoTime();
+
+        System.out.println("Prediction in " + MinMaxStatsTracker.formatTime(after - before));
+        return computed;
     }
 
     public static void main(String[] _args) {
+        // Create a fake board status
+        List<MinMaxPawn> bluePawns = new ArrayList<>();
+        for (int y = 0; y < 8; y++)
+            bluePawns.add(new MinMaxPawn(y, 0, 0, y));
+
+        List<MinMaxPawn> cyanPawns = new ArrayList<>();
+        for (int y = 0; y < 8; y++)
+            cyanPawns.add(new MinMaxPawn(y, 1, 7, y));
+
+
+        BoardStatus boardStatus = new BoardStatus(bluePawns, cyanPawns);
+
+
         NeuralNetwork nn = BuilderHelper.createNetwork();
 
-        NNContext ctx = new NNContext(List.of(0.5, 0.5));
+        NNContext ctx = new NNContext();
+        // Player 1 (bot) try to move A1 to A2
+        ctx.normalizeBoard(boardStatus, new Point(0, 0), new Point(1, 0));
 
         double predicted = nn.compute(ctx);
         System.out.println(predicted);

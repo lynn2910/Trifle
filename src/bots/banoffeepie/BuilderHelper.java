@@ -1,5 +1,7 @@
 package bots.banoffeepie;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BuilderHelper {
@@ -14,17 +16,13 @@ public class BuilderHelper {
 
         Neuron output = network.getOutputNeuron();
 
-        Neuron a = Neuron.random(random);
-        a.addChild(Neuron.random(random), random.nextDouble());
-        a.addChild(Neuron.random(random), random.nextDouble());
+        // We have 8 + 8 + 2 inputs, so 16 + 2 = 18
+        List<Neuron> inputNeurons = new ArrayList<>();
+        for (int i = 0; i < 18; i++) inputNeurons.add(Neuron.random(random).setInput(i));
 
-        output.addChild(a, random.nextDouble());
-
-        Neuron b = Neuron.random(random);
-        b.addChild(Neuron.random(random), random.nextDouble());
-        b.addChild(Neuron.random(random), random.nextDouble());
-
-        output.addChild(b, random.nextDouble());
+        for (Neuron neuron: inputNeurons) {
+            output.addChild(new NeuronLink(neuron, random.nextDouble()));
+        }
 
         return network;
     }
