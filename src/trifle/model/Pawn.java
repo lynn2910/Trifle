@@ -97,4 +97,11 @@ public class Pawn extends GameElement {
 
         return sb;
     }
+
+    @Override
+    public String toString(){
+        return "Pawn { colorIndex: " + colorIndex
+                + ", playerNumber: " + playerNumber
+                + ", coords: (" + coords.x + ", " + coords.y  + ") }";
+    }
 }

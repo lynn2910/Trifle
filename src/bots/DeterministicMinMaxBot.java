@@ -78,7 +78,11 @@ public class DeterministicMinMaxBot extends TrifleDecider {
         );
 
 
-        pawnInvolved.setCoords(nextMove.getMoveDone());
+//        pawnInvolved.setCoords(nextMove.getMoveDone());
+//
+//        stageModel.getPlayerPawns(model.getIdPlayer())
+//                .get(pawnInvolved.getColorIndex())
+//                .setCoords(nextMove.getMoveDone());
 
         return actions;
     }

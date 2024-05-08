@@ -100,6 +100,14 @@ public class TrifleStageModel extends GameStageModel {
         if (playerID == 0) return getBluePlayer();
         else return getCyanPlayer();
     }
+    public Pawn getPlayerPawn(int playerID, int pawnID) {
+        List<Pawn> pawns = getPlayerPawns(playerID);
+
+        for (Pawn pawn: pawns) {
+            if (pawn.getColorIndex() == pawnID) return pawn;
+        }
+        return null;
+    }
 
     public TextElement getPlayerName() {
         return this.playerName;

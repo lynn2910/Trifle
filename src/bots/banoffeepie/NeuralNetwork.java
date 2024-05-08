@@ -38,16 +38,21 @@ public class NeuralNetwork {
             cyanPawns.add(new MinMaxPawn(y, 1, 7, y));
 
 
-        BoardStatus boardStatus = new BoardStatus(bluePawns, cyanPawns);
-
-
-        NeuralNetwork nn = BuilderHelper.createNetwork();
+        BoardStatus boardStatus = new BoardStatus(bluePawns, cyanPawns, null);
 
         NNContext ctx = new NNContext();
         // Player 1 (bot) try to move A1 to A2
         ctx.normalizeBoard(boardStatus, new Point(0, 0), new Point(1, 0));
 
-        double predicted = nn.compute(ctx);
-        System.out.println(predicted);
+        int iters = 10;
+        double sum = 0.0;
+        for (int i = 0; i < iters; i++) {
+            NeuralNetwork nn = BuilderHelper.createNetwork();
+
+            double predicted = nn.compute(ctx) * 100;
+            sum += predicted;
+            System.out.println(predicted);
+        }
+        System.out.println("Mean: " + (sum / (double) iters));
     }
 }

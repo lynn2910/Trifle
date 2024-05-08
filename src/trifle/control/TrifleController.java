@@ -1,5 +1,7 @@
 package trifle.control;
 
+import bots.Utils;
+import minmax.BoardStatus;
 import trifle.boardifier.control.ActionFactory;
 import trifle.boardifier.control.ActionPlayer;
 import trifle.boardifier.control.Controller;
@@ -22,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -149,6 +152,22 @@ public class TrifleController extends Controller {
 
     private void playTurn() {
         Player p = model.getCurrentPlayer();
+
+        TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
+        BoardStatus boardStatus = Utils.boardStatusFromBoard(stageModel);
+
+        System.out.println();
+        for (int[] row: boardStatus.generateMatrix())
+            System.out.println(Arrays.toString(row));
+        System.out.println();
+
+        System.out.println("Blue pawns:");
+        for (Pawn pawn: stageModel.getPlayerPawns(0))
+            System.out.println(pawn);
+        System.out.println("Cyan pawns:");
+        for (Pawn pawn: stageModel.getPlayerPawns(1))
+            System.out.println(pawn);
+        System.out.println();
 
         switch (p.getType()) {
             case Player.HUMAN: {
@@ -328,6 +347,9 @@ public class TrifleController extends Controller {
     }
 
     private void botTurn(Player p) {
+        TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
+        System.out.println("AAAAAAAAA\n" + stageModel.getPlayerPawn(1, 2));
+
         ActionList actions;
         if (model.getIdPlayer() == 0) actions = this.firstComputer.decide();
         else actions = this.secondComputer.decide();
@@ -362,8 +384,11 @@ public class TrifleController extends Controller {
         // now we know that the user input is correctly formed, we can check if the movement is legal
         List<Pawn> pawns = model.getIdPlayer() == 0 ? gameStage.getBluePlayer() : gameStage.getCyanPlayer();
         Pawn pawn = model.getIdPlayer() == 0 ? pawns.get(pawnIndex) : pawns.get(7 - pawnIndex);
+        // FIXME gameStage.getPlayerPawn
 
-        Point lastEnemyMovement = model.getIdPlayer() == 0 ? gameStage.getLastCyanPlayerMove() : gameStage.getLastBluePlayerMove();
+        Point lastEnemyMovement = model.getIdPlayer() == 0
+                ? gameStage.getLastCyanPlayerMove()
+                    : gameStage.getLastBluePlayerMove();
 
         // Check the pawn color based on the last movement of the enemy.
         if (lastEnemyMovement != null) {

@@ -44,6 +44,8 @@ public class BanoffeePie extends TrifleDecider {
         BoardStatus boardStatus = Utils.boardStatusFromBoard(stageModel);
         TrifleController controller = (TrifleController) this.control;
 
+        System.out.println("AAAAAAAAA\n" + stageModel.getPlayerPawn(1, 7 - 2));
+
         Point lastOpponentMove;
         if (model.getIdPlayer() == 0) {
             lastOpponentMove = stageModel.getLastCyanPlayerMove();
@@ -73,6 +75,8 @@ public class BanoffeePie extends TrifleDecider {
         nextMove.getMoveDone().x = nextMove.getMoveDone().y;
         nextMove.getMoveDone().y = tempX;
 
+        System.out.println("Choice: " + nextMove.getMoveDone());
+
         ActionList actions = ActionFactory.generatePutInContainer(
                 model,
                 pawnInvolved,
@@ -90,9 +94,12 @@ public class BanoffeePie extends TrifleDecider {
         );
 
 
-        pawnInvolved.setCoords(nextMove.getMoveDone());
+//        pawnInvolved.setCoords(nextMove.getMoveDone());
+//
+//        stageModel.getPlayerPawns(model.getIdPlayer())
+//                .get(pawnInvolved.getColorIndex())
+//                .setCoords(nextMove.getMoveDone());
 
-
-        return new ActionList();
+        return actions;
     }
 }

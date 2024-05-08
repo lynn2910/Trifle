@@ -116,7 +116,7 @@ public class MinMaxNode extends Node {
                 ctx.normalizeBoard(boardStatus, pawn.getCoords(), moveDone);
 
                 long beforeWeight = System.nanoTime();
-                this.weight = neuralNetwork.compute(ctx);
+                this.weight = neuralNetwork.compute(ctx) * 100;
                 long afterWeight = System.nanoTime();
 
                 tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
@@ -149,14 +149,18 @@ public class MinMaxNode extends Node {
 
 
         // Move the pawn in question
-        boardStatus.movePawn(playerID, pawn.getColorIndex(), moveDone);
+        boardStatus.movePawn(
+                playerID,
+                playerID == 0
+                    ? pawn.getColorIndex()
+                        : 7 - pawn.getColorIndex(),
+                moveDone
+        );
 
         int opponentID = (this.playerID + 1) % 2;
         int moveColorIndexPosition = TrifleBoard.BOARD[this.moveDone.y][this.moveDone.x];
 
-        MinMaxPawn opponentPawn = opponentID == 0 ?
-                boardStatus.bluePawns().get(moveColorIndexPosition)
-                : boardStatus.cyanPawns().get(7 - moveColorIndexPosition);
+        MinMaxPawn opponentPawn = boardStatus.getPawn(opponentID, moveColorIndexPosition);
 
         List<Point> possibleMoves = determinePossibleMoves(opponentPawn.getCoords(), boardStatus, opponentID);
 

@@ -20,7 +20,29 @@ public class BuilderHelper {
         List<Neuron> inputNeurons = new ArrayList<>();
         for (int i = 0; i < 18; i++) inputNeurons.add(Neuron.random(random).setInput(i));
 
-        for (Neuron neuron: inputNeurons) {
+        // create a second layer only for the 16 first inputs
+        List<Neuron> firstLayer = new ArrayList<>();
+        for (int i = 0; i < 16; i++) {
+            Neuron neuron = Neuron.random(random);
+
+            for (Neuron input : inputNeurons)
+                neuron.addChild(new NeuronLink(input, random.nextDouble()));
+
+            firstLayer.add(neuron);
+        };
+
+        // Second layer that regroups everything
+        List<Neuron> secondLayer = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            Neuron neuron = Neuron.random(random);
+
+            for (Neuron l1Neuron : firstLayer)
+                neuron.addChild(new NeuronLink(l1Neuron, random.nextDouble()));
+
+            secondLayer.add(neuron);
+        }
+
+        for (Neuron neuron: secondLayer) {
             output.addChild(new NeuronLink(neuron, random.nextDouble()));
         }
 
