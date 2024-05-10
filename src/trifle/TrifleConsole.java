@@ -40,8 +40,6 @@ public class TrifleConsole {
         Logger.setVerbosity(Logger.VERBOSE_BASIC);
 
         Optional<String> outputMovesDir = Optional.empty();
-        Optional<String> trainingDataPath = Optional.empty();
-
 
         // Parse the internal arguments, such as `--output-moves`
         List<String> externalArgs = new ArrayList<>();

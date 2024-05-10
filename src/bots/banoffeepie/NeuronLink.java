@@ -10,14 +10,4 @@ public class NeuronLink {
         this.to = to;
         this.weight = weight;
     }
-
-    public int neuron1() {
-        return from;
-    }
-    public int neuron2() {
-        return to;
-    }
-    public double weight() {
-        return weight;
-    }
 }

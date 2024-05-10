@@ -350,7 +350,7 @@ public class TrifleController extends Controller {
         return (TrifleStageModel) model.getGameStage();
     }
 
-    private void botTurn(Player p) {
+    private void botTurn(Player _p) {
         TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
         System.out.println("AAAAAAAAA\n" + stageModel.getPlayerPawn(1, 2));
 

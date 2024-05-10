@@ -23,7 +23,7 @@ public class Trainer {
         // export it
         String jsonedNetwork = nn.exportNetwork();
         // write
-        FileWriter fileWriter = new FileWriter(output);;
+        FileWriter fileWriter = new FileWriter(output);
         fileWriter.write(jsonedNetwork);
         fileWriter.close();
     }
@@ -49,13 +49,14 @@ public class Trainer {
                 // get one of the neurons
                 int neuronIdToMutate = random.nextInt(1, nn.getNeurons().size() - 1);
                 Neuron neuronToMutate = nn.getNeurons().get(neuronIdToMutate);
+                neuronToMutate.mutate(random, nn);
 
                 List<Double> expectedList = new ArrayList<>();
                 List<Double> computedList = new ArrayList<>();
                 for (int i = 0; i < ITERS; i++) {
                     double computed = nn.compute(ctx);
                     computedList.add(computed);
-                    expectedList.add(expected);
+                    expectedList.add(expected * 10);
                 }
                 Double thisEpochLoss = Utils.meanSquareLoss(expectedList, computedList);
 
@@ -87,7 +88,7 @@ public class Trainer {
 
         for (String d: line.split(",")) {
             inputs.add(Double.parseDouble(d));
-        };
+        }
 
         return inputs;
     }

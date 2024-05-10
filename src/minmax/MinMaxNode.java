@@ -118,7 +118,7 @@ public class MinMaxNode extends Node {
                 ctx.normalizeBoard(boardStatus, pawn.getCoords(), moveDone);
 
                 long beforeWeight = System.nanoTime();
-                this.weight = neuralNetwork.compute(ctx) * 100;
+                this.weight = neuralNetwork.compute(ctx) * 10;
                 long afterWeight = System.nanoTime();
 
                 tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);

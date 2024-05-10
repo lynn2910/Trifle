@@ -22,10 +22,6 @@ public class Neuron {
         this.id = ID_CURSOR++;
     }
 
-    public static Neuron random(){
-        Random random = new Random();
-        return Neuron.random(random);
-    }
     public static Neuron random(Random random){
         return new Neuron(random.nextDouble());
     }
@@ -48,9 +44,6 @@ public class Neuron {
 
     public double getBias() {
         return bias;
-    }
-    public void setBias(double bias) {
-        this.bias = bias;
     }
 
     /**
