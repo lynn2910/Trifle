@@ -104,7 +104,7 @@ public class MinMaxStatsTracker {
         System.out.println("  Total time to calculate weight:  " + formatTime(totalWeightCalculationTime));
         System.out.println("  Number of weights:            :  " + this.timeToCalculateWeight.size());
 
-        long median = totalWeightCalculationTime / this.timeToCalculateWeight.size();
+        long median = this.timeToCalculateWeight.isEmpty() ? 0 : totalWeightCalculationTime / this.timeToCalculateWeight.size();
         System.out.println("  Median time to calculate weight: "
                 + formatTime(median));
         System.out.println();

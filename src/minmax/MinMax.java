@@ -39,7 +39,7 @@ public class MinMax extends Tree {
             throw new NullPointerException("trainingDataFileWriter is null");
 
         if (trainingDataFileWriter == null){
-            trainingDataFileWriter = new FileWriter(trainingPath);
+            trainingDataFileWriter = new FileWriter(trainingPath, true);
         }
 
         return trainingDataFileWriter;

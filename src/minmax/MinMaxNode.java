@@ -143,11 +143,11 @@ public class MinMaxNode extends Node {
                 return;
 
             for (int i = 0; i < ctx.normalizedInputs.size(); i++) {
-                fileWriter.write(ctx.normalizedInputs.get(i).toString());
-                fileWriter.write(',');
+                fileWriter.append(ctx.normalizedInputs.get(i).toString());
+                fileWriter.append(',');
             }
-            fileWriter.write(((Double) this.weight).toString());
-            fileWriter.write("\n");
+            fileWriter.append(((Double) this.weight).toString());
+            fileWriter.append("\n");
         } catch(IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();

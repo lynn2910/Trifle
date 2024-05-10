@@ -145,8 +145,10 @@ public class TrifleController extends Controller {
             if (this.outputMovesFileWriter != null)
                 this.outputMovesFileWriter.close();
 
-            if (MinMax.trainingDataFileWriter != null)
+            if (MinMax.trainingDataFileWriter != null) {
+                MinMax.trainingDataFileWriter.flush();
                 MinMax.trainingDataFileWriter.close();
+            }
         } catch (IOException e) {
             System.out.println("Error closing input stream");
             e.printStackTrace();
@@ -465,7 +467,7 @@ public class TrifleController extends Controller {
      * @param colored If the output string should have colors
      * @return The normalized coordinate
      */
-    private static String normalizeCoordinate(Point coordinates, boolean colored) {
+    public static String normalizeCoordinate(Point coordinates, boolean colored) {
         String sb = "";
 
         System.out.println(coordinates);
