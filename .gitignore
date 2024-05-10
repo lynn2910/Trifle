@@ -3,3 +3,5 @@
 out/**
 *.class
 .trifle000001
+training_data.csv
+resources/training_data.csv

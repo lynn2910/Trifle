@@ -111,8 +111,8 @@ public class TrifleConsole {
                 break;
             }
             case ComputerVsComputer: {
-                model.addComputerPlayer(playerNames.get(0));
-                model.addComputerPlayer(playerNames.get(1));
+                model.addComputerPlayer("Computer1");
+                model.addComputerPlayer("Computer2");
                 break;
             }
             default: {

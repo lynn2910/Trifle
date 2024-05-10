@@ -39,6 +39,18 @@ public class TrifleBoard extends ContainerElement {
         }
     }
 
+    public boolean canPawnMove(Pawn pawn){
+        Point c = pawn.getCoords();
+        if (pawn.getPlayerNumber() == 0)
+            return (getElement(c.x + 1, c.y) != null)
+                    && (getElement(c.x + 1, c.y + 1) != null)
+                    && (getElement(c.x + 1, c.y, - 1) != null);
+        else
+            return (c.x - 1 < 0 ||getElement(c.x - 1, c.y) != null)
+                    && (c.x - 1 < 0 ||getElement(c.x - 1, c.y + 1) != null)
+                    && (c.x - 1 < 0 ||getElement(c.x - 1, c.y, - 1) != null);
+    }
+
     /**
      * IMPORTANT If any update is made in this method, it should also be done for the MinMax!
      * @param coords the coordinates of the move wanted

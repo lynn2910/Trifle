@@ -44,8 +44,6 @@ public class BanoffeePie extends TrifleDecider {
         BoardStatus boardStatus = Utils.boardStatusFromBoard(stageModel);
         TrifleController controller = (TrifleController) this.control;
 
-        System.out.println("AAAAAAAAA\n" + stageModel.getPlayerPawn(1, 7 - 2));
-
         Point lastOpponentMove;
         if (model.getIdPlayer() == 0) {
             lastOpponentMove = stageModel.getLastCyanPlayerMove();
@@ -64,6 +62,10 @@ public class BanoffeePie extends TrifleDecider {
 
 
         MinMaxNode nextMove = this.minMax.minimax(model.getIdPlayer(), true);
+        if (nextMove == null) {
+            System.out.println("The bot " + model.getIdPlayer() + " cannot move his pawn.");
+            return new ActionList();
+        }
 
         this.minMax.getTracker().displayStatistics();
 
