@@ -15,13 +15,18 @@ public class Tui {
     private GameMode gameMode;
     private PlayerMode playerMode;
 
-    private final Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
 
     public void reset() {
         this.gameMode      = null;
         this.playerMode    = null;
         this.playerNames   = new ArrayList<>();
         this.botStrategies = new ArrayList<>();
+    }
+
+    public void closeStream(){
+        this.scanner.close();
+        this.scanner = null;
     }
 
     /**
@@ -62,6 +67,9 @@ public class Tui {
      */
     public void run() {
         this.reset();
+
+        if (this.scanner == null)
+            this.scanner = new Scanner(System.in);
 
         boolean run = true;
 

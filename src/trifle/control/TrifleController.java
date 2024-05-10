@@ -291,12 +291,30 @@ public class TrifleController extends Controller {
             System.out.println("Rounds: " + gameMode.numberOfRounds());
             System.out.println("Time:   " + formatTime(System.currentTimeMillis() - startTime));
 
-            if (bluePlayerPoints > cyanPlayerPoints)
+            int winnerID;
+
+            if (bluePlayerPoints > cyanPlayerPoints) {
                 System.out.println("    " + model.getPlayers().get(0).getName() + " wins this game.");
-            else if (bluePlayerPoints < cyanPlayerPoints)
+                winnerID = 0;
+            }
+            else if (bluePlayerPoints < cyanPlayerPoints){
                 System.out.println("    " + model.getPlayers().get(1).getName() + " wins this game.");
-            else {
+                winnerID = 1;
+            }  else {
                 System.out.println("    Draw.");
+                winnerID = -1;
+            }
+
+            // Write the result to a specific file
+            try {
+                FileWriter fileWriter = new FileWriter(".trifle000001");
+                fileWriter.write("");
+                fileWriter.append(Integer.toString(winnerID)).append('\n');
+                fileWriter.append(Integer.toString(bluePlayerPoints)).append('\n');
+                fileWriter.append(Integer.toString(cyanPlayerPoints));
+                fileWriter.close();
+            } catch(IOException e) {
+                System.out.println(ConsoleColor.RED + "Cannot write the result's file: " + e.getMessage());
             }
         }
     }
@@ -459,7 +477,7 @@ public class TrifleController extends Controller {
      * @param colored If the output string should have colors
      * @return The normalized coordinate
      */
-    private String normalizeCoordinate(Point coordinates, boolean colored) {
+    private static String normalizeCoordinate(Point coordinates, boolean colored) {
         String sb = "";
 
         System.out.println(coordinates);

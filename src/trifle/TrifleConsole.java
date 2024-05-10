@@ -73,22 +73,25 @@ public class TrifleConsole {
         if (externalArgs.isEmpty()) {
             tui.run();
             gameMode = tui.getGameMode();
+            tui.closeStream();
         }
         else {
-            switch (externalArgs.get(0)) {
-                case "0": break;
-                case "1": {
-                    gameMode = GameMode.Standard;
-                    break;
-                }
-                case "2": {
-                    gameMode = GameMode.Marathon;
-                    break;
-                }
-                default: {
-                    System.out.println("The gameMode you wish to play (" + externalArgs.get(0) + ") is not between 0 and 2 (inclusive).\nThe gameMode has been automatically changed to Human vs Human.");
-                }
-            }
+            // TODO trouver une autre solution pour définir le mode de jeu dans ce cas, car l'argument à l'index 0 est réservé
+            // au mode de joueur
+//            switch (externalArgs.get(0)) {
+//                case "0": break;
+//                case "1": {
+//                    gameMode = GameMode.Standard;
+//                    break;
+//                }
+//                case "2": {
+//                    gameMode = GameMode.Marathon;
+//                    break;
+//                }
+//                default: {
+//                    System.out.println("The gameMode you wish to play (" + externalArgs.get(0) + ") is not between 0 and 2 (inclusive).\nThe gameMode has been automatically changed to Human vs Human.");
+//                }
+//            }
         }
 
         Model model = new Model();
