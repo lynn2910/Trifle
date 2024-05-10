@@ -39,9 +39,15 @@ public class BuilderHelper {
             for (Neuron first: firstLayerNeurons) {
                 network.addLink(new NeuronLink(second.id, first.id, random.nextDouble()));
             }
+
+            network.addLink(new NeuronLink(second.id, inputNeurons.get(16).id, random.nextDouble()));
+            network.addLink(new NeuronLink(second.id, inputNeurons.get(17).id, random.nextDouble()));
         }
         for (Neuron second: secondLayerNeurons) {
             network.addLink(new NeuronLink(network.getOutputNeuron().id, second.id, random.nextDouble()));
+
+            network.addLink(new NeuronLink(second.id, inputNeurons.get(16).id, random.nextDouble()));
+            network.addLink(new NeuronLink(second.id, inputNeurons.get(17).id, random.nextDouble()));
         }
 
         return network;
