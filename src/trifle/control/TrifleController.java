@@ -2,6 +2,7 @@ package trifle.control;
 
 import bots.Utils;
 import minmax.BoardStatus;
+import minmax.MinMax;
 import trifle.boardifier.control.ActionFactory;
 import trifle.boardifier.control.ActionPlayer;
 import trifle.boardifier.control.Controller;
@@ -143,6 +144,9 @@ public class TrifleController extends Controller {
             // Close the file writer if any
             if (this.outputMovesFileWriter != null)
                 this.outputMovesFileWriter.close();
+
+            if (MinMax.trainingDataFileWriter != null)
+                MinMax.trainingDataFileWriter.close();
         } catch (IOException e) {
             System.out.println("Error closing input stream");
             e.printStackTrace();

@@ -14,36 +14,34 @@ public class BuilderHelper {
 
         NeuralNetwork network = new NeuralNetwork(Neuron.random(random));
 
-        Neuron output = network.getOutputNeuron();
-
         // We have 8 + 8 + 2 inputs, so 16 + 2 = 18
         List<Neuron> inputNeurons = new ArrayList<>();
         for (int i = 0; i < 18; i++) inputNeurons.add(Neuron.random(random).setInput(i));
 
-        // create a second layer only for the 16 first inputs
-        List<Neuron> firstLayer = new ArrayList<>();
-        for (int i = 0; i < 16; i++) {
-            Neuron neuron = Neuron.random(random);
+        List<Neuron> firstLayerNeurons = new ArrayList<>();
+        for (int i = 0; i < 16; i++) firstLayerNeurons.add(Neuron.random(random));
 
-            for (Neuron input : inputNeurons)
-                neuron.addChild(new NeuronLink(input, random.nextDouble()));
+        List<Neuron> secondLayerNeurons = new ArrayList<>();
+        for (int i = 0; i < 8; i++) secondLayerNeurons.add(Neuron.random(random));
 
-            firstLayer.add(neuron);
-        };
+        // register all neurons in the network
+        for (Neuron neuron : inputNeurons) network.addNeuron(neuron);
+        for (Neuron neuron : firstLayerNeurons) network.addNeuron(neuron);
+        for (Neuron neuron : secondLayerNeurons) network.addNeuron(neuron);
 
-        // Second layer that regroups everything
-        List<Neuron> secondLayer = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            Neuron neuron = Neuron.random(random);
-
-            for (Neuron l1Neuron : firstLayer)
-                neuron.addChild(new NeuronLink(l1Neuron, random.nextDouble()));
-
-            secondLayer.add(neuron);
+        // add links
+        for (Neuron first: firstLayerNeurons) {
+            for (Neuron input: inputNeurons) {
+                network.addLink(new NeuronLink(first.id, input.id, random.nextDouble()));
+            }
         }
-
-        for (Neuron neuron: secondLayer) {
-            output.addChild(new NeuronLink(neuron, random.nextDouble()));
+        for (Neuron second: secondLayerNeurons) {
+            for (Neuron first: firstLayerNeurons) {
+                network.addLink(new NeuronLink(second.id, first.id, random.nextDouble()));
+            }
+        }
+        for (Neuron second: secondLayerNeurons) {
+            network.addLink(new NeuronLink(network.getOutputNeuron().id, second.id, random.nextDouble()));
         }
 
         return network;

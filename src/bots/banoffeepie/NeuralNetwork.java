@@ -2,10 +2,10 @@ package bots.banoffeepie;
 
 import minmax.BoardStatus;
 import minmax.MinMaxPawn;
-import minmax.MinMaxStatsTracker;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -15,6 +15,9 @@ import java.util.List;
 public class NeuralNetwork {
     private final Neuron outputNeuron;
 
+    private final HashMap<Integer, Neuron> neurons = new HashMap<>();
+    private final List<NeuronLink>         links   = new ArrayList<>();
+
     public NeuralNetwork(Neuron outputNeuron){
         this.outputNeuron = outputNeuron;
     }
@@ -22,10 +25,54 @@ public class NeuralNetwork {
     public Neuron getOutputNeuron() {
         return outputNeuron;
     }
+    public Neuron getNeuron(int id) {
+        return neurons.get(id);
+    }
+    public HashMap<Integer, Neuron> getNeurons() {
+        return neurons;
+    }
+
+    public void addNeuron(Neuron neuron){
+        this.neurons.put(neuron.id, neuron);
+    }
+    public void addLink(NeuronLink link){
+        this.links.add(link);
+    }
+
+    public List<NeuronLink> getNeuronLinks(int neuronID){
+        List<NeuronLink> neuronLinks = new ArrayList<>();
+        for (NeuronLink neuronLink : links) {
+            if (neuronLink.from == neuronID)
+                neuronLinks.add(neuronLink);
+        }
+        return neuronLinks;
+    }
 
     public double compute(NNContext ctx){
-        return this.outputNeuron.compute(ctx);
+        this.outputNeuron.compute(ctx, this);
+        return ctx.getComputedValue(this.outputNeuron.id);
     }
+
+    public String exportNetwork(){
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("LINKS\n");
+        for (NeuronLink link : links) {
+            sb.append(link.to).append(',');
+            sb.append(link.from).append(',');
+            sb.append(link.weight).append('\n');
+        }
+        sb.append("\nNEURONS\n");
+        for (Neuron neuron : neurons.values()) {
+            sb.append(neuron.id).append(',');
+            sb.append(neuron.getBias()).append(',');
+            sb.append(neuron.isInput()).append(',');
+            sb.append(neuron.getInputId()).append('\n');
+        }
+
+        return sb.toString();
+    }
+
 
     public static void main(String[] _args) {
         // Create a fake board status

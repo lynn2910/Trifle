@@ -7,9 +7,11 @@ import minmax.tree.Node;
 import trifle.model.TrifleBoard;
 
 import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static minmax.MinMax.MAX_WEIGHT;
 import static minmax.MinMax.MIN_WEIGHT;
@@ -122,6 +124,33 @@ public class MinMaxNode extends Node {
                 tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
                 break;
             }
+        }
+
+        this.addNodeToTrainingDatas(boardStatus);
+    }
+
+    private void addNodeToTrainingDatas(BoardStatus boardStatus) {
+        if (MinMax.trainingPath == null)
+            return;
+
+        try {
+            FileWriter fileWriter = MinMax.getTrainingDataFileWriter();
+
+            NNContext ctx = new NNContext();
+            ctx.normalizeBoard(boardStatus, pawn.getCoords(), moveDone);
+
+            if (ctx.normalizedInputs.stream().anyMatch(Objects::isNull))
+                return;
+
+            for (int i = 0; i < ctx.normalizedInputs.size(); i++) {
+                fileWriter.write(ctx.normalizedInputs.get(i).toString());
+                fileWriter.write(',');
+            }
+            fileWriter.write(((Double) this.weight).toString());
+            fileWriter.write("\n");
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

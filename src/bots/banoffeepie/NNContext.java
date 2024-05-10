@@ -5,6 +5,7 @@ import minmax.MinMaxPawn;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ import java.util.List;
  */
 public class NNContext {
     public List<Double> normalizedInputs;
+    public HashMap<Integer, Double> computedValues = new HashMap<>();
 
 
     public NNContext() {
@@ -19,6 +21,16 @@ public class NNContext {
     }
     public NNContext(List<Double> normalizedInputs) {
         this.normalizedInputs = normalizedInputs;
+    }
+
+    public void addComputedValue(int id, double value){
+        computedValues.put(id, value);
+    }
+    public boolean hasComputedValue(int id){
+        return computedValues.containsKey(id);
+    }
+    public double getComputedValue(int id){
+        return computedValues.get(id);
     }
 
     public void normalizeBoard(BoardStatus boardStatus, Point pawnCoords, Point move) {

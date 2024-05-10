@@ -1,5 +1,6 @@
 package trifle;
 
+import minmax.MinMax;
 import trifle.boardifier.control.Logger;
 import trifle.boardifier.control.StageFactory;
 import trifle.boardifier.model.GameException;
@@ -39,6 +40,7 @@ public class TrifleConsole {
         Logger.setVerbosity(Logger.VERBOSE_BASIC);
 
         Optional<String> outputMovesDir = Optional.empty();
+        Optional<String> trainingDataPath = Optional.empty();
 
 
         // Parse the internal arguments, such as `--output-moves`
@@ -54,6 +56,11 @@ public class TrifleConsole {
                     args[i] = "";
                     args[i + 1] = "";
                     break;
+                }
+                case "--training-path": {
+                    MinMax.trainingPath = args[i + 1].trim();
+                    args[i] = "";
+                    args[i + 1] = "";
                 }
                 default:
                     externalArgs.add(arg);
