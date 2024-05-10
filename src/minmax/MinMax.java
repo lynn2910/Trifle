@@ -5,6 +5,8 @@ import minmax.tree.Tree;
 import trifle.model.TrifleBoard;
 
 import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,11 +24,25 @@ public class MinMax extends Tree {
     private final MinMaxStatsTracker tracker;
     private final MinMaxAlgorithm minMaxAlgorithm;
 
+    public static String trainingPath;
+    public static FileWriter trainingDataFileWriter;
+
     public MinMax(MinMaxAlgorithm algorithm){
         super();
         this.tracker = new MinMaxStatsTracker();
 
         this.minMaxAlgorithm = algorithm;
+    }
+
+    public static FileWriter getTrainingDataFileWriter() throws IOException {
+        if (trainingPath == null)
+            throw new NullPointerException("trainingDataFileWriter is null");
+
+        if (trainingDataFileWriter == null){
+            trainingDataFileWriter = new FileWriter(trainingPath);
+        }
+
+        return trainingDataFileWriter;
     }
 
     /**
@@ -132,11 +148,7 @@ public class MinMax extends Tree {
             // No one has moved his pawns, so open bar, all pawns can be moved!
             return boardStatus.getPawns(currentPlayerId);
         } else {
-            int x = lastOpponentMovement.x;
-            if (currentPlayerId == 1)
-                x = 7 - x;
-
-            int opponentLastMoveMinMaxPawnColorIndices = TrifleBoard.BOARD[lastOpponentMovement.y][x];
+            int opponentLastMoveMinMaxPawnColorIndices = TrifleBoard.BOARD[lastOpponentMovement.y][lastOpponentMovement.x];
 
             // return which pawn have this color
             List<MinMaxPawn> pawns = boardStatus.getPawns(currentPlayerId);
@@ -151,8 +163,7 @@ public class MinMax extends Tree {
                         new MinMaxPawn(
                                 p.getColorIndex(),
                                 currentPlayerId,
-                                currentPlayerId == 0 ? p.getCoords().x
-                                    : 7 - p.getCoords().x,
+                                p.getCoords().x,
                                 p.getCoords().y
                             )
                     );
