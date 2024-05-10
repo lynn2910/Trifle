@@ -10,7 +10,7 @@ public enum BotStrategy {
     BanoffeePie,
     MinMaxDeterministic;
 
-    public static final BotStrategy DEFAULT = BotStrategy.BanoffeePie;
+    public static final BotStrategy DEFAULT = BotStrategy.MinMaxDeterministic;
 
     /**
      * @return The name of the strategy

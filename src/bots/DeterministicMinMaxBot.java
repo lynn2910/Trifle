@@ -50,6 +50,10 @@ public class DeterministicMinMaxBot extends TrifleDecider {
         );
 
         MinMaxNode nextMove = this.minMax.minimax(model.getIdPlayer(), true);
+        if (nextMove == null) {
+            System.out.println("The bot " + model.getIdPlayer() + " cannot move his pawn.");
+            return new ActionList();
+        }
 
         this.minMax.getTracker().displayStatistics();
 
@@ -75,7 +79,8 @@ public class DeterministicMinMaxBot extends TrifleDecider {
         controller.registerMove(
                 stageModel,
                 nextMove.getMoveDone(),
-                "a1a2",
+                TrifleController.normalizeCoordinate(pawnInvolved.getCoords(), false)
+                    + TrifleController.normalizeCoordinate(nextMove.getMoveDone(), false),
                 pawnInvolved
         );
 

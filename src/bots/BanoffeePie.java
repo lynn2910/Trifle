@@ -91,7 +91,8 @@ public class BanoffeePie extends TrifleDecider {
         controller.registerMove(
                 stageModel,
                 nextMove.getMoveDone(),
-                "a1a2",
+                TrifleController.normalizeCoordinate(pawnInvolved.getCoords(), false)
+                        + TrifleController.normalizeCoordinate(nextMove.getMoveDone(), false),
                 pawnInvolved
         );
 
