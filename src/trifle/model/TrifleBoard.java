@@ -39,16 +39,18 @@ public class TrifleBoard extends ContainerElement {
         }
     }
 
-    public boolean canPawnMove(Pawn pawn){
+    public boolean canPawnMove(Pawn pawn, int playerID){
         Point c = pawn.getCoords();
-        if (pawn.getPlayerNumber() == 0)
-            return (getElement(c.x + 1, c.y) != null)
-                    && (getElement(c.x + 1, c.y + 1) != null)
-                    && (getElement(c.x + 1, c.y, - 1) != null);
-        else
-            return (c.x - 1 < 0 ||getElement(c.x - 1, c.y) != null)
-                    && (c.x - 1 < 0 ||getElement(c.x - 1, c.y + 1) != null)
-                    && (c.x - 1 < 0 ||getElement(c.x - 1, c.y, - 1) != null);
+        if (playerID == 0) {
+            return (c.y < 7 && getElement(c.y + 1, c.x) == null)
+                    || (c.y < 7 && c.x < 7 && getElement(c.y + 1, c.x + 1) == null)
+                    || (c.y < 7 && c.x > 0 && getElement(c.y + 1, c.x - 1) == null);
+        }
+        else {
+            return (c.x > 0 && getElement(c.x - 1, c.y) == null)
+                    || (c.y > 0 && c.x < 7 && getElement(c.y - 1, c.x + 1) == null)
+                    || (c.y > 0 && c.x > 0 && getElement(c.y - 1, c.x - 1) == null);
+        }
     }
 
     /**

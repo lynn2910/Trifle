@@ -61,7 +61,7 @@ public class BanoffeePie extends TrifleDecider {
         );
 
 
-        MinMaxNode nextMove = this.minMax.minimax(model.getIdPlayer(), true);
+        MinMaxNode nextMove = this.minMax.minimax(model.getIdPlayer(), stageModel.getPlayerMode(), true);
         if (nextMove == null) {
             System.out.println("The bot " + model.getIdPlayer() + " cannot move his pawn.");
             return new ActionList();

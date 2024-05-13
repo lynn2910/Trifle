@@ -392,7 +392,7 @@ public class TrifleController extends Controller {
 
         // Check if the player can move his pawn
         // If not display a message and wait 2s
-        if (!((TrifleBoard) gameStage.getBoard()).canPawnMove(pawn)) {
+        if (!((TrifleBoard) gameStage.getBoard()).canPawnMove(pawn, model.getIdPlayer())) {
             System.out.println(ConsoleColor.YELLOW + "The pawn that you must move cannot move in the current situation. Your turn will be skipped." + ConsoleColor.RESET);
             try { Thread.sleep(2000); } catch(InterruptedException ignored) {}
             return true;
