@@ -1,5 +1,6 @@
 package trifle;
 
+import minmax.MinMax;
 import trifle.boardifier.control.Logger;
 import trifle.boardifier.control.StageFactory;
 import trifle.boardifier.model.GameException;
@@ -40,7 +41,6 @@ public class TrifleConsole {
 
         Optional<String> outputMovesDir = Optional.empty();
 
-
         // Parse the internal arguments, such as `--output-moves`
         List<String> externalArgs = new ArrayList<>();
         for (int i = 0; i < args.length; i++) {
@@ -55,6 +55,11 @@ public class TrifleConsole {
                     args[i + 1] = "";
                     break;
                 }
+                case "--training-path": {
+                    MinMax.trainingPath = args[i + 1].trim();
+                    args[i] = "";
+                    args[i + 1] = "";
+                }
                 default:
                     externalArgs.add(arg);
             }
@@ -68,22 +73,25 @@ public class TrifleConsole {
         if (externalArgs.isEmpty()) {
             tui.run();
             gameMode = tui.getGameMode();
+            tui.closeStream();
         }
         else {
-            switch (externalArgs.get(0)) {
-                case "0": break;
-                case "1": {
-                    gameMode = GameMode.Standard;
-                    break;
-                }
-                case "2": {
-                    gameMode = GameMode.Marathon;
-                    break;
-                }
-                default: {
-                    System.out.println("The gameMode you wish to play (" + externalArgs.get(0) + ") is not between 0 and 2 (inclusive).\nThe gameMode has been automatically changed to Human vs Human.");
-                }
-            }
+            // TODO trouver une autre solution pour définir le mode de jeu dans ce cas, car l'argument à l'index 0 est réservé
+            // au mode de joueur
+//            switch (externalArgs.get(0)) {
+//                case "0": break;
+//                case "1": {
+//                    gameMode = GameMode.Standard;
+//                    break;
+//                }
+//                case "2": {
+//                    gameMode = GameMode.Marathon;
+//                    break;
+//                }
+//                default: {
+//                    System.out.println("The gameMode you wish to play (" + externalArgs.get(0) + ") is not between 0 and 2 (inclusive).\nThe gameMode has been automatically changed to Human vs Human.");
+//                }
+//            }
         }
 
         Model model = new Model();
@@ -99,12 +107,12 @@ public class TrifleConsole {
             }
             case HumanVsComputer: {
                 model.addHumanPlayer(playerNames.get(0));
-                model.addComputerPlayer(playerNames.get(1));
+                model.addComputerPlayer("Computer");
                 break;
             }
             case ComputerVsComputer: {
-                model.addComputerPlayer(playerNames.get(0));
-                model.addComputerPlayer(playerNames.get(1));
+                model.addComputerPlayer("Computer1");
+                model.addComputerPlayer("Computer2");
                 break;
             }
             default: {
@@ -205,6 +213,10 @@ public class TrifleConsole {
             if (2 - tuiPlayerNames.size() != tui.getPlayerMode().getBotNumber()) {
                 for (int i = 0; i < 2 - tuiPlayerNames.size(); i++)
                     tuiPlayerNames.add("Computer" + (i + 1));
+            }
+
+            if (tui.getPlayerMode() == PlayerMode.HumanVsComputer && tuiPlayerNames.size() < 2) {
+                tuiPlayerNames.add("Computer");
             }
 
             return tuiPlayerNames;

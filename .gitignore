@@ -2,3 +2,6 @@
 .git/*
 out/**
 *.class
+.trifle000001
+**/*.csv
+resources/games/*

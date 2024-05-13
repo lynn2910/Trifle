@@ -1,12 +1,17 @@
 package minmax;
 
+import bots.BanoffeePie;
+import bots.banoffeepie.NNContext;
+import bots.banoffeepie.NeuralNetwork;
 import minmax.tree.Node;
 import trifle.model.TrifleBoard;
 
 import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static minmax.MinMax.MAX_WEIGHT;
 import static minmax.MinMax.MIN_WEIGHT;
@@ -106,6 +111,46 @@ public class MinMaxNode extends Node {
                 tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
                 break;
             }
+            case NeuralNetworkAlgorithm: {
+                NeuralNetwork neuralNetwork = BanoffeePie.getNetwork();
+
+                NNContext ctx = new NNContext();
+                ctx.normalizeBoard(boardStatus, pawn.getCoords(), moveDone);
+
+                long beforeWeight = System.nanoTime();
+                this.weight = neuralNetwork.compute(ctx) * 10;
+                long afterWeight = System.nanoTime();
+
+                tracker.addTimeToCalculateWeight(afterWeight - beforeWeight);
+                break;
+            }
+        }
+
+        this.addNodeToTrainingDatas(boardStatus);
+    }
+
+    private void addNodeToTrainingDatas(BoardStatus boardStatus) {
+        if (MinMax.trainingPath == null)
+            return;
+
+        try {
+            FileWriter fileWriter = MinMax.getTrainingDataFileWriter();
+
+            NNContext ctx = new NNContext();
+            ctx.normalizeBoard(boardStatus, pawn.getCoords(), moveDone);
+
+            if (ctx.normalizedInputs.stream().anyMatch(Objects::isNull))
+                return;
+
+            for (int i = 0; i < ctx.normalizedInputs.size(); i++) {
+                fileWriter.append(ctx.normalizedInputs.get(i).toString());
+                fileWriter.append(',');
+            }
+            fileWriter.append(((Double) this.weight).toString());
+            fileWriter.append("\n");
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -133,14 +178,18 @@ public class MinMaxNode extends Node {
 
 
         // Move the pawn in question
-        boardStatus.movePawn(playerID, pawn.getColorIndex(), moveDone);
+        boardStatus.movePawn(
+                playerID,
+                playerID == 0
+                    ? pawn.getColorIndex()
+                        : 7 - pawn.getColorIndex(),
+                moveDone
+        );
 
         int opponentID = (this.playerID + 1) % 2;
         int moveColorIndexPosition = TrifleBoard.BOARD[this.moveDone.y][this.moveDone.x];
 
-        MinMaxPawn opponentPawn = opponentID == 0 ?
-                boardStatus.bluePawns().get(moveColorIndexPosition)
-                : boardStatus.cyanPawns().get(7 - moveColorIndexPosition);
+        MinMaxPawn opponentPawn = boardStatus.getPawn(opponentID, moveColorIndexPosition);
 
         List<Point> possibleMoves = determinePossibleMoves(opponentPawn.getCoords(), boardStatus, opponentID);
 

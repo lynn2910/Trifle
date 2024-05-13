@@ -104,7 +104,7 @@ public class MinMaxStatsTracker {
         System.out.println("  Total time to calculate weight:  " + formatTime(totalWeightCalculationTime));
         System.out.println("  Number of weights:            :  " + this.timeToCalculateWeight.size());
 
-        long median = totalWeightCalculationTime / this.timeToCalculateWeight.size();
+        long median = this.timeToCalculateWeight.isEmpty() ? 0 : totalWeightCalculationTime / this.timeToCalculateWeight.size();
         System.out.println("  Median time to calculate weight: "
                 + formatTime(median));
         System.out.println();
@@ -131,7 +131,7 @@ public class MinMaxStatsTracker {
      * @param nanoseconds The time in nanoseconds
      * @return The formatted time
      */
-    public String formatTime(long nanoseconds) {
+    public static String formatTime(long nanoseconds) {
         long hours = nanoseconds / (3600L * 1_000_000_000L);
         long minutes = (nanoseconds % (3600L * 1_000_000_000L)) / (60L * 1_000_000_000L);
         long seconds = (nanoseconds % (60L * 1_000_000_000L)) / (1_000_000_000L);

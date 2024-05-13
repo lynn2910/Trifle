@@ -1,27 +1,28 @@
 package minmax;
 
+import trifle.model.TrifleStageModel;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This class is a "container" to store the game status.
- *
- * @param bluePawns The index of the pawn is the ID.
- * @param cyanPawns The index of the pawn is the ID.
  */
-public record BoardStatus(List<MinMaxPawn> bluePawns, List<MinMaxPawn> cyanPawns) {
+public record BoardStatus(List<MinMaxPawn> bluePawns, List<MinMaxPawn> cyanPawns, TrifleStageModel stageModel) {
     public List<MinMaxPawn> getPawns(int playerID) {
-        if (playerID == 0)
-            return bluePawns();
-        else
-            return cyanPawns();
+        if (playerID == 0) return bluePawns();
+        else return cyanPawns();
     }
 
-    public BoardStatus movePawn(int playerID, int pawnIndex, Point move) {
+    public void movePawn(int playerID, int pawnIndex, Point move) {
         List<MinMaxPawn> pawns = getPawns(playerID);
         pawns.get(pawnIndex).setCoords(move);
-        return this;
+    }
+
+    public MinMaxPawn getPawn(int playerID, int pawnIndex) {
+        if (playerID == 0) return bluePawns().get(pawnIndex);
+        else return cyanPawns().get(pawnIndex);
     }
 
     public int[][] generateMatrix() {
@@ -40,7 +41,8 @@ public record BoardStatus(List<MinMaxPawn> bluePawns, List<MinMaxPawn> cyanPawns
     public BoardStatus cloneBoard() {
         return new BoardStatus(
                 new ArrayList<>(bluePawns),
-                new ArrayList<>(cyanPawns)
+                new ArrayList<>(cyanPawns),
+                this.stageModel
         );
     }
 }

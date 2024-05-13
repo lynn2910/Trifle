@@ -1,5 +1,8 @@
 package trifle.control;
 
+import bots.Utils;
+import minmax.BoardStatus;
+import minmax.MinMax;
 import trifle.boardifier.control.ActionFactory;
 import trifle.boardifier.control.ActionPlayer;
 import trifle.boardifier.control.Controller;
@@ -22,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -126,7 +130,7 @@ public class TrifleController extends Controller {
             long after = System.currentTimeMillis();
             if (waitBeforeEnd > 0 && after - before < waitBeforeEnd) {
                 // Sleep
-                try { Thread.sleep(1000 - (after-before)); }
+                try { Thread.sleep(waitBeforeEnd - (after-before)); }
                 catch (InterruptedException e) { System.out.println(e.getMessage()); e.printStackTrace(); }
             }
         }
@@ -140,6 +144,11 @@ public class TrifleController extends Controller {
             // Close the file writer if any
             if (this.outputMovesFileWriter != null)
                 this.outputMovesFileWriter.close();
+
+            if (MinMax.trainingDataFileWriter != null) {
+                MinMax.trainingDataFileWriter.flush();
+                MinMax.trainingDataFileWriter.close();
+            }
         } catch (IOException e) {
             System.out.println("Error closing input stream");
             e.printStackTrace();
@@ -268,12 +277,30 @@ public class TrifleController extends Controller {
             System.out.println("Rounds: " + gameMode.numberOfRounds());
             System.out.println("Time:   " + formatTime(System.currentTimeMillis() - startTime));
 
-            if (bluePlayerPoints > cyanPlayerPoints)
+            int winnerID;
+
+            if (bluePlayerPoints > cyanPlayerPoints) {
                 System.out.println("    " + model.getPlayers().get(0).getName() + " wins this game.");
-            else if (bluePlayerPoints < cyanPlayerPoints)
+                winnerID = 0;
+            }
+            else if (bluePlayerPoints < cyanPlayerPoints){
                 System.out.println("    " + model.getPlayers().get(1).getName() + " wins this game.");
-            else {
+                winnerID = 1;
+            }  else {
                 System.out.println("    Draw.");
+                winnerID = -1;
+            }
+
+            // Write the result to a specific file
+            try {
+                FileWriter fileWriter = new FileWriter(".trifle000001");
+                fileWriter.write("");
+                fileWriter.append(Integer.toString(winnerID)).append('\n');
+                fileWriter.append(Integer.toString(bluePlayerPoints)).append('\n');
+                fileWriter.append(Integer.toString(cyanPlayerPoints));
+                fileWriter.close();
+            } catch(IOException e) {
+                System.out.println(ConsoleColor.RED + "Cannot write the result's file: " + e.getMessage());
             }
         }
     }
@@ -327,7 +354,7 @@ public class TrifleController extends Controller {
         return (TrifleStageModel) model.getGameStage();
     }
 
-    private void botTurn(Player p) {
+    private void botTurn(Player _p) {
         ActionList actions;
         if (model.getIdPlayer() == 0) actions = this.firstComputer.decide();
         else actions = this.secondComputer.decide();
@@ -363,7 +390,17 @@ public class TrifleController extends Controller {
         List<Pawn> pawns = model.getIdPlayer() == 0 ? gameStage.getBluePlayer() : gameStage.getCyanPlayer();
         Pawn pawn = model.getIdPlayer() == 0 ? pawns.get(pawnIndex) : pawns.get(7 - pawnIndex);
 
-        Point lastEnemyMovement = model.getIdPlayer() == 0 ? gameStage.getLastCyanPlayerMove() : gameStage.getLastBluePlayerMove();
+        // Check if the player can move his pawn
+        // If not display a message and wait 2s
+        if (!((TrifleBoard) gameStage.getBoard()).canPawnMove(pawn, model.getIdPlayer())) {
+            System.out.println(ConsoleColor.YELLOW + "The pawn that you must move cannot move in the current situation. Your turn will be skipped." + ConsoleColor.RESET);
+            try { Thread.sleep(2000); } catch(InterruptedException ignored) {}
+            return true;
+        }
+
+        Point lastEnemyMovement = model.getIdPlayer() == 0
+                ? gameStage.getLastCyanPlayerMove()
+                    : gameStage.getLastBluePlayerMove();
 
         // Check the pawn color based on the last movement of the enemy.
         if (lastEnemyMovement != null) {
@@ -430,7 +467,7 @@ public class TrifleController extends Controller {
      * @param colored If the output string should have colors
      * @return The normalized coordinate
      */
-    private String normalizeCoordinate(Point coordinates, boolean colored) {
+    public static String normalizeCoordinate(Point coordinates, boolean colored) {
         String sb = "";
 
         System.out.println(coordinates);

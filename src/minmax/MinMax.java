@@ -3,9 +3,13 @@ package minmax;
 import minmax.tree.Node;
 import minmax.tree.Tree;
 import trifle.model.TrifleBoard;
+import trifle.rules.PlayerMode;
 
 import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,11 +25,25 @@ public class MinMax extends Tree {
     private final MinMaxStatsTracker tracker;
     private final MinMaxAlgorithm minMaxAlgorithm;
 
+    public static String trainingPath;
+    public static FileWriter trainingDataFileWriter;
+
     public MinMax(MinMaxAlgorithm algorithm){
         super();
         this.tracker = new MinMaxStatsTracker();
 
         this.minMaxAlgorithm = algorithm;
+    }
+
+    public static FileWriter getTrainingDataFileWriter() throws IOException {
+        if (trainingPath == null)
+            throw new NullPointerException("trainingDataFileWriter is null");
+
+        if (trainingDataFileWriter == null){
+            trainingDataFileWriter = new FileWriter(trainingPath, true);
+        }
+
+        return trainingDataFileWriter;
     }
 
     /**
@@ -51,9 +69,13 @@ public class MinMax extends Tree {
         this.tracker.startCounter();
 
         List<MinMaxPawn> movableMinMaxPawns = determineWhichMinMaxPawnsCanBeMove(boardStatus, currentPlayerId, lastOpponentMovement);
-        System.out.println("movableMinMaxPawn:\n" + movableMinMaxPawns);
 
         assert movableMinMaxPawns != null;
+
+        if (movableMinMaxPawns.isEmpty()) {
+            System.out.println("No move can be played, the bot cannot move...");
+            return;
+        }
 
         for (MinMaxPawn movableMinMaxPawn: movableMinMaxPawns) {
             List<Point> movesAllowed = MinMaxNode.determinePossibleMoves(
@@ -65,9 +87,6 @@ public class MinMax extends Tree {
                     currentPlayerId
             );
 
-            System.out.println("movesAllowed:\n" + movesAllowed);
-            System.out.println();
-
             for (Point move : movesAllowed) {
                 this.tracker.newNode(0);
 
@@ -76,7 +95,6 @@ public class MinMax extends Tree {
                 this.getRoot().add(node);
             }
         }
-
 
         this.tracker.endTimer();
     }
@@ -87,7 +105,10 @@ public class MinMax extends Tree {
      * @param isFull Whether it should use the weight of each node and not only the leafs
      * @return The better node
      */
-    public MinMaxNode minimax(int botID, boolean isFull) {
+    public MinMaxNode minimax(int botID, PlayerMode playerMode, boolean isFull) {
+        if (this.getRoot().isEmpty())
+            return null;
+
         tracker.startPathFinder();
 
         // We are maximizing the player
@@ -106,7 +127,13 @@ public class MinMax extends Tree {
 
         tracker.endPathFinder();
 
-        return max;
+        max.getMoveDone().y = 7 - max.getMoveDone().y;
+
+        if (botID == 0) return max;
+        else {
+            max.getMoveDone().y = 7 - max.getMoveDone().y;
+            return max;
+        }
     }
 
     /**
@@ -116,33 +143,33 @@ public class MinMax extends Tree {
      * @param lastOpponentMovement The last move played by the opponent. Can be null.
      * @return The list of movable pawns
      */
-    private List<MinMaxPawn> determineWhichMinMaxPawnsCanBeMove(BoardStatus boardStatus, int currentPlayerId, Point lastOpponentMovement){
+    private List<MinMaxPawn> determineWhichMinMaxPawnsCanBeMove(
+            BoardStatus boardStatus,
+            int currentPlayerId,
+            Point lastOpponentMovement
+    )
+    {
         if (boardStatus.bluePawns().stream().allMatch(p -> p.getCoords().x == 0)
             && boardStatus.cyanPawns().stream().allMatch(p -> p.getCoords().x == 7)) {
 
             // No one has moved his pawns, so open bar, all pawns can be moved!
-            if (currentPlayerId == 0){
-                return boardStatus.bluePawns();
-            } else {
-                return boardStatus.cyanPawns();
-            }
+            return boardStatus.getPawns(currentPlayerId);
         } else {
-            int x = lastOpponentMovement.x;
-            if (currentPlayerId == 1)
-                x = 7 - x;
+            if (lastOpponentMovement == null)
+                return boardStatus.getPawns(currentPlayerId);
 
-            int opponentLastMoveMinMaxPawnColorIndices = TrifleBoard.BOARD[lastOpponentMovement.y][x];
+            int opponentLastMoveMinMaxPawnColorIndices = TrifleBoard.BOARD[lastOpponentMovement.y][currentPlayerId == 0 ? 7 - lastOpponentMovement.x : lastOpponentMovement.x];
 
             // return which pawn have this color
             List<MinMaxPawn> pawns = boardStatus.getPawns(currentPlayerId);
+
             for (MinMaxPawn p: pawns) {
                 if (p.getColorIndex() == opponentLastMoveMinMaxPawnColorIndices) {
                     return List.of(
                         new MinMaxPawn(
                                 p.getColorIndex(),
                                 currentPlayerId,
-                                currentPlayerId == 0 ? p.getCoords().x
-                                    : 7 - p.getCoords().x,
+                                p.getCoords().x,
                                 p.getCoords().y
                             )
                     );
@@ -160,35 +187,32 @@ public class MinMax extends Tree {
         this.getRoot().clear();
     }
 
-    public static void main(String[] args) {
-        List<MinMaxPawn> bluePawns = new ArrayList<>();
-        for (int y = 0; y < 8; y++) {
-            bluePawns.add(new MinMaxPawn(y, 0, 0, y));
-        }
-
-        List<MinMaxPawn> cyanPawns = new ArrayList<>();
-        for (int y = 0; y < 8; y++) {
-            cyanPawns.add(new MinMaxPawn(y, 1, 7, y));
-        }
-
-        bluePawns.get(0).getCoords().x++;
-        cyanPawns.get(2).getCoords().x = 6;
-        bluePawns.get(4).getCoords().x = 3;
-
-        Point lastMove = new Point(3, 4);
-
-        int currentPlayerId = 1;
-
-        BoardStatus boardStatus = new BoardStatus(bluePawns, cyanPawns);
-
-        MinMax minMax = new MinMax(MinMaxAlgorithm.DeterministicAlgorithm);
-        minMax.buildCurrentTree(boardStatus, currentPlayerId, lastMove, DEPTH, true);
-
-        MinMaxNode nextMove = minMax.minimax(currentPlayerId, true);
-        System.out.println("nextMove: ");
-        System.out.println("  pawn: " + nextMove.getPawn());
-        System.out.println("  move: " + nextMove.getMoveDone());
-
-        minMax.getTracker().displayStatistics();
-    }
+//    public static void main(String[] args) {
+//        List<MinMaxPawn> bluePawns = new ArrayList<>();
+//        for (int y = 0; y < 8; y++) {
+//            bluePawns.add(new MinMaxPawn(y, 0, 0, y));
+//        }
+//
+//        List<MinMaxPawn> cyanPawns = new ArrayList<>();
+//        for (int y = 0; y < 8; y++) {
+//            cyanPawns.add(new MinMaxPawn(y, 1, 7, y));
+//        }
+//
+//        bluePawns.get(0).getCoords().x++;
+//        cyanPawns.get(2).getCoords().x = 6;
+//        bluePawns.get(4).getCoords().x = 3;
+//
+//        Point lastMove = new Point(3, 4);
+//
+//        int currentPlayerId = 1;
+//
+//        BoardStatus boardStatus = new BoardStatus(bluePawns, cyanPawns, null);
+//
+//        MinMax minMax = new MinMax(MinMaxAlgorithm.DeterministicAlgorithm);
+//        minMax.buildCurrentTree(boardStatus, currentPlayerId, lastMove, DEPTH, true);
+//
+//        MinMaxNode nextMove = minMax.minimax(currentPlayerId, true);
+//
+//        minMax.getTracker().displayStatistics();
+//    }
 }

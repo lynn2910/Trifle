@@ -1,5 +1,7 @@
 package bots;
 
+import bots.banoffeepie.BuilderHelper;
+import bots.banoffeepie.NeuralNetwork;
 import minmax.BoardStatus;
 import minmax.MinMax;
 import minmax.MinMaxAlgorithm;
@@ -15,20 +17,29 @@ import trifle.model.TrifleBoard;
 import trifle.model.TrifleStageModel;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 
-public class DeterministicMinMaxBot extends TrifleDecider {
+public class BanoffeePie extends TrifleDecider {
+    protected static NeuralNetwork network;
     private MinMax minMax;
 
-    public DeterministicMinMaxBot(Model model, Controller controller) {
+    public BanoffeePie(Model model, Controller controller) {
         super(model, controller);
 
-        this.minMax = new MinMax(MinMaxAlgorithm.DeterministicAlgorithm);
+        this.minMax = new MinMax(MinMaxAlgorithm.NeuralNetworkAlgorithm);
+    }
+
+    public static NeuralNetwork getNetwork(){
+        if (network == null){
+            // TODO add logic to import a Neural Network
+            network = BuilderHelper.createNetwork();
+        }
+
+        return network;
     }
 
     @Override
-    public ActionList decide() {
+    public ActionList decide(){
         TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
         BoardStatus boardStatus = Utils.boardStatusFromBoard(stageModel);
         TrifleController controller = (TrifleController) this.control;
@@ -49,6 +60,7 @@ public class DeterministicMinMaxBot extends TrifleDecider {
                 true
         );
 
+
         MinMaxNode nextMove = this.minMax.minimax(model.getIdPlayer(), stageModel.getPlayerMode(), true);
         if (nextMove == null) {
             System.out.println("The bot " + model.getIdPlayer() + " cannot move his pawn.");
@@ -58,14 +70,14 @@ public class DeterministicMinMaxBot extends TrifleDecider {
         this.minMax.getTracker().displayStatistics();
 
         List<Pawn> pawns = stageModel.getPlayerPawns(model.getIdPlayer());
-        Pawn pawnInvolved;
-        if (model.getIdPlayer() == 0) pawnInvolved = pawns.get(nextMove.getPawn().getColorIndex());
-        else pawnInvolved = pawns.get(7 - nextMove.getPawn().getColorIndex());
+        Pawn pawnInvolved = pawns.get(nextMove.getPawn().getColorIndex());
 
         // Don't touch this thing
         int tempX = nextMove.getMoveDone().x;
         nextMove.getMoveDone().x = nextMove.getMoveDone().y;
         nextMove.getMoveDone().y = tempX;
+
+        System.out.println("Choice: " + nextMove.getMoveDone());
 
         ActionList actions = ActionFactory.generatePutInContainer(
                 model,
@@ -80,7 +92,7 @@ public class DeterministicMinMaxBot extends TrifleDecider {
                 stageModel,
                 nextMove.getMoveDone(),
                 TrifleController.normalizeCoordinate(pawnInvolved.getCoords(), false)
-                    + TrifleController.normalizeCoordinate(nextMove.getMoveDone(), false),
+                        + TrifleController.normalizeCoordinate(nextMove.getMoveDone(), false),
                 pawnInvolved
         );
 

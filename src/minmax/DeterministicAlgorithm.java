@@ -27,7 +27,11 @@ public class DeterministicAlgorithm {
             Point move
     )
     {
-        return random.nextDouble(-100, 100);
+        if (boardStatus.getPawns(0).stream().anyMatch(p -> p.getCoords().y == 7)
+            || boardStatus.getPawns(1).stream().anyMatch(p -> p.getCoords().y == 0))
+            return 100;
+
+        return random.nextDouble(-90, 90);
 //        double weight = 0.0;
 //
 //        int[][] matrix = boardStatus.generateMatrix();

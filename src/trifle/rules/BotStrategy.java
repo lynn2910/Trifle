@@ -1,5 +1,6 @@
 package trifle.rules;
 
+import bots.BanoffeePie;
 import bots.DeterministicMinMaxBot;
 import trifle.boardifier.control.Controller;
 import trifle.boardifier.model.Model;
@@ -31,6 +32,7 @@ public enum BotStrategy {
     public TrifleDecider initComputer(Model model, Controller controller){
         return switch (this) {
             case MinMaxDeterministic -> new DeterministicMinMaxBot(model, controller);
+            case BanoffeePie -> new BanoffeePie(model, controller);
             default -> new TrifleDecider(model, controller);
         };
     }

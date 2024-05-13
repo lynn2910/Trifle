@@ -73,5 +73,6 @@ Here is a quick summary for each resource:
 - `board.png`: The default board of the Kamisado at the start of a game
 - `draw_table.py`: A python3 script used to test which board display should be used.
 - `kamisado.text`: The ASCII-styled name, here only for storage purposes.
+- `generate_training_data.sh`: A bash script used to generate a LOT of data for the AI
 
 > **Note:** The game require some resources which are stored under the following directory: `src/trifle/resources/`
