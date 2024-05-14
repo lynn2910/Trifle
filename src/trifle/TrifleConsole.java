@@ -55,11 +55,6 @@ public class TrifleConsole {
                     args[i + 1] = "";
                     break;
                 }
-                case "--training-path": {
-                    MinMax.trainingPath = args[i + 1].trim();
-                    args[i] = "";
-                    args[i + 1] = "";
-                }
                 default:
                     externalArgs.add(arg);
             }

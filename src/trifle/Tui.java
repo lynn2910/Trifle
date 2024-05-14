@@ -346,8 +346,8 @@ public class Tui {
     private boolean setSingleBotStrategy(int n){
         while (true) {
             System.out.println("The strategies are:");
-            System.out.println("(a). " + BotStrategy.BanoffeePie);
-            System.out.println("    " + BotStrategy.BanoffeePie.getDescription());
+            System.out.println("(a). " + BotStrategy.BotEurDeCul);
+            System.out.println("    " + BotStrategy.BotEurDeCul.getDescription());
             System.out.println("(b). " + BotStrategy.MinMaxDeterministic);
             System.out.println("    " + BotStrategy.MinMaxDeterministic.getDescription());
             System.out.print("What will be bot n°" + n + "'s strategy? ");
@@ -356,8 +356,8 @@ public class Tui {
 
             switch (l) {
                 case "a": {
-                    this.botStrategies.add(BotStrategy.BanoffeePie);
-                    System.out.println("Bot no." + n + " strategy will be " + ConsoleColor.WHITE_BOLD + BotStrategy.BanoffeePie + ConsoleColor.RESET);
+                    this.botStrategies.add(BotStrategy.BotEurDeCul);
+                    System.out.println("Bot no." + n + " strategy will be " + ConsoleColor.WHITE_BOLD + BotStrategy.BotEurDeCul + ConsoleColor.RESET);
                     return true;
                 }
                 case "b": {

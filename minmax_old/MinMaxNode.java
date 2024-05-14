@@ -176,13 +176,12 @@ public class MinMaxNode extends Node {
             this.computeWeight(boardStatus, tracker);
         }
 
+        int pawnIndex = playerID == 0 ? pawn.getColorIndex() : 7 - pawn.getColorIndex();
 
         // Move the pawn in question
         boardStatus.movePawn(
                 playerID,
-                playerID == 0
-                    ? pawn.getColorIndex()
-                        : 7 - pawn.getColorIndex(),
+                pawnIndex,
                 moveDone
         );
 
@@ -200,7 +199,11 @@ public class MinMaxNode extends Node {
         }
 
         // Move back the pawn :D
-        boardStatus.movePawn(playerID, pawn.getColorIndex(), pawn.getCoords());
+        boardStatus.movePawn(
+                playerID,
+                pawnIndex,
+                pawn.getCoords()
+        );
     }
 
     /**

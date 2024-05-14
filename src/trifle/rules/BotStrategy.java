@@ -1,13 +1,12 @@
 package trifle.rules;
 
-import bots.BanoffeePie;
 import bots.DeterministicMinMaxBot;
 import trifle.boardifier.control.Controller;
 import trifle.boardifier.model.Model;
 import trifle.control.TrifleDecider;
 
 public enum BotStrategy {
-    BanoffeePie,
+    BotEurDeCul,
     MinMaxDeterministic;
 
     public static final BotStrategy DEFAULT = BotStrategy.MinMaxDeterministic;
@@ -17,14 +16,14 @@ public enum BotStrategy {
      */
     public String toString() {
         return switch (this) {
-            case BanoffeePie -> "Project 'BanoffeePie'";
+            case BotEurDeCul -> "BotEur de cul";
             case MinMaxDeterministic -> "Classic MinMax"; // TODO
         };
     }
 
     public String getDescription(){
         return switch (this) {
-            case BanoffeePie -> "MinMax algorithm with neural network";
+            case BotEurDeCul -> ""; // TODO
             case MinMaxDeterministic -> "with a classic algorithm";
         };
     }
@@ -32,7 +31,6 @@ public enum BotStrategy {
     public TrifleDecider initComputer(Model model, Controller controller){
         return switch (this) {
             case MinMaxDeterministic -> new DeterministicMinMaxBot(model, controller);
-            case BanoffeePie -> new BanoffeePie(model, controller);
             default -> new TrifleDecider(model, controller);
         };
     }

@@ -131,5 +131,4 @@ public class TrifleBoard extends ContainerElement {
 
         return validCells;
     }
-
 }
