@@ -209,6 +209,7 @@ public class Tracker {
 //
 //            String response = responseBuilder.toString();
 
+            
             switch (con.getResponseCode()) {
                 case 200: {
                     System.out.println("Statistics sent");
