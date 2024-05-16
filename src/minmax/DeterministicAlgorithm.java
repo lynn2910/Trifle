@@ -10,7 +10,10 @@ import java.util.Random;
  * A "simple" algorithm that can calculate a weight based on the move
  */
 public class DeterministicAlgorithm {
-    private static Random random = new Random();
+    private static final Random random = new Random();
+
+    private static final double BLUE_PLAYER_DEF_COEFF = random.nextDouble(0, 1);
+    private static final double CYAN_PLAYER_DEF_COEFF = random.nextDouble(0, 1);
 
     /**
      * Determine if whether the move is good or bad
@@ -30,11 +33,52 @@ public class DeterministicAlgorithm {
             int depth
     )
     {
-        return boardStatus.isWin() ? 10000 * (depth / (double) MinMax.DEPTH)
-                : notAWin(boardStatus, playerID, pawn, move, depth);
+//        return boardStatus.isWin() ? 100 * (depth / (double) MinMax.DEPTH)
+//                : notAWin(boardStatus, playerID, pawn, move, depth);
+        return calculateWeight(boardStatus, playerID, pawn, move, depth);
     }
 
-    private static double notAWin(
+    private static double calculateWeight(
+            BoardStatus boardStatus,
+            int playerID,
+            Pawn pawn,
+            Point move,
+            int depth
+    )
+    {
+        return defensive(boardStatus, playerID, pawn, move, depth) + aggressive(boardStatus, playerID, pawn, move, depth);
+    }
+
+    private static double aggressive(
+            BoardStatus boardStatus,
+            int playerID,
+            Pawn pawn,
+            Point move,
+            int depth
+    )
+    {
+        double offensiveWeight = 0.0;
+
+        boolean canWin = false;
+        List<Point> allowedMoves = boardStatus.getPossibleMoves(playerID, move);
+        for (Point p: allowedMoves) {
+            if ((playerID == 0 && p.x == 7) || (playerID == 1 && p.x == 0)) {
+                offensiveWeight += 50;
+                canWin = true;
+            }
+        }
+
+        // privilege 4 and 5 in X
+        if (!canWin) {
+            if (move.x == 3 || move.x == 4)
+                offensiveWeight += 10;
+        }
+
+        offensiveWeight *= playerID == 0 ? (1 - BLUE_PLAYER_DEF_COEFF) : (1 - CYAN_PLAYER_DEF_COEFF);
+        return offensiveWeight;
+    }
+
+    private static double defensive(
             BoardStatus boardStatus,
             int playerID,
             Pawn pawn,
@@ -43,7 +87,7 @@ public class DeterministicAlgorithm {
     )
     {
         // offensive
-        double w = 0.0;
+        double defensiveWeight = 0.0;
 
 
         // block the pawns of the opponent
@@ -58,7 +102,7 @@ public class DeterministicAlgorithm {
 
             for (Point possibleMove: possibleMoves) {
                 if (possibleMove == move)
-                    w += canWin ? 50 : 25;
+                    defensiveWeight += canWin ? 50 : 25;
             }
         }
 
@@ -71,15 +115,10 @@ public class DeterministicAlgorithm {
                 boardStatus.getPawns(playerID)
         );
 
-        w /= pawnBlocked.size();
+        defensiveWeight /= pawnBlocked.size();
+        defensiveWeight *= playerID == 0 ? BLUE_PLAYER_DEF_COEFF : CYAN_PLAYER_DEF_COEFF;
 
-        if (w > 100) {
-            w = w / 100;
-        } else if (w < -100) {
-            w = w / 100;
-        }
-
-        return w;
+        return defensiveWeight;
     }
 
     private static List<Pawn> getPawnsInTrajectory(BoardStatus boardStatus, Point move, int playerID, List<Pawn> opponentPawns){

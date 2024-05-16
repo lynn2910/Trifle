@@ -49,6 +49,8 @@ public class TrifleController extends Controller {
     private FileWriter outputMovesFileWriter;
     private final InputStreamReader inputStreamReader;
 
+
+
     /**
      * The Buffer used by the game
      */
