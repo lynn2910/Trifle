@@ -84,9 +84,7 @@ public class Node {
 
     private void buildTree(BoardStatus boardStatus, int depth) {
         if (depth < 1 || boardStatus.isWin()) {
-            System.out.println("Calculate weight");
             this.calculateWeight(boardStatus, depth);
-            System.out.println(this.weight);
             return;
         }
 

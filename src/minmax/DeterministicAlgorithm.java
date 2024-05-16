@@ -48,12 +48,10 @@ public class DeterministicAlgorithm {
 
         // block the pawns of the opponent
         for (Pawn opponentPawn: boardStatus.getPawns((playerID + 1) % 2)) {
-            System.out.println(opponentPawn);
             List<Point> possibleMoves = boardStatus.getPossibleMoves(
                     (playerID + 1) % 2,
                     opponentPawn.getCoords()
             );
-            System.out.println(possibleMoves);
 
             boolean canWin = possibleMoves.stream()
                     .anyMatch(m -> playerID == 0 ? m.x == 0 : m.x == 7);
@@ -62,10 +60,7 @@ public class DeterministicAlgorithm {
                 if (possibleMove == move)
                     w += canWin ? 50 : 25;
             }
-            System.out.println();
         }
-
-        System.out.println(w);
 
 
         // detect bot pawns that will be blocked by this move
@@ -77,7 +72,6 @@ public class DeterministicAlgorithm {
         );
 
         w /= pawnBlocked.size();
-        System.out.println(w);
 
         if (w > 100) {
             w = w / 100;
@@ -97,7 +91,6 @@ public class DeterministicAlgorithm {
             for (int x = move.x - 1; x > 0; x--) {
                 Optional<Pawn> maybe = isOpponentAt(opponentPawns, x, move.y);
                 if (maybe.isPresent()) {
-                    System.out.println("Found opponent pawn: " + maybe.get());
                     opponentPawnsInTrajectory.add(maybe.get());
                     break;
                 }

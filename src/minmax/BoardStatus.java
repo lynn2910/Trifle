@@ -125,7 +125,7 @@ public class BoardStatus {
         return isPointOccupied(p.x, p.y);
     }
     public boolean isPointOccupied(int x, int y) {
-        return this.matrix[x][y] == 1;
+        return this.matrix[x][y] != 0;
     }
 
     public boolean isWin(){

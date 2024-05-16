@@ -13,9 +13,6 @@ import trifle.model.Pawn;
 import trifle.model.TrifleBoard;
 import trifle.model.TrifleStageModel;
 
-import java.awt.*;
-import java.util.List;
-
 public class DeterministicMinMaxBot extends TrifleDecider {
     private final MinMax minMax;
 
