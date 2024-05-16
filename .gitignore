@@ -6,3 +6,5 @@ out/**
 **/*.csv
 resources/games/*
 stat-api/node_modules
+resources/run_*/games/*
+resources/run_*/win.result
