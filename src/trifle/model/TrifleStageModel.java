@@ -32,6 +32,9 @@ public class TrifleStageModel extends GameStageModel {
     private final List<TextElement> movesHistory;
     private final List<OldMove> oldMovesList;
 
+    private boolean isBluePlayerBlocked = false;
+    private boolean isCyanPlayerBlocked = false;
+
 
 
 
@@ -65,6 +68,29 @@ public class TrifleStageModel extends GameStageModel {
     public void setBoard(TrifleBoard board) {
         this.board = board;
         addContainer(board);
+    }
+
+    public boolean isBluePlayerBlocked() {
+        return isBluePlayerBlocked;
+    }
+    public void setBluePlayerBlocked(boolean isBluePlayerBlocked) {
+        this.isBluePlayerBlocked = isBluePlayerBlocked;
+    }
+
+    public boolean isCyanPlayerBlocked() {
+        return isCyanPlayerBlocked;
+    }
+    public void setCyanPlayerBlocked(boolean isCyanPlayerBlocked) {
+        this.isCyanPlayerBlocked = isCyanPlayerBlocked;
+    }
+
+    public boolean isPlayerBlocked(int playerID){
+        if (playerID == 0) return isBluePlayerBlocked();
+        else return isCyanPlayerBlocked();
+    }
+    public void setPlayerBlocked(int playerID, boolean blocked){
+        if (playerID == 0) setBluePlayerBlocked(blocked);
+        else setCyanPlayerBlocked(blocked);
     }
 
     public List<Pawn> getBluePlayer() { return this.bluePlayer; }

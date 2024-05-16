@@ -122,6 +122,8 @@ public class TrifleConsole {
         TrifleController controller = new TrifleController(model, view, gameMode, playerMode, playerNames);
         controller.setFirstStageName("trifle");
 
+        model.setNextPlayer();
+
         if (playerMode != PlayerMode.HumanVsHuman) {
             List<BotStrategy> botStrategies = tui.getBotStrategies();
             controller.defineBots(botStrategies);

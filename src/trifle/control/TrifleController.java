@@ -154,6 +154,12 @@ public class TrifleController extends Controller {
     private void playTurn() {
         Player p = model.getCurrentPlayer();
 
+        TrifleStageModel stage = (TrifleStageModel) model.getGameStage();
+        if (stage.isBluePlayerBlocked() && stage.isCyanPlayerBlocked()) {
+            System.out.println("All players cannot move, it's a draw.");
+            this.endGame();
+        }
+
         switch (p.getType()) {
             case Player.HUMAN: {
                 playerTurn(p);
@@ -298,6 +304,8 @@ public class TrifleController extends Controller {
                 System.out.println(ConsoleColor.RED + "Cannot write the result's file: " + e.getMessage());
             }
         }
+        super.endGame();
+        System.exit(0);
     }
 
     private String formatTime(long time){
@@ -389,9 +397,13 @@ public class TrifleController extends Controller {
         // If not display a message and wait 2s
         if (!((TrifleBoard) gameStage.getBoard()).canPawnMove(pawn, model.getIdPlayer())) {
             System.out.println(ConsoleColor.YELLOW + "The pawn that you must move cannot move in the current situation. Your turn will be skipped." + ConsoleColor.RESET);
+
+            gameStage.setPlayerBlocked(model.getIdPlayer(), true);
+
             try { Thread.sleep(2000); } catch(InterruptedException ignored) {}
             return true;
         }
+        gameStage.setPlayerBlocked(model.getIdPlayer(), false);
 
         Point lastEnemyMovement = model.getIdPlayer() == 0
                 ? gameStage.getLastCyanPlayerMove()

@@ -40,8 +40,10 @@ public class DeterministicMinMaxBot extends TrifleDecider {
         Node nextMove = this.minMax.minimax(model.getIdPlayer());
         if (nextMove == null) {
             System.out.println("The bot " + model.getIdPlayer() + " cannot move his pawn.");
+            stageModel.setPlayerBlocked(model.getIdPlayer(), true);
             return new ActionList();
         }
+        stageModel.setPlayerBlocked(model.getIdPlayer(), false);
         System.out.println("Choice of the MinMax:\n" + nextMove);
 
         this.minMax.getTracker().displayStatistics();

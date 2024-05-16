@@ -5,7 +5,7 @@ echo "The game files are stored in ${classes_path}"
 
 read -p "How many games do you want to run? " -r number_of_games_to_run
 
-folder_id=$(ls -l | grep -c "games")
+folder_id=$(ls -l | grep -cE0 "run_[0-9]+")
 ((folder_id++))
 
 mkdir -p "run_${folder_id}"
@@ -52,4 +52,4 @@ echo "$game_count games have been run"
 echo "Computer1: ${computer1Win} wins"
 echo "Computer2: ${computer2Win} wins"
 
-echo -e "computer1 ${computer1Win}\ncomputer2 ${computer2Win}" > "run_${folder_id}/win.result"
+echo -e "games ${game_count}\ncomputer1 ${computer1Win}\ncomputer2 ${computer2Win}" > "run_${folder_id}/win.result"
