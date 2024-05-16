@@ -133,18 +133,67 @@ public class BoardStatus {
                 || cyanPawns.stream().anyMatch(p -> p.getCoords().x == 0);
     }
 
+    // TODO
     public List<Point> getPossibleMoves(int playerID, Point p) {
         List<Point> possibleMoves = new ArrayList<>();
 
         if (playerID == 0) {
+            // horizontally
             for (int x = p.x + 1; x < 7; x++) {
                 if (isPointOccupied(x, p.y)) break;
                 possibleMoves.add(new Point(x, p.y));
             }
+
+            int x = p.x, y = p.y;
+
+            // right diagonal
+            while (x < 7 && y < 7) {
+                x++;
+                y++;
+
+                if (isPointOccupied(x, y)) break;
+                possibleMoves.add(new Point(x, y));
+            }
+
+            x = p.x;
+            y = p.y;
+
+            // left diagonal
+            while (y > 0 && x < 7) {
+                y--;
+                x++;
+
+                if (isPointOccupied(x, y)) break;
+                possibleMoves.add(new Point(x, y));
+            }
+
         } else {
+            // horizontally
             for (int x = p.x - 1; x > 0; x--) {
                 if (isPointOccupied(x, p.y)) break;
                 possibleMoves.add(new Point(x, p.y));
+            }
+
+            int x = p.x, y = p.y;
+
+            // right diagonal
+            while (x > 0 && y < 7) {
+                x--;
+                y++;
+                if (isPointOccupied(x, y)) break;
+                possibleMoves.add(new Point(x, y));
+            }
+
+            x = p.x;
+            y = p.y;
+
+            // left diagonal
+            while (x > 0 && y > 0) {
+                x--;
+                y--;
+
+                if (isPointOccupied(x, y)) break;
+                possibleMoves.add(new Point(x, y));
             }
         }
 

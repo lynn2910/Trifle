@@ -17,7 +17,7 @@ import java.awt.*;
 import java.util.List;
 
 public class DeterministicMinMaxBot extends TrifleDecider {
-    private MinMax minMax;
+    private final MinMax minMax;
 
     public DeterministicMinMaxBot(Model model, Controller controller) {
         super(model, controller);
@@ -50,15 +50,10 @@ public class DeterministicMinMaxBot extends TrifleDecider {
         this.minMax.getTracker().displayStatistics();
         this.minMax.getTracker().sendStatisticsToApi();
 
-        List<Pawn> pawns = stageModel.getPlayerPawns(model.getIdPlayer());
-        Pawn pawnInvolved = null;
-
-        for (Pawn pawn : pawns) {
-            if (pawn.getColorIndex() == nextMove.getPawnInvolved().getColorIndex()) {
-                pawnInvolved = pawn;
-                break;
-            }
-        }
+        Pawn pawnInvolved = stageModel.getPlayerPawn(
+                model.getIdPlayer(),
+                nextMove.getPawnInvolved().getColorIndex()
+        );
 
         assert pawnInvolved != null;
 
