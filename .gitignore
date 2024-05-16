@@ -5,3 +5,4 @@ out/**
 .trifle000001
 **/*.csv
 resources/games/*
+stat-api/node_modules

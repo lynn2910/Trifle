@@ -54,6 +54,7 @@ public class Node {
     }
 
     private void calculateWeight(BoardStatus boardStatus, int currentDepth) {
+        long start = System.nanoTime();
         this.weight = DeterministicAlgorithm.determineWeight(
                 boardStatus,
                 currentPlayerID,
@@ -61,21 +62,16 @@ public class Node {
                 moveDone,
                 currentDepth
         );
+        long end = System.nanoTime();
+        boardStatus.getTracker().newWeightTime(end - start);
     }
 
     public void buildRoot(BoardStatus boardStatus, int botID, int depth) {
         this.currentPlayerID = botID;
         List<Pawn> allowedPawns = getAllowedPawns(boardStatus);
-        System.out.println("allowedPawns:");
-        System.out.println(allowedPawns);
-        System.out.println();
 
         for (Pawn pawn : allowedPawns) {
-            System.out.println("for " + pawn);
             List<Point> possibleMoves = boardStatus.getPossibleMoves(currentPlayerID, pawn.getCoords());
-            System.out.println("Possible moves:");
-            System.out.println(possibleMoves);
-            System.out.println();
 
             for (Point move: possibleMoves) {
                 Node node = new Node(pawn, move, currentPlayerID);
@@ -93,6 +89,8 @@ public class Node {
             System.out.println(this.weight);
             return;
         }
+
+        boardStatus.getTracker().newNode(depth);
 
         boardStatus.movePawn(
                 getCurrentPlayerID(),
@@ -138,7 +136,6 @@ public class Node {
             }
 
             double evaluated = child.minimaxInternal(botID);
-            System.out.println(evaluated + " for " + child.getMoveDone());
             if (betterNode.getWeight() < evaluated) {
                 betterNode = child;
             }

@@ -47,7 +47,8 @@ public class DeterministicMinMaxBot extends TrifleDecider {
         }
         System.out.println("Choice of the MinMax:\n" + nextMove);
 
-//        this.minMax.getTracker().displayStatistics();
+        this.minMax.getTracker().displayStatistics();
+        this.minMax.getTracker().sendStatisticsToApi();
 
         List<Pawn> pawns = stageModel.getPlayerPawns(model.getIdPlayer());
         Pawn pawnInvolved = null;

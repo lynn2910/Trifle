@@ -13,6 +13,8 @@ public class BoardStatus {
     private List<Pawn> bluePawns;
     private List<Pawn> cyanPawns;
 
+    private Tracker tracker;
+
     private Point lastBlueMove;
     private Point lastCyanMove;
 
@@ -59,6 +61,13 @@ public class BoardStatus {
     public Point getLastMove(int playerID){
         if (playerID == 0) return getLastBlueMove();
         else return getLastCyanMove();
+    }
+
+    public Tracker getTracker(){
+        return this.tracker;
+    }
+    public void setTracker(Tracker tracker){
+        this.tracker = tracker;
     }
 
     public void setLastMove(int playerID, Point move){
