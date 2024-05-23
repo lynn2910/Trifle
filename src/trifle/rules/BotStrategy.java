@@ -17,14 +17,14 @@ public enum BotStrategy {
     public String toString() {
         return switch (this) {
             case BotEurDeCul -> "BotEur de cul";
-            case MinMaxDeterministic -> "Classic MinMax"; // TODO
+            case MinMaxDeterministic -> "Mellie (MinMax)"; // TODO
         };
     }
 
     public String getDescription(){
         return switch (this) {
             case BotEurDeCul -> ""; // TODO
-            case MinMaxDeterministic -> "with a classic algorithm";
+            case MinMaxDeterministic -> "MinMax with a deterministic algorithm";
         };
     }
 
