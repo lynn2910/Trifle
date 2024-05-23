@@ -1,7 +1,5 @@
 package trifle.control;
 
-import minmax.BoardStatus;
-import minmax.MinMax;
 import trifle.boardifier.control.ActionFactory;
 import trifle.boardifier.control.ActionPlayer;
 import trifle.boardifier.control.Controller;

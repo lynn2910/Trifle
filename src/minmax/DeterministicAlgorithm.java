@@ -33,8 +33,6 @@ public class DeterministicAlgorithm {
             int depth
     )
     {
-//        return boardStatus.isWin() ? 100 * (depth / (double) MinMax.DEPTH)
-//                : notAWin(boardStatus, playerID, pawn, move, depth);
         return calculateWeight(boardStatus, playerID, pawn, move, depth);
     }
 

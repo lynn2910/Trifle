@@ -5,7 +5,6 @@ import trifle.model.TrifleStageModel;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BoardStatus {
@@ -133,7 +132,6 @@ public class BoardStatus {
                 || cyanPawns.stream().anyMatch(p -> p.getCoords().x == 0);
     }
 
-    // TODO
     public List<Point> getPossibleMoves(int playerID, Point p) {
         List<Point> possibleMoves = new ArrayList<>();
 
