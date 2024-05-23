@@ -11,7 +11,6 @@ import java.util.*;
 public class TrifleBoard extends ContainerElement {
     public static final String BOARD_ID = "trifle_board";
 
-    // FIXME Il y a sans doute des erreurs dedans
     public static final int[][] BOARD = {
             {0, 1, 2, 3, 4, 5, 6, 7},
             {5, 0, 3, 6, 1, 4, 7, 2},
@@ -54,7 +53,6 @@ public class TrifleBoard extends ContainerElement {
     }
 
     /**
-     * IMPORTANT If any update is made in this method, it should also be done for the MinMax!
      * @param coords the coordinates of the move wanted
      * @param playerId The current player ID
      * @return The list of allowed moves

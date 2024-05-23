@@ -38,7 +38,6 @@ public enum GameMode {
     }
 
     public int numberOfRounds(){
-        // FIXME heu je ne connais pas les valeurs moi!
         return switch (this) {
             case Fast -> 1;
             case Standard -> 3;

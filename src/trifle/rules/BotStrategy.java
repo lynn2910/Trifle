@@ -17,7 +17,7 @@ public enum BotStrategy {
     public String toString() {
         return switch (this) {
             case BotEurDeCul -> "BotEur de cul";
-            case MinMaxDeterministic -> "Mellie (MinMax)"; // TODO
+            case MinMaxDeterministic -> "Mellie (MinMax)";
         };
     }
 

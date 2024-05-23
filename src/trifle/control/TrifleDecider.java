@@ -24,8 +24,6 @@ public class TrifleDecider extends Decider {
         ActionList actions = new ActionList();
         actions.setDoEndOfTurn(true);
 
-        // IMPORTANT call `registerMove` from TrifleController, because we need to register the last move and to detect the win
-
 //        TrifleController controller = (TrifleController) this.control;
 //
 //        controller.registerMove(

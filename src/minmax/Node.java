@@ -141,7 +141,6 @@ public class Node {
             }
         }
 
-        // TODO only when botID == 1
 //        betterNode.getMoveDone().x = 7 - betterNode.getMoveDone().x;
 
         // reverse x and y?
