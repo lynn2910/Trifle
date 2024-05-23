@@ -7,7 +7,7 @@ public class MinMax {
     private Node root;
     private final Tracker tracker;
 
-    public static int DEPTH = 3;
+    public static int DEPTH = 50;
 
     public MinMax() {
         this.root = new Node();
