@@ -15,12 +15,12 @@ export function formatDuration(nanoseconds: number): string {
     if (seconds > 0) {
         parts.push(`${seconds}s`);
     }
-    if (milliseconds > 0) {
-        parts.push(`${milliseconds}${remainingNanos > 0 ? '.' + (remainingNanos % 10000) : ''}`);
-    } else if (remainingNanos > 0) {
-        parts.push(`0.${remainingNanos % 10000}`);
+    if (milliseconds > 0 || remainingNanos > 0) {
+        parts.push(`${milliseconds}${remainingNanos > 0 ? '.' + Math.floor(remainingNanos) : ''}ms`);
     }
 
-    parts.push('ms');
-    return parts.join(' ').trim();
+    let parts_trimmed = parts.join(' ').trim();
+
+    if (parts_trimmed.length < 1) return "0ms"
+    else return parts_trimmed;
 }
