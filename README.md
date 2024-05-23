@@ -67,9 +67,9 @@ java -cp out trifle.TrifleConsole 0
 
 Run and register the moves done:
 ```bash
-java -cp out trifle.TrifleConsole --output-args ./move_file.in
+java -cp out trifle.TrifleConsole --output-moves ./move_file.in
 # Or
-java -cp out trifle.TrifleConsole 0 --output-args ./move_file.in
+java -cp out trifle.TrifleConsole 0 --output-moves ./move_file.in
 ```
 > **Note:** The TUI lets you configure things such as the bot.s strategy.ies and player name.s, while if you run it without the TUI, default values will be set for you.
 
