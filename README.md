@@ -33,6 +33,8 @@ The project members are:
   - **Linux** (Tested on Debian 12)
   - **Windows 10/11** (Both tested)
   - **MacOS** (Tested by a third-party)
+- Tests:
+  - **mockito** (lib for junit)
 
 ### Instructions
 
@@ -58,11 +60,22 @@ java -cp out trifle.TrifleConsole
 Run without the TUI:
 ```bash
 java -cp out trifle.TrifleConsole 0
+# 0 = Human    vs Human
+# 1 = Human    vs Computer
+# 2 = Computer vs Computer
 ```
 
+Run and register the moves done:
+```bash
+java -cp out trifle.TrifleConsole --output-args ./move_file.in
+# Or
+java -cp out trifle.TrifleConsole 0 --output-args ./move_file.in
+```
 > **Note:** The TUI lets you configure things such as the bot.s strategy.ies and player name.s, while if you run it without the TUI, default values will be set for you.
 
-> **Note:** For JUNIT, you should run with the ide IDEA.
+> **Note bis:** For JUNIT, you should run with the ide IDEA.
+
+> **Tip:** If you want to slow the bot, add `WAIT_BEFORE_END=5000` before the command (in the env variables), the game will automatically read it and wait for 5s if you or the bot have been faster
 
 ## Useful resources
 
@@ -73,6 +86,8 @@ Here is a quick summary for each resource:
 - `board.png`: The default board of the Kamisado at the start of a game
 - `draw_table.py`: A python3 script used to test which board display should be used.
 - `kamisado.text`: The ASCII-styled name, here only for storage purposes.
-- `generate_training_data.sh`: A bash script used to generate a LOT of data for the AI
+- `run_game.sh`: A bash script which can run a specific number of games, allowing for massive benchmarking along the API (at `stat-api`)
+- `profiling`: A folder which contains profiling information from the IDEA profiler, allowing to watch the memory and cpu usage.
+- `efficiency_games`: A folder which contains games used to determine the efficiency of the bots.
 
-> **Note:** The game require some resources which are stored under the following directory: `src/trifle/resources/`
+> **Note:** The game can use some resources which are stored under the following directory: `src/trifle/resources/`
