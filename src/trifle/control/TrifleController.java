@@ -33,8 +33,8 @@ public class TrifleController extends Controller {
     private final long startTime;
 
     // Store each computer, yet it can be null
-    private TrifleDecider firstComputer;
-    private TrifleDecider secondComputer;
+    public TrifleDecider firstComputer;
+    public TrifleDecider secondComputer;
 
     /**
      * Count the number of rounds currently played
@@ -44,7 +44,7 @@ public class TrifleController extends Controller {
     private int bluePlayerPoints = 0;
     private int cyanPlayerPoints = 0;
 
-    private FileWriter outputMovesFileWriter;
+    public FileWriter outputMovesFileWriter;
     private final InputStreamReader inputStreamReader;
 
 
@@ -112,7 +112,6 @@ public class TrifleController extends Controller {
         this.updatePlayersCounter();
 
         this.update();
-
         int waitBeforeEnd = 0; // 2500
         if (System.getenv().containsKey("WAIT_BEFORE_END")) {
             waitBeforeEnd = Integer.parseInt(System.getenv().get("WAIT_BEFORE_END"));
@@ -149,7 +148,7 @@ public class TrifleController extends Controller {
         }
     }
 
-    private void playTurn() {
+    public void playTurn() {
         Player p = model.getCurrentPlayer();
 
         TrifleStageModel stage = (TrifleStageModel) model.getGameStage();
@@ -193,7 +192,7 @@ public class TrifleController extends Controller {
 
     private static final Pattern MOVE_PATTERN = Pattern.compile("^([a-hA-H][1-8]|[cbpdefgnCBPDEFGN])([a-hA-H][1-8])$");
 
-    private void playerTurn(Player p) {
+    public void playerTurn(Player p) {
         boolean ok = false;
 
         while (!ok) {
@@ -355,7 +354,7 @@ public class TrifleController extends Controller {
         return (TrifleStageModel) model.getGameStage();
     }
 
-    private void botTurn(Player _p) {
+    public void botTurn(Player _p) {
         ActionList actions;
         if (model.getIdPlayer() == 0) actions = this.firstComputer.decide();
         else actions = this.secondComputer.decide();
@@ -636,5 +635,14 @@ public class TrifleController extends Controller {
         }
 
         stageModel.getPlayerName().setText(text);
+    }
+
+    public TrifleDecider getFirstComputer() {
+        return firstComputer;
+    }
+
+
+    public TrifleDecider getSecondComputer() {
+        return secondComputer;
     }
 }
