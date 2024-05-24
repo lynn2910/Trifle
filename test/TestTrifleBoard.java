@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTriffleBoard {
+public class TestTrifleBoard {
 
     private TrifleBoard board;
     private TrifleStageModel stageModel;

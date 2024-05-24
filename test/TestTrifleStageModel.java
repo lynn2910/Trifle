@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTriffleStageModel{
+public class TestTrifleStageModel {
 
     private TrifleStageModel stageModel;
     private TrifleBoard board;
