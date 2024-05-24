@@ -34,7 +34,7 @@ public class DeterministicAlgorithm {
     )
     {
         if (boardStatus.isWin())
-            return (100 * depth) + defensive(boardStatus, playerID, pawn, move, depth);
+            return (100 * (MinMax.DEPTH / (double) depth)) + defensive(boardStatus, playerID, pawn, move, depth);
 
         return defensive(boardStatus, playerID, pawn, move, depth) + aggressive(boardStatus, playerID, pawn, move, depth);
     }
