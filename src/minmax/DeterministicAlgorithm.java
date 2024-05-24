@@ -115,10 +115,74 @@ public class DeterministicAlgorithm {
         List<Pawn> opponentPawnsInTrajectory = new ArrayList<>();
 
         if (playerID == 0) {
+            for (int x = move.x + 1; x < 7; x++) {
+                Optional<Pawn> maybe = isOpponentAt(opponentPawns, x, move.y);
+                if (maybe.isPresent()) {
+                    opponentPawnsInTrajectory.add(maybe.get());
+                    break;
+                }
+            }
 
+            int x = move.x, y = move.y;
+
+            // right diagonal
+            while (x < 7 && y < 7) {
+                x++;
+                y++;
+
+                Optional<Pawn> maybe = isOpponentAt(opponentPawns, x, y);
+                if (maybe.isPresent()) {
+                    opponentPawnsInTrajectory.add(maybe.get());
+                    break;
+                }
+            }
+
+            x = move.x;
+            y = move.y;
+
+            // left diagonal
+            while (y > 0 && x < 7) {
+                y--;
+                x++;
+
+                Optional<Pawn> maybe = isOpponentAt(opponentPawns, x, y);
+                if (maybe.isPresent()) {
+                    opponentPawnsInTrajectory.add(maybe.get());
+                    break;
+                }
+            }
         } else {
             for (int x = move.x - 1; x > 0; x--) {
                 Optional<Pawn> maybe = isOpponentAt(opponentPawns, x, move.y);
+                if (maybe.isPresent()) {
+                    opponentPawnsInTrajectory.add(maybe.get());
+                    break;
+                }
+            }
+
+            int x = move.x, y = move.y;
+
+            // right diagonal
+            while (x > 0 && y < 7) {
+                x--;
+                y++;
+
+                Optional<Pawn> maybe = isOpponentAt(opponentPawns, x, y);
+                if (maybe.isPresent()) {
+                    opponentPawnsInTrajectory.add(maybe.get());
+                    break;
+                }
+            }
+
+            x = move.x;
+            y = move.y;
+
+            // left diagonal
+            while (x > 0 && y > 0) {
+                x--;
+                y--;
+
+                Optional<Pawn> maybe = isOpponentAt(opponentPawns, x, y);
                 if (maybe.isPresent()) {
                     opponentPawnsInTrajectory.add(maybe.get());
                     break;
