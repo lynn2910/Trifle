@@ -25,7 +25,6 @@ public class Tui {
     }
 
     public void closeStream(){
-        this.scanner.close();
         this.scanner = null;
     }
 
