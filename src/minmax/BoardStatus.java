@@ -62,7 +62,7 @@ public class BoardStatus {
         else return getLastCyanMove();
     }
 
-    public Tracker getTracker(){
+    public Tracker getTracker(){    
         return this.tracker;
     }
     public void setTracker(Tracker tracker){

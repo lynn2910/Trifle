@@ -1,13 +1,32 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import trifle.boardifier.control.Controller;
+import trifle.boardifier.model.Model;
+import trifle.boardifier.model.Player;
+import trifle.boardifier.view.View;
 import trifle.control.TrifleController;
+import trifle.control.TrifleDecider;
+import trifle.model.TrifleStageModel;
+import trifle.rules.BotStrategy;
+import trifle.rules.GameMode;
+import trifle.rules.PlayerMode;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 import java.awt.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class TestTrifleController {
+
     /**
      * Test a list of valid and invalid moves for the method `extractPawnIndex` from `TrifleController`
      * @param inputMove the input move, such as a1g7 or cg7
@@ -101,4 +120,104 @@ public class TestTrifleController {
             assertEquals(y, p.y);
         }
     }
+
+    @Mock
+    private Model model;
+
+    @Mock
+    private View view;
+
+    @Mock
+    private GameMode gameMode;
+
+    @Mock
+    private PlayerMode playerMode;
+
+    @Mock
+    private List<String> playerNames;
+
+    @Mock
+    private TrifleStageModel stageModel;
+
+    private TrifleController controller;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
+        when(model.getGameStage()).thenReturn(stageModel);
+        controller = new TrifleController(model, view, gameMode, playerMode, playerNames);
+    }
+
+    @Test
+    void testInitialization() {
+        assertNotNull(controller);
+    }
+
+    @Test
+    void testDefineBotsHumanVsHuman() {
+        controller.defineBots(List.of());
+        assertNull(controller.getFirstComputer());
+        assertNull(controller.getSecondComputer());
+    }
+
+    @Test
+    void testDefineBotsHumanVsComputer() {
+        BotStrategy botStrategy = mock(BotStrategy.class);
+        when(botStrategy.initComputer(any(Model.class), any(TrifleController.class))).thenReturn(mock(TrifleDecider.class));
+        controller.defineBots(List.of(botStrategy));
+        assertNull(controller.getFirstComputer());
+        assertNotNull(controller.getSecondComputer());
+    }
+
+    @Test
+    void testDefineBotsComputerVsComputer() {
+        BotStrategy botStrategy1 = mock(BotStrategy.class);
+        BotStrategy botStrategy2 = mock(BotStrategy.class);
+        when(botStrategy1.initComputer(any(Model.class), any(TrifleController.class))).thenReturn(mock(TrifleDecider.class));
+        when(botStrategy2.initComputer(any(Model.class), any(TrifleController.class))).thenReturn(mock(TrifleDecider.class));
+        controller.defineBots(List.of(botStrategy1, botStrategy2));
+        assertNotNull(controller.getFirstComputer());
+        assertNotNull(controller.getSecondComputer());
+    }
+
+
+    @Test
+    void testPlayTurnHuman() {
+        Player humanPlayer = mock(Player.class);
+        when(humanPlayer.getType()).thenReturn(Player.HUMAN);
+        when(model.getCurrentPlayer()).thenReturn(humanPlayer);
+        doNothing().when(controller).playerTurn(any(Player.class));
+        controller.playTurn();
+        verify(controller).playerTurn(humanPlayer);
+    }
+
+    @Test
+    void testPlayTurnComputer() {
+        Player computerPlayer = mock(Player.class);
+        when(computerPlayer.getType()).thenReturn(Player.COMPUTER);
+        when(model.getCurrentPlayer()).thenReturn(computerPlayer);
+        doNothing().when(controller).botTurn(any(Player.class));
+        controller.playTurn();
+        verify(controller).botTurn(computerPlayer);
+    }
+
+    @Test
+    void testEndGameWithWinner() {
+        when(gameMode.numberOfRounds()).thenReturn(1);
+        when(model.getIdWinner()).thenReturn(0);
+        when(model.getPlayers()).thenReturn(List.of(mock(Player.class), mock(Player.class)));
+        controller.endGame();
+        verify(model, times(1)).setIdWinner(0);
+    }
+
+    @Test
+    void testEndGameDraw() {
+        when(gameMode.numberOfRounds()).thenReturn(1);
+        when(model.getIdWinner()).thenReturn(-1);
+        when(model.getPlayers()).thenReturn(List.of(mock(Player.class), mock(Player.class)));
+        controller.endGame();
+        verify(model, times(1)).setIdWinner(-1);
+    }
+
+
 }
