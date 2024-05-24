@@ -33,6 +33,8 @@ public class DeterministicAlgorithm {
             int depth
     )
     {
+        if (boardStatus.isWin())
+            return (100 * depth) + defensive(boardStatus, playerID, pawn, move, depth);
 
         return defensive(boardStatus, playerID, pawn, move, depth) + aggressive(boardStatus, playerID, pawn, move, depth);
     }
