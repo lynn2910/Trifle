@@ -128,4 +128,20 @@ public class TrifleBoard extends ContainerElement {
 
         return validCells;
     }
+
+    public int getWidth() {
+        int result = 0;
+        for (int[] row : BOARD) {
+            result = Math.max(result, row.length);
+        }
+        return  result;
+    }
+
+    public int getHeight() {
+        int result = 0;
+        for (int[] row : BOARD) {
+            result++;
+        }
+        return result;
+    }
 }
