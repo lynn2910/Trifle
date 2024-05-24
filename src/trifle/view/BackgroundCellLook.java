@@ -23,9 +23,5 @@ public class BackgroundCellLook extends ElementLook {
 
         shape[2][0] = Pawn.BG_COLORS[colorIndex] + " ";
         shape[2][PawnLook.WIDTH - 1] = " " + ConsoleColor.RESET;
-
-//        shape[1][1] = " " + ConsoleColor.RESET;
-//        shape[1][4] = " " + Pawn.BG_COLORS[colorIndex];
-//        shape[2][3] = " " + ConsoleColor.RESET;
     }
 }

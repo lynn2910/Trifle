@@ -2,7 +2,6 @@ package trifle.model;
 
 import trifle.boardifier.control.Logger;
 import trifle.boardifier.model.ContainerElement;
-import trifle.boardifier.model.Coord2D;
 import trifle.boardifier.model.GameStageModel;
 
 import java.awt.Point;

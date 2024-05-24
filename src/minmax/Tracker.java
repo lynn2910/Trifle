@@ -197,19 +197,7 @@ public class Tracker {
         System.out.println("Sending statistics to API...");
         try {
             HttpURLConnection con = getHttpURLConnection();
-            StringBuilder responseBuilder = new StringBuilder(); // Create StringBuilder
 
-            // Read the response
-//            BufferedInputStream bis = new BufferedInputStream(con.getInputStream());
-//            int result2;
-//            while ((result2 = bis.read()) != -1) {
-//                responseBuilder.append((char) result2);
-//            }
-//            bis.close();
-//
-//            String response = responseBuilder.toString();
-
-            
             switch (con.getResponseCode()) {
                 case 200: {
                     System.out.println("Statistics sent");

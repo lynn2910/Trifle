@@ -4,7 +4,6 @@ import trifle.boardifier.model.GameStageModel;
 import trifle.boardifier.model.StageElementsFactory;
 import trifle.boardifier.model.TextElement;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

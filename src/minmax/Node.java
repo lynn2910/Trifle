@@ -12,7 +12,7 @@ public class Node {
     private int currentPlayerID;
     private double weight;
 
-    private List<Node> children = new ArrayList<>();
+    private final List<Node> children = new ArrayList<>();
 
     public Node(Pawn pawnInvolved, Point moveDone, int currentPlayerID) {
         this.pawnInvolved = pawnInvolved;

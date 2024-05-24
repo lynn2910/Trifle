@@ -409,7 +409,6 @@ public class TrifleController extends Controller {
 
         // Check the pawn color based on the last movement of the enemy.
         if (lastEnemyMovement != null) {
-            // TODO There is another rule?
             // get this cell color
             int colorIndex = TrifleBoard.BOARD[lastEnemyMovement.y][lastEnemyMovement.x];
             if (colorIndex != pawn.getColorIndex()) {
@@ -495,7 +494,6 @@ public class TrifleController extends Controller {
      * Detect if there is a win-win situation
      */
     private void detectWin(){
-        // TODO detect situations when the game is a draw (no one can move his pawns)
         TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
 
         // check blue pawns

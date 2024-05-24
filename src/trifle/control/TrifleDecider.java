@@ -4,8 +4,6 @@ import trifle.boardifier.control.Controller;
 import trifle.boardifier.control.Decider;
 import trifle.boardifier.model.Model;
 import trifle.boardifier.model.action.ActionList;
-import trifle.model.Pawn;
-import trifle.model.TrifleStageModel;
 
 /**
  * A default implementation of a Decider, aka a computer player.

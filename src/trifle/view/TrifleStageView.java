@@ -1,7 +1,6 @@
 package trifle.view;
 
 import trifle.boardifier.control.Logger;
-import trifle.boardifier.model.ContainerElement;
 import trifle.boardifier.model.GameElement;
 import trifle.boardifier.model.GameStageModel;
 import trifle.boardifier.model.TextElement;

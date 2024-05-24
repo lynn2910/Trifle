@@ -6,12 +6,12 @@ import trifle.boardifier.view.ConsoleColor;
  * The purpose of this class is to register what moves have been done
  */
 public class OldMove {
-    private int playerId;
-    private String playerName;
+    private final int playerId;
+    private final String playerName;
     // Normalized to `color (position)`
-    private String pawn;
+    private final String pawn;
     // Normalized to A1
-    private String move;
+    private final String move;
 
     public OldMove(int playerId, String playerName, String pawn, String move){
         this.playerId = playerId;

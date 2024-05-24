@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardStatus {
-    private int[][] matrix;
-    private List<Pawn> bluePawns;
-    private List<Pawn> cyanPawns;
+    private final int[][] matrix;
+    private final List<Pawn> bluePawns;
+    private final List<Pawn> cyanPawns;
 
     private Tracker tracker;
 

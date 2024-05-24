@@ -1,6 +1,5 @@
 package trifle;
 
-import minmax.MinMax;
 import trifle.boardifier.control.Logger;
 import trifle.boardifier.control.StageFactory;
 import trifle.boardifier.model.GameException;

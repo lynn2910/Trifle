@@ -4,8 +4,8 @@ import java.awt.*;
 
 public class Pawn {
     private Point coords;
-    private int playerID;
-    private int colorIndex;
+    private final int playerID;
+    private final int colorIndex;
 
     public Pawn(Point coords, int playerID, int colorIndex) {
         this.coords = coords;
