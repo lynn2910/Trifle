@@ -33,17 +33,7 @@ public class DeterministicAlgorithm {
             int depth
     )
     {
-        return calculateWeight(boardStatus, playerID, pawn, move, depth);
-    }
 
-    private static double calculateWeight(
-            BoardStatus boardStatus,
-            int playerID,
-            Pawn pawn,
-            Point move,
-            int depth
-    )
-    {
         return defensive(boardStatus, playerID, pawn, move, depth) + aggressive(boardStatus, playerID, pawn, move, depth);
     }
 
@@ -99,7 +89,7 @@ public class DeterministicAlgorithm {
                     .anyMatch(m -> playerID == 0 ? m.x == 0 : m.x == 7);
 
             for (Point possibleMove: possibleMoves) {
-                if (possibleMove == move)
+                if (possibleMove.x == move.x && possibleMove.y == move.y)
                     defensiveWeight += canWin ? 50 : 25;
             }
         }
@@ -113,7 +103,9 @@ public class DeterministicAlgorithm {
                 boardStatus.getPawns(playerID)
         );
 
-        defensiveWeight /= pawnBlocked.size();
+        if (!pawnBlocked.isEmpty())
+            defensiveWeight /=  (pawnBlocked.size() / 5.0);
+
         defensiveWeight *= playerID == 0 ? BLUE_PLAYER_DEF_COEFF : CYAN_PLAYER_DEF_COEFF;
 
         return defensiveWeight;
