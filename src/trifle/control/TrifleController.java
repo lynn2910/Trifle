@@ -632,6 +632,12 @@ public class TrifleController extends Controller {
             };
 
             text += ConsoleColor.RESET;
+
+            text += " at ";
+            text += normalizeCoordinate(
+                    stageModel.getPlayerPawn(model.getIdPlayer(), colorIndex).getCoords(),
+                    true
+            );
         }
 
         stageModel.getPlayerName().setText(text);
