@@ -151,7 +151,8 @@ public class DeterministicAlgorithm {
                     break;
                 }
             }
-        } else {
+        }
+        else {
             for (int x = move.x - 1; x > 0; x--) {
                 Optional<Pawn> maybe = isOpponentAt(opponentPawns, x, move.y);
                 if (maybe.isPresent()) {

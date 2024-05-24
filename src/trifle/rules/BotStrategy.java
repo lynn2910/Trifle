@@ -23,7 +23,7 @@ public enum BotStrategy {
 
     public String getDescription(){
         return switch (this) {
-            case BotEurDeCul -> ""; // TODO
+            case BotEurDeCul -> "A simple deterministic algorithm";
             case MinMaxDeterministic -> "MinMax with a deterministic algorithm";
         };
     }
