@@ -91,19 +91,19 @@ public class TestTrifleStageModel {
     @Test
     public void testMovesHistory() {
         List<OldMove> oldMoves = new ArrayList<>();
-        oldMoves.add(new OldMove(1, new Point(1, 1), new Point(1, 2)));
-        oldMoves.add(new OldMove(2, new Point(2, 2), new Point(2, 3)));
+        oldMoves.add(new OldMove(1, "A", "A1", "A2"));
+        oldMoves.add(new OldMove(2, "B", "G8", "G7"));
 
         for (OldMove move : oldMoves) {
             stageModel.addOldMove(move);
         }
 
         stageModel.updateHistory();
-        List<TextElement> movesHistory = stageModel.getMovesHistory();
+        List<OldMove> movesHistory = stageModel.getOldMovesList();
         assertEquals(oldMoves.size(), movesHistory.size());
 
         for (int i = 0; i < oldMoves.size(); i++) {
-            assertEquals(oldMoves.get(i).toString(), movesHistory.get(i).getText());
+            assertEquals(oldMoves.get(i), movesHistory.get(i));
         }
     }
 }

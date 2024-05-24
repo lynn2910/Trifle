@@ -1,5 +1,6 @@
 package trifle.control;
 
+import org.mockito.Mock;
 import trifle.boardifier.control.ActionFactory;
 import trifle.boardifier.control.ActionPlayer;
 import trifle.boardifier.control.Controller;
@@ -27,8 +28,8 @@ import java.util.regex.Pattern;
 
 public class TrifleController extends Controller {
     // Store the gameMode. Useful to check how many rounds are left.
-    private final GameMode gameMode;
-    private final PlayerMode playerMode;
+    private GameMode gameMode     = GameMode.defaultValue();
+    private PlayerMode playerMode = PlayerMode.defaultValue();
     private final List<String> playerNames;
     private final long startTime;
 

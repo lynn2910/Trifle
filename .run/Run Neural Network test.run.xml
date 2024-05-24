@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run Neural Network test" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="bots.banoffeepie.NeuralNetwork" />
-    <module name="trifle" />
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
-  </configuration>
-</component>

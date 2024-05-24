@@ -197,6 +197,9 @@ public class TrifleStageModel extends GameStageModel {
     public List<TextElement> getMovesHistory() {
         return this.movesHistory;
     }
+    public List<OldMove> getOldMovesList(){
+        return this.oldMovesList;
+    }
     public void addOldMove(OldMove move){
         this.oldMovesList.add(move);
     }
@@ -204,6 +207,9 @@ public class TrifleStageModel extends GameStageModel {
     public static final int MAX_HISTORY_SIZE = 14;
 
     public void updateHistory(){
+        if (this.movesHistory.isEmpty())
+            return;
+
         // 13 -> 12, 12 -> 11, ...
         for (int i = 0; i < MAX_HISTORY_SIZE - 1; i++) {
             TextElement thisText = this.movesHistory.get(i);
