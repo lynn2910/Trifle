@@ -13,6 +13,8 @@ import trifle.model.Pawn;
 import trifle.model.TrifleBoard;
 import trifle.model.TrifleStageModel;
 
+import java.awt.*;
+
 public class DeterministicMinMaxBot extends TrifleDecider {
     private final MinMax minMax;
 
@@ -41,6 +43,21 @@ public class DeterministicMinMaxBot extends TrifleDecider {
         if (nextMove == null) {
             System.out.println("The bot " + model.getIdPlayer() + " cannot move his pawn.");
             stageModel.setPlayerBlocked(model.getIdPlayer(), true);
+
+            Point lastOpponentMove = boardStatus.getLastMove((model.getIdPlayer() + 1) % 2);
+            if (lastOpponentMove != null) {
+
+                int bgColorIndex = TrifleBoard.BOARD[lastOpponentMove.x][lastOpponentMove.y];
+
+                Pawn pawn = stageModel.getPlayerPawn(model.getIdPlayer(), bgColorIndex);
+
+                if (model.getIdPlayer() == 0) {
+                    stageModel.setLastBluePlayerMove(pawn.getCoords());
+                } else {
+                    stageModel.setLastCyanPlayerMove(pawn.getCoords());
+                }
+            }
+
             return new ActionList();
         }
         stageModel.setPlayerBlocked(model.getIdPlayer(), false);
