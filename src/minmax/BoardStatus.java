@@ -1,7 +1,7 @@
 package minmax;
 
-import trifle.model.TrifleBoard;
-import trifle.model.TrifleStageModel;
+import trifleConsole.model.TrifleBoard;
+import trifleConsole.model.TrifleStageModel;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,8 +18,8 @@ public class BoardStatus {
     private Point lastCyanMove;
 
     public BoardStatus(
-            List<trifle.model.Pawn> bluePawns,
-            List<trifle.model.Pawn> cyanPawns,
+            List<trifleConsole.model.Pawn> bluePawns,
+            List<trifleConsole.model.Pawn> cyanPawns,
             TrifleBoard board,
             TrifleStageModel trifleStageModel
     )

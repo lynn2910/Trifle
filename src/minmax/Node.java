@@ -1,6 +1,6 @@
 package minmax;
 
-import trifle.model.TrifleBoard;
+import trifleConsole.model.TrifleBoard;
 
 import java.util.ArrayList;
 import java.util.List;

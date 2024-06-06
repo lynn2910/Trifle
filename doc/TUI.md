@@ -38,7 +38,7 @@ _Internal (private) methods should not be used and values must not be overwritte
 
 ### Define game mode
 
-This section will let the user select the game mode based on the enumerator `GameMode.java` at `trifle.rules.GameMode`.
+This section will let the user select the game mode based on the enumerator `GameMode.java` at `trifleConsole.rules.GameMode`.
 
 There are three options:
 - **a.** Fast
@@ -62,7 +62,7 @@ This section will let the user choose between three possibilities:
 - **b.** Player vs Computer
 - **c.** Computer vs Computer
 
-_These values are based on the enumerator `PlayerMode` at `trifle.rules.PlayerMode`_
+_These values are based on the enumerator `PlayerMode` at `trifleConsole.rules.PlayerMode`_
 
 Because the number of players may change, all player names registered will be cleared.
 
@@ -107,7 +107,7 @@ _The description is below each choice, here is an example:_
     Work In Progress
 ```
 
-_These values are based on the enumerator `BotStrategy` at `trifle.rules.BotStrategy`_
+_These values are based on the enumerator `BotStrategy` at `trifleConsole.rules.BotStrategy`_
 
 All strategies already registered will be removed.
 

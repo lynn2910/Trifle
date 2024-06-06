@@ -13,7 +13,7 @@ public class Pawn {
         this.colorIndex = colorIndex;
     }
 
-    public Pawn(trifle.model.Pawn pawn) {
+    public Pawn(trifleConsole.model.Pawn pawn) {
         this(
                 new Point(pawn.getCoords().y, pawn.getCoords().x),
                 pawn.getPlayerNumber(),

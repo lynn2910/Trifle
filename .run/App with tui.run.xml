@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="App with tui" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="trifle.TrifleConsole" />
+    <option name="MAIN_CLASS_NAME" value="trifleConsole.TrifleConsole" />
     <module name="kamisado" />
     <method v="2">
       <option name="Make" enabled="true" />

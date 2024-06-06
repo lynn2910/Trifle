@@ -3,8 +3,8 @@
     <envs>
       <env name="WAIT_BEFORE_END" value="5000" />
     </envs>
-    <option name="MAIN_CLASS_NAME" value="trifle.TrifleConsole" />
-    <module name="trifle" />
+    <option name="MAIN_CLASS_NAME" value="trifleConsole.TrifleConsole" />
+    <module name="trifleConsole" />
     <option name="PROGRAM_PARAMETERS" value="0" />
     <option name="REDIRECT_INPUT" value="true" />
     <option name="INPUT_FILE" value="$ProjectFileDir$/$Prompt$" />

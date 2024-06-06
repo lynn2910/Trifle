@@ -1,9 +1,9 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import trifle.model.Pawn;
-import trifle.model.TrifleBoard;
-import trifle.model.TrifleStageModel;
+import trifleConsole.model.Pawn;
+import trifleConsole.model.TrifleBoard;
+import trifleConsole.model.TrifleStageModel;
 
 import java.awt.Point;
 import java.util.List;

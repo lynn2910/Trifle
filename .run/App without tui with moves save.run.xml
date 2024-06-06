@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="App without tui with moves save" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="trifle.TrifleConsole" />
-    <module name="trifle" />
+    <option name="MAIN_CLASS_NAME" value="trifleConsole.TrifleConsole" />
+    <module name="trifleConsole" />
     <option name="PROGRAM_PARAMETERS" value="0 --output-moves $TempDir$/lastTrifleGame.in" />
     <method v="2">
       <option name="Make" enabled="true" />

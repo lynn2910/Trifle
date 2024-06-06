@@ -5,24 +5,21 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import trifle.boardifier.control.Controller;
-import trifle.boardifier.model.Model;
-import trifle.boardifier.model.Player;
-import trifle.boardifier.view.View;
-import trifle.control.TrifleController;
-import trifle.control.TrifleDecider;
-import trifle.model.TrifleStageModel;
-import trifle.rules.BotStrategy;
-import trifle.rules.GameMode;
-import trifle.rules.PlayerMode;
+import trifleConsole.boardifier.model.Model;
+import trifleConsole.boardifier.model.Player;
+import trifleConsole.boardifier.view.View;
+import trifleConsole.control.TrifleController;
+import trifleConsole.control.TrifleDecider;
+import trifleConsole.model.TrifleStageModel;
+import rules.BotStrategy;
+import rules.GameMode;
+import rules.PlayerMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 import java.awt.*;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class TestTrifleController {

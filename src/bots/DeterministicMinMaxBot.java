@@ -3,15 +3,15 @@ package bots;
 import minmax.BoardStatus;
 import minmax.MinMax;
 import minmax.Node;
-import trifle.boardifier.control.ActionFactory;
-import trifle.boardifier.control.Controller;
-import trifle.boardifier.model.Model;
-import trifle.boardifier.model.action.ActionList;
-import trifle.control.TrifleController;
-import trifle.control.TrifleDecider;
-import trifle.model.Pawn;
-import trifle.model.TrifleBoard;
-import trifle.model.TrifleStageModel;
+import trifleConsole.boardifier.control.ActionFactory;
+import trifleConsole.boardifier.control.Controller;
+import trifleConsole.boardifier.model.Model;
+import trifleConsole.boardifier.model.action.ActionList;
+import trifleConsole.control.TrifleController;
+import trifleConsole.control.TrifleDecider;
+import trifleConsole.model.Pawn;
+import trifleConsole.model.TrifleBoard;
+import trifleConsole.model.TrifleStageModel;
 
 import java.awt.*;
 

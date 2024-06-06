@@ -1,11 +1,11 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import trifle.boardifier.model.Model;
-import trifle.boardifier.model.TextElement;
-import trifle.model.OldMove;
-import trifle.model.Pawn;
-import trifle.model.TrifleBoard;
-import trifle.model.TrifleStageModel;
+import trifleConsole.boardifier.model.Model;
+import trifleConsole.boardifier.model.TextElement;
+import trifleConsole.model.OldMove;
+import trifleConsole.model.Pawn;
+import trifleConsole.model.TrifleBoard;
+import trifleConsole.model.TrifleStageModel;
 
 import java.awt.Point;
 import java.util.ArrayList;

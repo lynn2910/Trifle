@@ -1,6 +1,6 @@
 package minmax;
 
-import trifle.boardifier.view.ConsoleColor;
+import trifleConsole.boardifier.view.ConsoleColor;
 
 import java.io.*;
 import java.net.ConnectException;

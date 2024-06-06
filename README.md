@@ -5,9 +5,9 @@ The final goal is to create an application where we can play at the game Kamisad
 ## Why the name of the project
 
 This project code is `Trifle`, here is a little definition:
-> Trifle is a layered dessert of English origin. The usual ingredients are a thin layer of sponge fingers or sponge cake soaked in sherry or another fortified wine, a fruit element (fresh or jelly), custard and whipped cream layered in that order in a glass dish. The contents of a trifle are highly variable and many varieties exist, some forgoing fruit entirely and instead using other ingredients, such as chocolate, coffee or vanilla. The fruit and sponge layers may be suspended in fruit-flavored jelly, and these ingredients are usually arranged to produce three or four layers. The assembled dessert can be topped with whipped cream or, more traditionally, syllabub.
+> Trifle is a layered dessert of English origin. The usual ingredients are a thin layer of sponge fingers or sponge cake soaked in sherry or another fortified wine, a fruit element (fresh or jelly), custard and whipped cream layered in that order in a glass dish. The contents of a trifleConsole are highly variable and many varieties exist, some forgoing fruit entirely and instead using other ingredients, such as chocolate, coffee or vanilla. The fruit and sponge layers may be suspended in fruit-flavored jelly, and these ingredients are usually arranged to produce three or four layers. The assembled dessert can be topped with whipped cream or, more traditionally, syllabub.
 > 
-> The name trifle was used for a dessert like a fruit fool in the sixteenth century; by the eighteenth century, Hannah Glasse records a recognisably modern trifle, with the inclusion of a gelatin jelly. 
+> The name trifleConsole was used for a dessert like a fruit fool in the sixteenth century; by the eighteenth century, Hannah Glasse records a recognisably modern trifleConsole, with the inclusion of a gelatin jelly. 
 
 Source: [en.wikipedia.org](https://en.wikipedia.org/wiki/Trifle)
 
@@ -42,7 +42,7 @@ The project members are:
 
 Clone the game:
 ```bash
-git clone https://gitlab.iut-bm.univ-fcomte.fr/ccolin2/trifle.git
+git clone https://gitlab.iut-bm.univ-fcomte.fr/ccolin2/trifleConsole.git
 ```
 
 Build the game:
@@ -54,12 +54,12 @@ You can choose whether you want to run or not the game with an interactive menu 
 
 Run with the TUI:
 ```bash
-java -cp out trifle.TrifleConsole
+java -cp out trifleConsole.TrifleConsole
 ```
 
 Run without the TUI:
 ```bash
-java -cp out trifle.TrifleConsole 0
+java -cp out trifleConsole.TrifleConsole 0
 # 0 = Human    vs Human
 # 1 = Human    vs Computer
 # 2 = Computer vs Computer
@@ -67,9 +67,9 @@ java -cp out trifle.TrifleConsole 0
 
 Run and register the moves done:
 ```bash
-java -cp out trifle.TrifleConsole --output-moves ./move_file.in
+java -cp out trifleConsole.TrifleConsole --output-moves ./move_file.in
 # Or
-java -cp out trifle.TrifleConsole 0 --output-moves ./move_file.in
+java -cp out trifleConsole.TrifleConsole 0 --output-moves ./move_file.in
 ```
 > **Note:** The TUI lets you configure things such as the bot.s strategy.ies and player name.s, while if you run it without the TUI, default values will be set for you.
 
@@ -90,4 +90,4 @@ Here is a quick summary for each resource:
 - `profiling`: A folder which contains profiling information from the IDEA profiler, allowing to watch the memory and cpu usage.
 - `efficiency_games`: A folder which contains games used to determine the efficiency of the bots.
 
-> **Note:** The game can use some resources which are stored under the following directory: `src/trifle/resources/`
+> **Note:** The game can use some resources which are stored under the following directory: `src/trifleConsole/resources/`
