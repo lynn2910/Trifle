@@ -17,19 +17,48 @@ public class Pawn extends GameElement {
     public static final int BLUE_PLAYER = 1;
     public static final int CYAN_PLAYER = 2;
 
-    // FIXME on peut enfin mettre les vraies couleurs!
     public static final Color[] COLORS = new Color[]{
-            Color.CYAN,
-            Color.BLUE,
-            Color.PINK,
-            Color.WHITE,
-            Color.YELLOW,
-            Color.RED,
-            Color.GREEN,
-            Color.DARK_GRAY
+            Color.getHSBColor(
+                    19f / 360f,
+                    0.737f,
+                    0.878f
+            ),
+            Color.getHSBColor(
+                    213f / 360f,
+                    0.682f,
+                    0.678f
+            ),
+            Color.getHSBColor(
+                    314f / 360f,
+                    0.694f,
+                    0.475f
+            ),
+            Color.getHSBColor(
+                    341f / 360f,
+                    0.541f,
+                    0.898f
+            ),
+            Color.getHSBColor(
+                    53f / 360f,
+                    0.672f,
+                    0.898f
+            ),
+            Color.getHSBColor(
+                    1f,
+                    0.742f,
+                    0.867f
+            ),
+            Color.getHSBColor(
+                    149f / 360f,
+                    0.724f,
+                    0.612f
+            ),
+            Color.getHSBColor(
+                    349f / 360f,
+                    0.582f,
+                    0.216f
+            )
     };
-
-    public static final Color[] BG_COLORS = COLORS;
 
     private final int colorIndex;
     private final int playerID;
