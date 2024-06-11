@@ -1,11 +1,10 @@
 package trifleGraphic.controllers;
 
-import trifleConsole.boardifier.view.ConsoleColor;
-import trifleConsole.model.Pawn;
 import trifleGraphic.boardifierGraphic.control.Controller;
 import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.model.Player;
 import trifleGraphic.boardifierGraphic.view.View;
+import trifleGraphic.model.Pawn;
 import trifleGraphic.model.TrifleBoard;
 import trifleGraphic.model.TrifleStageModel;
 
@@ -19,16 +18,31 @@ public class GameController extends Controller {
         setControlMouse(new GameMouseController(model, view, this));
     }
 
+    public void registerMove(TrifleStageModel gameStage, Point moveCoordinates, String move, Pawn pawn){
+        if (model.getIdPlayer() == 0) {
+            gameStage.setLastBluePlayerMove(moveCoordinates);
+        } else {
+            gameStage.setLastCyanPlayerMove(moveCoordinates);
+        }
+
+        pawn.setCoords(moveCoordinates);
+
+//        this.addOldMoveToFile(move);
+//        this.addMoveToOldMoves(model.getCurrentPlayer(), pawn.getFormattedPawnId(), normalizeCoordinate(moveCoordinates, true));
+
+        // !! Last one !!
+//        this.detectWin();
+    }
+
     @Override
     public void endOfTurn(){
         System.out.println("End of turn");
+        System.out.println("PlayerID: " + model.getIdPlayer());
         model.setNextPlayer();
+        System.out.println("PlayerID: " + model.getIdPlayer());
 
         TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
         stageModel.setState(TrifleStageModel.SELECT_PAWN_STATE);
-
-        System.out.println();
-        model.setNextPlayer();
 
         Player p = model.getCurrentPlayer();
         String text = p.getName() + " is playing.";
@@ -63,6 +77,8 @@ public class GameController extends Controller {
         }
 
         stageModel.getPlayerName().setText(text);
+
+        super.endOfTurn();
     }
 
     /**
@@ -83,9 +99,6 @@ public class GameController extends Controller {
 
         sb += ((char) (coordinates.x + 65)) + "";
         sb += (coordinates.y + 1);
-
-        if (colored)
-            sb += ConsoleColor.RESET;
 
         return sb;
     }

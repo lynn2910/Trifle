@@ -24,6 +24,7 @@ public class TrifleBoard extends ContainerElement {
 
     public TrifleBoard(int x, int y, GameStageModel gameStageModel) {
         super(BOARD_ID, x, y, 8, 8, gameStageModel);
+        resetReachableCells(false);
     }
 
     public void setValidCells(Point coordinates, int playerId) {

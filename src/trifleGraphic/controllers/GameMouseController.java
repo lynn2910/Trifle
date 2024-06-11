@@ -11,7 +11,6 @@ import trifleGraphic.boardifierGraphic.model.GameElement;
 import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.model.action.ActionList;
 import trifleGraphic.boardifierGraphic.model.animation.AnimationTypes;
-import trifleGraphic.boardifierGraphic.view.ElementLook;
 import trifleGraphic.boardifierGraphic.view.View;
 import trifleGraphic.model.Pawn;
 import trifleGraphic.model.TrifleBoard;
@@ -28,10 +27,6 @@ public class GameMouseController extends ControllerMouse implements EventHandler
     }
 
     public void handle(MouseEvent event) {
-        System.out.println(model.getSelected());
-        System.out.println(model.isCaptureMouseEvent());
-        if (!model.isCaptureMouseEvent()) return;
-
         Coord2D clic = new Coord2D(event.getSceneX(), event.getSceneY());
 
         List<GameElement> elementList = control.elementsAt(clic);
@@ -47,6 +42,12 @@ public class GameMouseController extends ControllerMouse implements EventHandler
         }
     }
 
+    /**
+     * Manage the clic of the user to move a pawn at a specific destination. Implements all rules of the Kamisado
+     * @param clic The clic coordinates
+     * @param stageModel The stage model
+     * @param elementList All elements that have been clicked since last frame.
+     */
     private void processPawnDestination(Coord2D clic, TrifleStageModel stageModel, List<GameElement> elementList){
         handlePawnSelectionState(clic, stageModel);
 
@@ -68,13 +69,20 @@ public class GameMouseController extends ControllerMouse implements EventHandler
         int[] dest = boardLook.getCellFromSceneLocation(clic);
         System.out.println("Mouse pawn destination: " + dest[0] + " " + dest[1]);
 
-        if (board.canReachCell(dest[1], dest[0])) {
+        if (board.canReachCell(dest[0], dest[1])) {
             System.out.println("The selected pawn can reach the cell at (" + dest[0] + ", " + dest[1] + ")");
 
-            ActionList actionList = ActionFactory.generatePutInContainer(control, model, pawn, TrifleBoard.BOARD_ID, dest[1], dest[0], AnimationTypes.NONE, 1);
+            ActionList actionList = ActionFactory.generatePutInContainer(
+                    control,
+                    model,
+                    pawn,
+                    TrifleBoard.BOARD_ID,
+                    dest[0],
+                    dest[1],
+                    AnimationTypes.NONE,
+                    0
+            );
             actionList.setDoEndOfTurn(true);
-
-            pawn.setCoords(new Point(dest[0], dest[1]));
 
             stageModel.unselectAll();
             stageModel.setState(TrifleStageModel.SELECT_PAWN_STATE);
@@ -82,6 +90,12 @@ public class GameMouseController extends ControllerMouse implements EventHandler
 
             ActionPlayer play = new ActionPlayer(model, control, actionList);
             play.start();
+
+            GameController controller = (GameController) control;
+            controller.registerMove(stageModel, new Point(dest[1], dest[0]), "", pawn);
+
+//            controller.endOfTurn();
+
             return;
         }
 
@@ -92,6 +106,12 @@ public class GameMouseController extends ControllerMouse implements EventHandler
         board.resetReachableCells(false);
     }
 
+    /**
+     * Select a pawn at a specific coordinate
+     * @param clic The clic coordinates
+     * @param stageModel The stage Model
+     * @return A pawn model of the current player if any
+     */
     private Pawn getPawnFrom(Coord2D clic, TrifleStageModel stageModel) {
         System.out.println();
         System.out.println("Player ID: " + model.getIdPlayer());
@@ -112,16 +132,26 @@ public class GameMouseController extends ControllerMouse implements EventHandler
         return null;
     }
 
+    /**
+     * Select the pawn at the given clic if there is any. Also implements the rules about the pawn selection.
+     * @param clic The clic coordinates
+     * @param stageModel The stage model
+     */
     private void handlePawnSelectionState(Coord2D clic, TrifleStageModel stageModel) {
         System.out.println();
         Pawn pawn = getPawnFrom(clic, stageModel);
         System.out.println(clic);
-        if (pawn == null ) return;
+        if (pawn == null) return;
+
+        TrifleBoard board = (TrifleBoard) stageModel.getBoard();
+        if (!board.canPawnMove(pawn, model.getIdPlayer())) return;
+
+//        Point lastOpponentMove = stageModel.getLastBluePlayerMove();
+        // pawn.getColorIndex() == TrifleBoard.BOARD[lastOpponentMove.y][lastOpponentMove.x]
 
         pawn.toggleSelected();
         stageModel.setState(TrifleStageModel.SELECT_DEST_STATE);
 
-        TrifleBoard board = (TrifleBoard) stageModel.getBoard();
         board.setValidCells(pawn.getCoords(), model.getIdPlayer());
         System.out.println();
     }

@@ -117,6 +117,7 @@ public class TrifleStageModel extends GameStageModel {
 
     private void addPawnToBoard(Pawn pawn) {
         this.board.addElement(pawn, pawn.getCoords().y, pawn.getCoords().x);
+        addElement(pawn);
     }
 
     public void addBackgroundCell(BackgroundCell backgroundCell) {

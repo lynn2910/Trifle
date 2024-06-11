@@ -3,6 +3,7 @@ package trifleGraphic.model;
 import trifleGraphic.boardifierGraphic.model.ElementTypes;
 import trifleGraphic.boardifierGraphic.model.GameElement;
 import trifleGraphic.boardifierGraphic.model.GameStageModel;
+import trifleGraphic.view.TrifleBoardLook;
 
 import java.awt.*;
 
@@ -31,11 +32,13 @@ public class Pawn extends GameElement {
     public static final Color[] BG_COLORS = COLORS;
 
     private final int colorIndex;
-    private final int playerNumber;
+    private final int playerID;
 
     private Point coords;
 
-    public Pawn(int colorIndex, int playerNumber, GameStageModel gameStageModel, int x, int y) {
+    private int sumoLevel;
+
+    public Pawn(int colorIndex, int playerID, GameStageModel gameStageModel, int x, int y) {
         super(gameStageModel);
 
         ElementTypes.register("pawn", PAWN_ELEMENT_ID);
@@ -43,23 +46,40 @@ public class Pawn extends GameElement {
         this.type = ElementTypes.getType("pawn");
 
         this.colorIndex = colorIndex;
-        this.playerNumber = playerNumber;
+        this.playerID = playerID;
 
         this.coords = new Point(x, y);
         this.setLocation((x + 1) * PAWN_SIZE - 2, (y + 1) * PAWN_SIZE + 7);
+
+        this.sumoLevel = 0;
     }
 
     public Point getCoords(){
         return coords;
     }
     public void setCoords(Point coords){
+        System.out.println("Coordinates defined to " + coords);
         this.coords = coords;
         // IMPORTANT Update the location every fucking time!
         this.setLocation((coords.x + 1) * PAWN_SIZE - 2, (coords.y + 1) * PAWN_SIZE + 7);
+        this.setLocation(
+                coords.x * TrifleBoardLook.PAWN_SIZE + 8,
+                coords.y * TrifleBoardLook.PAWN_SIZE + 8
+        );
     }
 
     public int getColorIndex(){
         return colorIndex;
+    }
+
+    public int getSumoLevel(){
+        return sumoLevel;
+    }
+    public void increaseSumoLevel(){
+        sumoLevel++;
+    }
+    public void resetSumoLevel(){
+        sumoLevel = 0;
     }
 
     /**
@@ -80,8 +100,8 @@ public class Pawn extends GameElement {
         };
     }
 
-    public int getPlayerNumber(){
-        return playerNumber;
+    public int getPlayerID(){
+        return playerID;
     }
 
     /**
@@ -116,7 +136,7 @@ public class Pawn extends GameElement {
     @Override
     public String toString(){
         return "Pawn { colorIndex: " + colorIndex
-                + ", playerNumber: " + playerNumber
+                + ", playerNumber: " + playerID
                 + ", coords: (" + coords.x + ", " + coords.y  + ") }";
     }
 }
