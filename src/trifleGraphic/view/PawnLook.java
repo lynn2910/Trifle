@@ -3,6 +3,7 @@ package trifleGraphic.view;
 import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import trifleGraphic.boardifierGraphic.model.GameElement;
@@ -14,7 +15,9 @@ import static trifleGraphic.view.TrifleBoardLook.PAWN_SIZE;
 public class PawnLook extends ElementLook {
     private Circle circle;
 
-    public static int RADIUS = PAWN_SIZE / 2;
+    public static int RADIUS = (PAWN_SIZE / 2) - 2;
+
+    public static int STROKE_WIDTH = 2;
 
     public PawnLook(GameElement element) {
         super(element);
@@ -43,12 +46,14 @@ public class PawnLook extends ElementLook {
                 pawnColor.getGreen() / 255.0,
                 pawnColor.getBlue() / 255.0
         );
-
-
         circle.setFill(convertedColor);
 
+        circle.setStrokeWidth(STROKE_WIDTH);
+        circle.setStrokeType(StrokeType.CENTERED);
+        circle.setStroke(Color.valueOf(pawn.getPlayerID() == 1 ? "0xfefefe" : "0x000"));
+
+
         addShape(circle);
-        // NB: text won't change so no need to put it as an attribute
         Text text = new Text(pawn.getChinesePawnName());
         text.setFont(new Font(24));
 
@@ -73,7 +78,7 @@ public class PawnLook extends ElementLook {
      * @return Zero for white, one for black
      */
     public static int whiteOrBlack(Color color) {
-        double seuil = 0.5;
+        double seuil = 0.75;
 
         Color adjustedColor = color.brighter();
         double lum = adjustedColor.getBrightness();
