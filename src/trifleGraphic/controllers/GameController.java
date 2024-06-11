@@ -8,6 +8,7 @@ import trifleGraphic.model.Pawn;
 import trifleGraphic.model.TrifleBoard;
 import trifleGraphic.model.TrifleStageModel;
 
+import java.util.List;
 import java.awt.*;
 
 public class GameController extends Controller {
@@ -17,6 +18,8 @@ public class GameController extends Controller {
         setControlAction(new GameActionController(model, view, this));
         setControlMouse(new GameMouseController(model, view, this));
     }
+
+    public static final int[] PLAYER_IDS =  new int[]{0, 1};
 
     public void registerMove(TrifleStageModel gameStage, Point moveCoordinates, String move, Pawn pawn){
         if (model.getIdPlayer() == 0) {
@@ -31,7 +34,42 @@ public class GameController extends Controller {
 //        this.addMoveToOldMoves(model.getCurrentPlayer(), pawn.getFormattedPawnId(), normalizeCoordinate(moveCoordinates, true));
 
         // !! Last one !!
-//        this.detectWin();
+        this.detectWin();
+    }
+
+    /**
+     * Detect a winning situation for any player.
+     * <br>This method doesn't manage a draw situation
+     */
+    public void detectWin(){
+        TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
+
+        for (int playerID: PLAYER_IDS){
+            List<Pawn> pawns = gameStage.getPlayerPawns(playerID);
+            boolean isWinning = pawns.stream()
+                    .anyMatch(pawn -> pawn.getCoords().y == getBaseRowForPlayer((playerID + 1) % 2));
+
+            if (isWinning){
+                model.setIdWinner(playerID);
+                this.endGame();
+            }
+        }
+    }
+
+    @Override
+    public void endGame() {
+
+        super.endGame();
+    }
+
+    /**
+     * Get the base row ID of the given player.
+     * <br>The base row is the row at which each player started.
+     * @param playerID The wanted player
+     * @return The row ID
+     */
+    public int getBaseRowForPlayer(int playerID){
+        return playerID == 0 ? 0 : 7;
     }
 
     @Override

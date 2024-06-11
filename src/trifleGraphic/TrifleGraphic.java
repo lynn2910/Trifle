@@ -90,7 +90,6 @@ public class TrifleGraphic extends Application {
         controller.setFirstStageName(FIRST_STAGE_NAME);
         primaryStage.setTitle("Trifle - Kamisado");
 
-        // FIXME changer le thème? J'ai pris le premier qui est arrivé sur Google :')
         Application.setUserAgentStylesheet("trifleGraphic/themes/nord-light.css");
         primaryStage.show();
 //        try {
