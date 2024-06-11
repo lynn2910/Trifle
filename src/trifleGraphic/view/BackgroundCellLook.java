@@ -6,7 +6,6 @@ import trifleGraphic.boardifierGraphic.model.GameElement;
 import trifleGraphic.boardifierGraphic.view.ElementLook;
 import trifleGraphic.model.BackgroundCell;
 import trifleGraphic.model.Pawn;
-import trifleGraphic.model.TrifleBoard;
 
 import static trifleGraphic.view.TrifleBoardLook.PAWN_SIZE;
 
@@ -23,7 +22,20 @@ public class BackgroundCellLook extends ElementLook {
         BackgroundCell bc = (BackgroundCell) element;
 
         this.rectangle = new Rectangle(PAWN_SIZE, PAWN_SIZE);
-        rectangle.setFill(Color.BLUE);
+        this.rectangle.setX(this.rectangle.getX() - ((double) PAWN_SIZE / 2));
+        this.rectangle.setY(this.rectangle.getY() - ((double) PAWN_SIZE / 2));
+
+        java.awt.Color bcColor = Pawn.COLORS[bc.getColorIndex()];
+
+        Color convertedColor = javafx.scene.paint.Color.color(
+                bcColor.getRed() / 255.0,
+                bcColor.getGreen() / 255.0,
+                bcColor.getBlue() / 255.0
+        );
+
+        rectangle.setFill(convertedColor);
+
+        addShape(rectangle);
 
 //        int colorIndex = TrifleBoard.BOARD[(int) bc.getY()][(int) bc.getX()];
 //        Color color = Pawn.BG_COLORS[colorIndex];

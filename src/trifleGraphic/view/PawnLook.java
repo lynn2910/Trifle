@@ -67,7 +67,6 @@ public class PawnLook extends ElementLook {
 
         Bounds bt = text.getBoundsInLocal();
         text.setX(-bt.getWidth()/2);
-        // since numbers are always above the baseline, relocate just using the part above baseline
         text.setY(text.getBaselineOffset()/2-4);
         addShape(text);
     }

@@ -14,7 +14,7 @@ public class TrifleBoardLook extends ClassicBoardLook {
                 -1,
                 Color.TRANSPARENT,
                 Color.TRANSPARENT,
-                0,
+                1,
                 Color.TRANSPARENT,
                 5,
                 Color.TRANSPARENT,
