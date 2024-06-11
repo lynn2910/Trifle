@@ -5,6 +5,7 @@ import boardifier.view.ElementLook;
 import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -12,6 +13,7 @@ import model.Pawn;
 
 public class PawnLook extends ElementLook {
     private Circle circle;
+    private Rectangle rectangle;
     private int radius;
 
     public PawnLook(int radius, GameElement element) {
@@ -23,6 +25,10 @@ public class PawnLook extends ElementLook {
 
     @Override
     public void onSelectionChange() {
+        System.out.println("PawnLook onSelectionChange");
+
+        this.rectangle.setFill(Color.BLACK);
+
         Pawn pawn = (Pawn)getElement();
         if (pawn.isSelected()) {
             circle.setStrokeWidth(3);
@@ -43,6 +49,7 @@ public class PawnLook extends ElementLook {
         Pawn pawn = (Pawn)element;
         circle = new Circle();
         circle.setRadius(radius);
+        rectangle = new Rectangle(radius * 2, radius * 2);
         if (pawn.getColor() == Pawn.PAWN_BLACK) {
             circle.setFill(Color.BLACK);
         }

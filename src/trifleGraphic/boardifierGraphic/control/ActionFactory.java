@@ -95,7 +95,7 @@ public class ActionFactory {
         return list;
     }
 
-    // draw dice without aniamtion
+    // draw dice without animation
     public static ActionList generateDrawDice(Model model, GameElement element) {
 
         ActionList list = new ActionList();

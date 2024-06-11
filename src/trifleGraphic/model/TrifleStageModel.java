@@ -121,6 +121,7 @@ public class TrifleStageModel extends GameStageModel {
 
     public void addBackgroundCell(BackgroundCell backgroundCell) {
         this.backgroundCells.add(backgroundCell);
+        addElement(backgroundCell);
     }
     public List<BackgroundCell> getBackgroundCells() {
         return this.backgroundCells;

@@ -36,11 +36,11 @@ public class TrifleStageView extends GameStageView {
         for (int col = 0; col < 8; col++) {
             Pawn bluePawn = model.getPlayerPawn(0, col);
             addLook(new PawnLook(bluePawn));
-            model.getBoard().addElement(bluePawn, 0, col);
+//            model.getBoard().addElement(bluePawn, 0, col);
 
             Pawn cyanPawn = model.getPlayerPawn(1, col);
             addLook(new PawnLook(cyanPawn));
-            model.getBoard().addElement(cyanPawn, 7, col);
+//            model.getBoard().addElement(cyanPawn, 7, col);
         }
 
         for (int x = 0; x < 8; x++) {

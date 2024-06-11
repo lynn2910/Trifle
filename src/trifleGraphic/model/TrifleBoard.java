@@ -33,7 +33,7 @@ public class TrifleBoard extends ContainerElement {
         List<Point> validCells = this.computeValidCells(coordinates, playerId);
         if (validCells != null) {
             for (Point p: validCells) {
-                reachableCells[p.x][p.y] = true;
+                reachableCells[p.y][p.x] = true;
             }
         }
     }
