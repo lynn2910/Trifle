@@ -55,7 +55,7 @@ public class TrifleGraphic extends Application {
 
         // Add the players to the model
         playerNames = getPlayerNames(gameMode);
-        PlayerMode playerMode = getPlayerMode(externalArgs.isEmpty() ? null : externalArgs.get(0));
+        PlayerMode playerMode = getPlayerMode(externalArgs.isEmpty() ? "" : externalArgs.get(0));
         switch (playerMode) {
             case HumanVsHuman: {
                 model.addHumanPlayer(playerNames.get(0));
@@ -133,6 +133,7 @@ public class TrifleGraphic extends Application {
      */
     private static PlayerMode getPlayerMode(String mode) {
         return switch (mode) {
+            case "" -> PlayerMode.HumanVsHuman;
             case "0" -> PlayerMode.HumanVsHuman;
             case "1" -> PlayerMode.HumanVsComputer;
             case "2" -> PlayerMode.ComputerVsComputer;
