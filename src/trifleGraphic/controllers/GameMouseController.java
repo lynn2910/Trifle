@@ -10,6 +10,8 @@ import trifleGraphic.boardifierGraphic.model.Coord2D;
 import trifleGraphic.boardifierGraphic.model.GameElement;
 import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.model.action.ActionList;
+import trifleGraphic.boardifierGraphic.model.action.GameAction;
+import trifleGraphic.boardifierGraphic.model.action.PutInContainerAction;
 import trifleGraphic.boardifierGraphic.model.animation.AnimationTypes;
 import trifleGraphic.boardifierGraphic.view.View;
 import trifleGraphic.model.Pawn;
@@ -87,24 +89,50 @@ public class GameMouseController extends ControllerMouse implements EventHandler
 
             //TODO faut revoir comment délplacer les pions après un oshi (en fct du lvl de sumo)
             if (isOshi) {
-                for (int colOffset = 0; colOffset < pawn.getSumoLevel(); colOffset++) {
-                    int colDest = dest[1] + (model.getIdPlayer() == 0 ? -colOffset : colOffset);
+                for (int rowdest = 0; rowdest < pawn.getSumoLevel() + 1; rowdest++) {
+                    int rowDest = dest[0] + (model.getIdPlayer() == 0 ? rowdest : -rowdest);
+                    System.out.println("modifications [" + rowDest + "]["+ dest[1] + "] : " + rowDest);
+                    if (board.getElement(rowDest, dest[1]) == null || board.getElement(rowDest, dest[1]).getType() != Pawn.PAWN_ELEMENT_ID) {
+                        System.out.println("no YEET");
+                        break;
+                    }
 
-                    if (board.getElement(dest[0], colDest) == null || board.getElement(dest[0], colDest).getType() != Pawn.PAWN_ELEMENT_ID) break;
+                    System.out.println("YEET");
+
+                    Pawn p = (Pawn) board.getElement(rowDest, dest[1]);
+
+                    int newRow = rowDest + (model.getIdPlayer() == 0 ? 1 : -1);
+                    p.setCoords(new Point(dest[1], newRow));
 
                     ActionList actionList2 = ActionFactory.generatePutInContainer(
                             control,
                             model,
-                            pawn,
+                            p,
                             TrifleBoard.BOARD_ID,
-                            dest[0],
-                            colDest,
+                            newRow,
+                            dest[1],
                             AnimationTypes.NONE,
                             0
                     );
 
-                    System.out.println("YEET");
                     actionList.addAll(actionList2);
+
+
+                    // if (AnimationTypes.NONE.equals(animationName)) {
+                    //                GameAction put = new PutInContainerAction(model, element, nameContainerDest, rowDest, colDest);
+                    //                list.addSingleAction(put);
+                    //            }
+                    //            else {
+                    //                // get the look of the element
+                    //                ElementLook elementLook = control.getElementLook(element);
+                    //                // get the container look of the destination container
+                    //                ContainerLook containerLook = (ContainerLook) control.getElementLook(containerDest);
+                    //                // get the location of the element look within this destination look, if placed in rowDest, colDest
+                    //                Coord2D center = containerLook.getRootPaneLocationForLookFromCell(elementLook, rowDest, colDest);
+                    //                // generate the action + animation
+                    //                GameAction put = new PutInContainerAction(model, element, nameContainerDest, rowDest, colDest, animationName, center.getX(), center.getY(), factor);
+                    //                list.addSingleAction(put);
+                    //            }
                 }
             } else actionList.setDoEndOfTurn(true);
 
@@ -171,8 +199,16 @@ public class GameMouseController extends ControllerMouse implements EventHandler
         TrifleBoard board = (TrifleBoard) stageModel.getBoard();
         if (!board.canPawnMove(pawn, model.getIdPlayer())) return;
 
-//        Point lastOpponentMove = stageModel.getLastBluePlayerMove();
-        // pawn.getColorIndex() == TrifleBoard.BOARD[lastOpponentMove.y][lastOpponentMove.x]
+        // the color pawm must play the same color cell
+        Point lastOpponentMove = stageModel.getLastPlayerMove((model.getIdPlayer() + 1) % 2);
+        if (lastOpponentMove != null) {
+            int colorIndex = TrifleBoard.BOARD[lastOpponentMove.y][lastOpponentMove.x];
+
+            if (colorIndex != pawn.getColorIndex()){
+                System.out.println("Invalid color: cannot move the wanted color");
+                return;
+            }
+        }
 
         pawn.toggleSelected();
         stageModel.setState(TrifleStageModel.SELECT_DEST_STATE);

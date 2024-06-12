@@ -63,7 +63,7 @@ public class TrifleBoard extends ContainerElement {
         Pawn p = (Pawn) getElement(coords.y, coords.x);
 
         int opponentVerticalCounter = 0;
-        boolean withoutOpponant = true;
+        boolean withoutOpponent = true;
         boolean canOshi = true;
 
         if (playerId == 0) {
@@ -71,25 +71,27 @@ public class TrifleBoard extends ContainerElement {
 
 
             // check on the vertical
-            for (int y = coords.y + 1; y < p.getNumberCasesPlayable(); y++) {
+            for (int y = coords.y + 1; y <= p.getNumberCasesPlayable(); y++) {
+
                 // normal valid cell
-                if ((getElement(y, coords.x) == null) && withoutOpponant) {
+                if ((getElement(y, coords.x) == null) && withoutOpponent) {
                     validCells.add(new Point(coords.x, y));
                     canOshi = false;
                 }
-                // detect opponant pawn
-                if (getElement(y, coords.x) != null && withoutOpponant) {
-                    withoutOpponant = false;
+                // detect opponent pawn
+                if (getElement(y, coords.x) != null && withoutOpponent) {
+                    withoutOpponent = false;
                 }
+
                 // oshi if possible
-                if (!withoutOpponant && canOshi) {
+                if (!withoutOpponent && canOshi) {
                     Pawn cellPawn = (Pawn) getElement(y, coords.x);
 
-                    if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) break;
-
-                    else if (sumoLevel < opponentVerticalCounter) break;
-
-                    else if ((getElement(y, coords.x) == null) && (y <= 8) && (sumoLevel >= opponentVerticalCounter)) {
+                    if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) {
+                        break;
+                    } else if (sumoLevel < opponentVerticalCounter) {
+                        break;
+                    } else if (getElement(y, coords.x) == null || getElement(y, coords.x).getType() != Pawn.PAWN_ELEMENT_ID) {
                         validCells.add(new Point(coords.x, y - opponentVerticalCounter));
                         break;
                     } else opponentVerticalCounter++;
@@ -101,7 +103,6 @@ public class TrifleBoard extends ContainerElement {
                 int y = 0;
             }
 
-            opponentVerticalCounter = 0;
 
             // check on the right diagonal
             int x = coords.x, y = coords.y;
@@ -133,22 +134,21 @@ public class TrifleBoard extends ContainerElement {
             // edited line will be commented with `+` after
 
             for (int y = coords.y - 1; y >= 0; y--) {
-                if ((getElement(y, coords.x) == null) && withoutOpponant) {
+                if ((getElement(y, coords.x) == null) && withoutOpponent) {
                     validCells.add(new Point(coords.x, y));
                     canOshi = false;
                 }
-                if (getElement(y, coords.x) != null && withoutOpponant) {
-                    withoutOpponant = false;
+                if (getElement(y, coords.x) != null && withoutOpponent) {
+                    withoutOpponent = false;
                 }
-                if (!withoutOpponant && canOshi) {
+                if (!withoutOpponent && canOshi) {
                     Pawn cellPawn = (Pawn) getElement(y, coords.x);
                     if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) {
                         break;
                     }
 
                     else if (sumoLevel < opponentVerticalCounter) break;
-                    //TODO détection none
-                    else if ((getElement(y, coords.x) == null) && (y >= 0) && (sumoLevel >= opponentVerticalCounter)) {
+                    else if (getElement(y, coords.x) == null) {
                         validCells.add(new Point(coords.x, y + opponentVerticalCounter));
                         break;
                     } else opponentVerticalCounter++;

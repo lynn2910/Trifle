@@ -48,7 +48,6 @@ public class TrifleStageModel extends GameStageModel {
      *
      *
      */
-
     public TrifleStageModel(String name, Model model) {
         super(name, model);
 
@@ -136,6 +135,10 @@ public class TrifleStageModel extends GameStageModel {
     public Point getLastCyanPlayerMove() { return this.lastCyanPlayerMove; }
     public void setLastCyanPlayerMove(Point lastCyanPlayerMove) {
         this.lastCyanPlayerMove = lastCyanPlayerMove;
+    }
+
+    public Point getLastPlayerMove(int playerID){
+        return playerID == 0 ? getLastBluePlayerMove() : getLastCyanPlayerMove();
     }
 
     public List<Pawn> getPlayerPawns(int playerID) {
