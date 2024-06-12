@@ -1,6 +1,7 @@
 package trifleGraphic;
 
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import rules.GameMode;
 import rules.PlayerMode;
@@ -14,7 +15,7 @@ import trifleGraphic.view.TrifleView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrifleGraphic extends Application {
+public class Trifle extends Application {
     private static GameMode gameMode;
     private static String outputMovesDir;
     private static final List<String> externalArgs = new ArrayList<>();
@@ -33,7 +34,7 @@ public class TrifleGraphic extends Application {
             switch (arg) {
                 case "": {break;}
                 case "--output-moves": {
-                    TrifleGraphic.outputMovesDir = args[i + 1];
+                    Trifle.outputMovesDir = args[i + 1];
                     // remove this arg
                     args[i] = "";
                     args[i + 1] = "";
@@ -44,7 +45,7 @@ public class TrifleGraphic extends Application {
             }
         }
 
-        TrifleGraphic.gameMode = GameMode.defaultValue();
+        Trifle.gameMode = GameMode.defaultValue();
 
         launch(args);
     }
@@ -90,6 +91,7 @@ public class TrifleGraphic extends Application {
         controller.setFirstStageName(FIRST_STAGE_NAME);
         primaryStage.setTitle("Trifle - Kamisado");
 
+        primaryStage.getIcons().add(new Image("trifleGraphic/icon.png"));
         Application.setUserAgentStylesheet("trifleGraphic/themes/nord-light.css");
         primaryStage.show();
 //        try {

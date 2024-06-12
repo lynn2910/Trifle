@@ -2,7 +2,7 @@ package trifleGraphic.model;
 
 import rules.GameMode;
 import rules.PlayerMode;
-import trifleGraphic.TrifleGraphic;
+import trifleGraphic.Trifle;
 import trifleGraphic.boardifierGraphic.model.*;
 
 import java.awt.*;
@@ -193,8 +193,8 @@ public class TrifleStageModel extends GameStageModel {
      * Create or update the TextElement which store the number of points for each player
      */
     public void updatePlayerPoints(int bluePlayerPoints, int cyanPlayerPoints) {
-        String text = TrifleGraphic.playerNames.get(0) + ": " + bluePlayerPoints
-                + "   " + TrifleGraphic.playerNames.get(1) + ": " + cyanPlayerPoints;
+        String text = Trifle.playerNames.get(0) + ": " + bluePlayerPoints
+                + "   " + Trifle.playerNames.get(1) + ": " + cyanPlayerPoints;
 
         if (this.getPlayerPoints() == null) {
             TextElement playerPointsCounter = new TextElement(text, this);
