@@ -10,7 +10,7 @@ import trifleGraphic.boardifierGraphic.view.TextLook;
 import trifleGraphic.model.Pawn;
 import trifleGraphic.model.TrifleStageModel;
 
-import static trifleGraphic.view.TrifleBoardLook.PAWN_SIZE;
+import static trifleGraphic.boardifierGraphic.view.ContainerLook.ALIGN_CENTER;
 
 public class TrifleStageView extends GameStageView {
     public final static int BOARD_WIDTH = 600;
@@ -34,6 +34,8 @@ public class TrifleStageView extends GameStageView {
         TrifleBoardLook boardLook = new TrifleBoardLook(model.getBoard());
         boardLook.setPadding(0);
         boardLook.setAnchorType(ElementLook.ANCHOR_TOPLEFT);
+        boardLook.setHorizontalAlignment(ALIGN_CENTER);
+        boardLook.setVerticalAlignment(ALIGN_CENTER);
 
         for (int col = 0; col < 8; col++) {
             Pawn bluePawn = model.getPlayerPawn(0, col);

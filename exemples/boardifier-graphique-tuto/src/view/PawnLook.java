@@ -14,7 +14,7 @@ import model.Pawn;
 public class PawnLook extends ElementLook {
     private Circle circle;
     private Rectangle rectangle;
-    private int radius;
+    private final int radius;
 
     public PawnLook(int radius, GameElement element) {
         super(element);
@@ -58,15 +58,11 @@ public class PawnLook extends ElementLook {
         }
 
         addShape(circle);
-        // NB: text won't change so no need to put it as an attribute
+
         Text text = new Text(String.valueOf(pawn.getNumber()));
         text.setFont(new Font(24));
-        if (pawn.getColor() == Pawn.PAWN_BLACK) {
-            text.setFill(Color.valueOf("0xFFFFFF"));
-        }
-        else {
-            text.setFill(Color.valueOf("0x000000"));
-        }
+        if (pawn.getColor() == Pawn.PAWN_BLACK) {text.setFill(Color.valueOf("0xFFFFFF"));}
+        else {text.setFill(Color.valueOf("0x000000"));}
         Bounds bt = text.getBoundsInLocal();
         text.setX(-bt.getWidth()/2);
         // since numbers are always above the baseline, relocate just using the part above baseline
