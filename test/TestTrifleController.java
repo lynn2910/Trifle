@@ -198,7 +198,7 @@ public class TestTrifleController {
 
     @Test
     void testEndGameWithWinner() {
-        when(gameMode.numberOfRounds()).thenReturn(1);
+        when(gameMode.requiredPoints()).thenReturn(1);
         when(model.getIdWinner()).thenReturn(0);
         when(model.getPlayers()).thenReturn(List.of(mock(Player.class), mock(Player.class)));
         controller.endGame();
@@ -207,7 +207,7 @@ public class TestTrifleController {
 
     @Test
     void testEndGameDraw() {
-        when(gameMode.numberOfRounds()).thenReturn(1);
+        when(gameMode.requiredPoints()).thenReturn(1);
         when(model.getIdWinner()).thenReturn(-1);
         when(model.getPlayers()).thenReturn(List.of(mock(Player.class), mock(Player.class)));
         controller.endGame();
