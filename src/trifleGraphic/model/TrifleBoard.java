@@ -27,11 +27,11 @@ public class TrifleBoard extends ContainerElement {
         resetReachableCells(false);
     }
 
-    public void setValidCells(Point coordinates, int playerId) {
+    public void setValidCells(Point coordinates, int playerId, int sumoLevel) {
         Logger.debug("setting valid cells :D", this);
         resetReachableCells(false);
 
-        List<Point> validCells = this.computeValidCells(coordinates, playerId);
+        List<Point> validCells = this.computeValidCells(coordinates, playerId, sumoLevel);
         if (validCells != null) {
             for (Point p: validCells) {
                 reachableCells[p.y][p.x] = true;
@@ -58,18 +58,50 @@ public class TrifleBoard extends ContainerElement {
      * @param playerId The current player ID
      * @return The list of allowed moves
      */
-    public List<Point> computeValidCells(Point coords, int playerId) {
+    public List<Point> computeValidCells(Point coords, int playerId, int sumoLevel) {
         List<Point> validCells = new ArrayList<>();
+        Pawn p = (Pawn) getElement(coords.y, coords.x);
+
+        int opponentVerticalCounter = 0;
+        boolean withoutOpponant = true;
+        boolean canOshi = true;
 
         if (playerId == 0) {
             // player is based on the top and must go to the bottom
 
+
             // check on the vertical
-            for (int y = coords.y + 1; y < 8; y++) {
-                if (getElement(y, coords.x) == null) {
+            for (int y = coords.y + 1; y < p.getNumberCasesPlayable(); y++) {
+                // normal valid cell
+                if ((getElement(y, coords.x) == null) && withoutOpponant) {
                     validCells.add(new Point(coords.x, y));
-                } else break;
+                    canOshi = false;
+                }
+                // detect opponant pawn
+                if (getElement(y, coords.x) != null && withoutOpponant) {
+                    withoutOpponant = false;
+                }
+                // oshi if possible
+                if (!withoutOpponant && canOshi) {
+                    Pawn cellPawn = (Pawn) getElement(y, coords.x);
+
+                    if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) break;
+
+                    else if (sumoLevel < opponentVerticalCounter) break;
+
+                    else if ((getElement(y, coords.x) == null) && (y <= 8) && (sumoLevel >= opponentVerticalCounter)) {
+                        validCells.add(new Point(coords.x, y - opponentVerticalCounter));
+                        break;
+                    } else opponentVerticalCounter++;
+                };
             }
+
+            if (opponentVerticalCounter > 0) {
+                // Le sumo peut jouer
+                int y = 0;
+            }
+
+            opponentVerticalCounter = 0;
 
             // check on the right diagonal
             int x = coords.x, y = coords.y;
@@ -100,11 +132,29 @@ public class TrifleBoard extends ContainerElement {
             // The same as the upper code, but with inverse conditions
             // edited line will be commented with `+` after
 
-            for (int y = coords.y - 1; y >= 0; y--) { // +
-                if (getElement(y, coords.x) == null) {
+            for (int y = coords.y - 1; y >= 0; y--) {
+                if ((getElement(y, coords.x) == null) && withoutOpponant) {
                     validCells.add(new Point(coords.x, y));
-                } else break;
+                    canOshi = false;
+                }
+                if (getElement(y, coords.x) != null && withoutOpponant) {
+                    withoutOpponant = false;
+                }
+                if (!withoutOpponant && canOshi) {
+                    Pawn cellPawn = (Pawn) getElement(y, coords.x);
+                    if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) {
+                        break;
+                    }
+
+                    else if (sumoLevel < opponentVerticalCounter) break;
+                    //TODO détection none
+                    else if ((getElement(y, coords.x) == null) && (y >= 0) && (sumoLevel >= opponentVerticalCounter)) {
+                        validCells.add(new Point(coords.x, y + opponentVerticalCounter));
+                        break;
+                    } else opponentVerticalCounter++;
+                };
             }
+
 
             // check on the right diagonal
             int x = coords.x, y = coords.y;

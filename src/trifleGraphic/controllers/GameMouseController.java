@@ -63,7 +63,7 @@ public class GameMouseController extends ControllerMouse implements EventHandler
         Pawn pawn = (Pawn) model.getSelected().get(0);
 
         TrifleBoard board = (TrifleBoard) stageModel.getBoard();
-        board.setValidCells(pawn.getCoords(), model.getIdPlayer());
+        board.setValidCells(pawn.getCoords(), model.getIdPlayer(), pawn.getSumoLevel());
 
         TrifleBoardLook boardLook = (TrifleBoardLook) control.getElementLook(stageModel.getBoard());
         int[] dest = boardLook.getCellFromSceneLocation(clic);
@@ -71,6 +71,8 @@ public class GameMouseController extends ControllerMouse implements EventHandler
 
         if (board.canReachCell(dest[0], dest[1])) {
             System.out.println("The selected pawn can reach the cell at (" + dest[0] + ", " + dest[1] + ")");
+
+            boolean isOshi = board.getElement(dest[0], dest[1]) != null && board.getElement(dest[0], dest[1]).getType() == Pawn.PAWN_ELEMENT_ID;
 
             ActionList actionList = ActionFactory.generatePutInContainer(
                     control,
@@ -82,11 +84,34 @@ public class GameMouseController extends ControllerMouse implements EventHandler
                     AnimationTypes.NONE,
                     0
             );
-            actionList.setDoEndOfTurn(true);
+
+            //TODO faut revoir comment délplacer les pions après un oshi (en fct du lvl de sumo)
+            if (isOshi) {
+                for (int colOffset = 0; colOffset < pawn.getSumoLevel(); colOffset++) {
+                    int colDest = dest[1] + (model.getIdPlayer() == 0 ? -colOffset : colOffset);
+
+                    if (board.getElement(dest[0], colDest) == null || board.getElement(dest[0], colDest).getType() != Pawn.PAWN_ELEMENT_ID) break;
+
+                    ActionList actionList2 = ActionFactory.generatePutInContainer(
+                            control,
+                            model,
+                            pawn,
+                            TrifleBoard.BOARD_ID,
+                            dest[0],
+                            colDest,
+                            AnimationTypes.NONE,
+                            0
+                    );
+
+                    System.out.println("YEET");
+                    actionList.addAll(actionList2);
+                }
+            } else actionList.setDoEndOfTurn(true);
 
             stageModel.unselectAll();
             stageModel.setState(TrifleStageModel.SELECT_PAWN_STATE);
             board.resetReachableCells(false);
+
 
             ActionPlayer play = new ActionPlayer(model, control, actionList);
             play.start();
@@ -152,7 +177,7 @@ public class GameMouseController extends ControllerMouse implements EventHandler
         pawn.toggleSelected();
         stageModel.setState(TrifleStageModel.SELECT_DEST_STATE);
 
-        board.setValidCells(pawn.getCoords(), model.getIdPlayer());
+        board.setValidCells(pawn.getCoords(), model.getIdPlayer(), pawn.getSumoLevel());
         System.out.println();
     }
 }
