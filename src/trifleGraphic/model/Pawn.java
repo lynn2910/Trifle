@@ -77,12 +77,13 @@ public class Pawn extends GameElement {
 
         this.colorIndex = colorIndex;
         this.playerID = playerID;
+        this.sumoLevel = 0;
+
         this.numberCasesPlayable = 7 - 2 * this.sumoLevel;
 
         this.coords = new Point(x, y);
         this.setLocation((x + 1) * PAWN_SIZE - 2, (y + 1) * PAWN_SIZE + 7);
 
-        this.sumoLevel = 1;
     }
 
     public Point getCoords(){

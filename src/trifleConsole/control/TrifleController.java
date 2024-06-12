@@ -450,12 +450,6 @@ public class TrifleController extends Controller {
     }
 
     public void registerMove(TrifleStageModel gameStage, Point moveCoordinates, String move, Pawn pawn){
-        if (model.getIdPlayer() == 0) {
-            gameStage.setLastBluePlayerMove(moveCoordinates);
-        } else {
-            gameStage.setLastCyanPlayerMove(moveCoordinates);
-        }
-
         this.addOldMoveToFile(move);
         this.addMoveToOldMoves(model.getCurrentPlayer(), pawn.getFormattedPawnId(), normalizeCoordinate(moveCoordinates, true));
         pawn.setCoords(moveCoordinates);
