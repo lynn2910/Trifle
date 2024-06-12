@@ -26,7 +26,7 @@ public class TrifleStageFactory extends StageElementsFactory {
         stageModel.setPlayerName(playerNameText);
 
         // Create the round counter
-        TextElement roundCounterText = new TextElement("Round 1/" + stageModel.getGameMode().numberOfRounds(), stageModel);
+        TextElement roundCounterText = new TextElement("Round 1/" + stageModel.getGameMode().requiredPoints(), stageModel);
         roundCounterText.setLocation(BOARD_WIDTH, 44 + 20);
         stageModel.setRoundCounter(roundCounterText);
 

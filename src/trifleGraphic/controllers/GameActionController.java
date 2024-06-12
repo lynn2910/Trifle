@@ -26,6 +26,7 @@ public class GameActionController  extends ControllerAction implements EventHand
         view.getMenuIntro().setOnAction(e -> {
             control.stopGame();
             view.resetView();
+            model.setCaptureEvents(false);
         });
 
         view.getMenuQuit().setOnAction(e -> {
@@ -36,6 +37,7 @@ public class GameActionController  extends ControllerAction implements EventHand
 
     private void onMenuStartAction(ActionEvent actionEvent) {
         try {
+            model.setCaptureEvents(true);
             control.startGame();
         } catch(GameException err) {
             System.err.println(err.getMessage());
@@ -44,7 +46,8 @@ public class GameActionController  extends ControllerAction implements EventHand
     }
 
     public void handle(ActionEvent event) {
-        if (!model.isCaptureActionEvent()) return;
         // TODO on peut y ajouter les différents events handlers pour la game
+
+//        event.getTarget()
     }
 }

@@ -91,9 +91,13 @@ public class Trifle extends Application {
         controller.setFirstStageName(FIRST_STAGE_NAME);
         primaryStage.setTitle("Trifle - Kamisado");
 
+        model.setCaptureEvents(false);
+
         primaryStage.getIcons().add(new Image("trifleGraphic/icon.png"));
         Application.setUserAgentStylesheet("trifleGraphic/themes/nord-light.css");
         primaryStage.show();
+
+
 //        try {
 //            int numberOfRounds = gameMode.numberOfRounds();
 //

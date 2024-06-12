@@ -1,17 +1,31 @@
 package trifleGraphic.controllers;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.StageStyle;
+import trifleGraphic.boardifierGraphic.control.ActionFactory;
+import trifleGraphic.boardifierGraphic.control.ActionPlayer;
 import trifleGraphic.boardifierGraphic.control.Controller;
+import trifleGraphic.boardifierGraphic.model.GameException;
 import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.model.Player;
+import trifleGraphic.boardifierGraphic.model.action.ActionList;
+import trifleGraphic.boardifierGraphic.model.animation.AnimationTypes;
 import trifleGraphic.boardifierGraphic.view.View;
 import trifleGraphic.model.Pawn;
 import trifleGraphic.model.TrifleBoard;
 import trifleGraphic.model.TrifleStageModel;
+import trifleGraphic.view.TrifleRootPane;
 
 import java.util.List;
 import java.awt.*;
+import java.util.Optional;
 
 public class GameController extends Controller {
+
+    private int bluePlayerPoints = 0;
+    private int cyanPlayerPoints = 0;
+
     public GameController(Model model, View view) {
         super(model, view);
 
@@ -27,21 +41,14 @@ public class GameController extends Controller {
         } else {
             gameStage.setLastCyanPlayerMove(moveCoordinates);
         }
-
-        pawn.setCoords(moveCoordinates);
-
-//        this.addOldMoveToFile(move);
-//        this.addMoveToOldMoves(model.getCurrentPlayer(), pawn.getFormattedPawnId(), normalizeCoordinate(moveCoordinates, true));
-
-        // !! Last one !!
-        this.detectWin();
     }
 
     /**
      * Detect a winning situation for any player.
      * <br>This method doesn't manage a draw situation
+     * @return If this is a winning situation
      */
-    public void detectWin(){
+    public boolean detectWin(){
         TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
 
         for (int playerID: PLAYER_IDS){
@@ -52,14 +59,164 @@ public class GameController extends Controller {
             if (isWinning){
                 model.setIdWinner(playerID);
                 this.endGame();
+                return true;
             }
         }
+        return false;
     }
 
     @Override
     public void endGame() {
+        System.out.println();
+//        super.endGame();
 
-        super.endGame();
+        TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
+        int requiredPoints = TrifleRootPane.gameMode.requiredPoints();
+
+        int givenPoints = 1;
+        if (model.getIdWinner() == 0 || model.getIdWinner() == 1) {
+            List<Pawn> pawns = gameStage.getPlayerPawns(model.getIdWinner());
+            int losingPlayerId = model.getIdWinner() == 0 ? 1 : 0;
+
+            for (Pawn pawn: pawns) {
+                if (pawn.getSumoLevel() > 0 && pawn.getCoords().y == getBaseRowForPlayer(losingPlayerId)) {
+                    givenPoints = pawn.getSumoLevel() * 2;
+                    pawn.increaseSumoLevel();
+                    break;
+                }
+            }
+        }
+
+        switch (model.getIdWinner()){
+            case 0: bluePlayerPoints += givenPoints; break;
+            case 1: cyanPlayerPoints += givenPoints; break;
+        }
+
+        int winningPlayerPoints;
+        if (model.getIdWinner() == 0) winningPlayerPoints = bluePlayerPoints;
+        else winningPlayerPoints = cyanPlayerPoints;
+
+        // détecter une victoire
+        if (winningPlayerPoints >= requiredPoints) {
+            partyEnd();
+        }
+
+        // TODO demander si le joueur veut que les pions soit à de droite à gauche ou à l'inverse
+
+        ActionList actionList = new ActionList();
+
+        // reset the game
+        for (int i = 0; i <= 7; i++) {
+            Pawn bluePawn = gameStage.getPlayerPawns(0).get(i);
+            bluePawn.setCoords(new Point(i, 0));
+
+            ActionList actionList2 = ActionFactory.generatePutInContainer(
+                    this,
+                    model,
+                    bluePawn,
+                    TrifleBoard.BOARD_ID,
+                    0,
+                    i,
+                    AnimationTypes.NONE,
+                    0
+            );
+            actionList.addAll(actionList2);
+
+
+            Pawn cyanPawn = gameStage.getPlayerPawns(1).get(i);
+            cyanPawn.setCoords(new Point(i, 7));
+
+            ActionList actionList3 = ActionFactory.generatePutInContainer(
+                    this,
+                    model,
+                    cyanPawn,
+                    TrifleBoard.BOARD_ID,
+                    7,
+                    i,
+                    AnimationTypes.NONE,
+                    0
+            );
+            actionList.addAll(actionList3);
+
+        }
+
+        gameStage.setLastBluePlayerMove(null);
+        gameStage.setLastCyanPlayerMove(null);
+
+        gameStage.setBluePlayerBlocked(false);
+        gameStage.setCyanPlayerBlocked(false);
+
+        ActionPlayer play = new ActionPlayer(model, this, actionList);
+        play.start();
+
+        System.out.println("\n\n\nNew round!\n\n");
+    }
+
+    /**
+     * At the end of the game, it asks if you want to quit,
+     * configure the game or start a new game with the same settings
+     */
+    private void partyEnd(){
+        Alert endGameBox = this.createEndGameBox();
+        model.setCaptureEvents(false);
+        Optional<ButtonType> res = endGameBox.showAndWait();
+        model.setCaptureEvents(true);
+        System.out.println("User response: " + res);
+
+        if (res.isEmpty()){
+            System.out.println("Unexpected result: No button has been clicked yet there wasn't any way to close the window?");
+            System.exit(1);
+        } else {
+            switch (res.get().getText().toLowerCase()){
+                case "quit": {
+                    System.exit(0);
+                    break;
+                }
+                case "configure game": {
+                    this.stopGame();
+                    view.resetView();
+                    break;
+                }
+                case "new game": {
+                    try {
+                        this.startGame();
+                    } catch (GameException e){
+                        System.out.println("\u001b[31m" + e.getMessage());
+                        e.printStackTrace();
+                        System.out.print("\u001b[0m");
+                        System.exit(1);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Create the alert box shown at the end of a game.
+     * @return The alert box initiated
+     */
+    private Alert createEndGameBox(){
+        String message = switch(model.getIdWinner()) {
+            case 0 -> "Winner: " + model.getPlayers().get(0).getName();
+            case 1 -> "Winner: " + model.getPlayers().get(1).getName();
+            default -> "Draw";
+        };
+
+        Alert box = new Alert(Alert.AlertType.NONE);
+        box.initStyle(StageStyle.UNDECORATED);
+
+        box.initOwner(view.getStage());
+        box.setHeaderText(message);
+
+        ButtonType quitButton = new ButtonType("Quit");
+        ButtonType configureGameButton = new ButtonType("Configure game");
+        ButtonType newGameButton = new ButtonType("New Game");
+
+        box.getButtonTypes().clear();
+        box.getButtonTypes().addAll(quitButton, configureGameButton, newGameButton);
+
+        return box;
     }
 
     /**
