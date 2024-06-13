@@ -3,6 +3,8 @@ package trifleGraphic.controllers;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.StageStyle;
+import rules.GameMode;
+import rules.PlayerMode;
 import trifleGraphic.boardifierGraphic.control.ActionFactory;
 import trifleGraphic.boardifierGraphic.control.ActionPlayer;
 import trifleGraphic.boardifierGraphic.control.Controller;
@@ -65,6 +67,9 @@ public class GameController extends Controller {
         return false;
     }
 
+    public GameMode gameMode     = GameMode.Fast;
+    public PlayerMode playerMode = PlayerMode.HumanVsHuman;
+
     public void configureFromRootPane(){
         this.model.getPlayers().clear();
 
@@ -73,15 +78,18 @@ public class GameController extends Controller {
 
         if (TrifleRootPane.isSecondPlayerBot) this.model.addComputerPlayer(TrifleRootPane.secondPlayerName);
         else this.model.addHumanPlayer(TrifleRootPane.secondPlayerName);
+
+        this.gameMode = TrifleRootPane.selectedGameMode;
+        this.playerMode = TrifleRootPane.selectedPlayerMode;
     }
 
     @Override
     public void endGame() {
         System.out.println();
-//        super.endGame();
 
         TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
-        int requiredPoints = TrifleRootPane.selectedGameMode.requiredPoints();
+        System.out.println("selected gamemode: " + this.gameMode.toString());
+        int requiredPoints = this.gameMode.requiredPoints();
 
         int givenPoints = 1;
         if (model.getIdWinner() == 0 || model.getIdWinner() == 1) {
