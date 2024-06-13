@@ -66,6 +66,7 @@ public class Pawn extends GameElement {
     private Point coords;
 
     private int sumoLevel;
+    private static int numberCasesPlayable;
 
     public Pawn(int colorIndex, int playerID, GameStageModel gameStageModel, int x, int y) {
         super(gameStageModel);
@@ -76,11 +77,13 @@ public class Pawn extends GameElement {
 
         this.colorIndex = colorIndex;
         this.playerID = playerID;
+        this.sumoLevel = 0;
+
+        this.numberCasesPlayable = 7 - 2 * this.sumoLevel;
 
         this.coords = new Point(x, y);
         this.setLocation((x + 1) * PAWN_SIZE - 2, (y + 1) * PAWN_SIZE + 7);
 
-        this.sumoLevel = 0;
     }
 
     public Point getCoords(){
@@ -103,6 +106,10 @@ public class Pawn extends GameElement {
     }
     public void resetSumoLevel(){
         sumoLevel = 0;
+    }
+
+    public int getNumberCasesPlayable(){
+        return numberCasesPlayable;
     }
 
     /**

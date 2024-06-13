@@ -22,16 +22,19 @@ public class TrifleBoard extends ContainerElement {
             {7, 6, 5, 4, 3, 2, 1, 0}
     };
 
+    public int opponentVerticalCounter = 0;
+    public int counterCases = 0;
+
     public TrifleBoard(int x, int y, GameStageModel gameStageModel) {
         super(BOARD_ID, x, y, 8, 8, gameStageModel);
         resetReachableCells(false);
     }
 
-    public void setValidCells(Point coordinates, int playerId) {
+    public void setValidCells(Point coordinates, int playerId, int sumoLevel) {
         Logger.debug("setting valid cells :D", this);
         resetReachableCells(false);
 
-        List<Point> validCells = this.computeValidCells(coordinates, playerId);
+        List<Point> validCells = this.computeValidCells(coordinates, playerId, sumoLevel);
         if (validCells != null) {
             System.out.println("called setValidCells");
             for (Point p: validCells) {
@@ -59,37 +62,80 @@ public class TrifleBoard extends ContainerElement {
      * @param playerId The current player ID
      * @return The list of allowed moves
      */
-    public List<Point> computeValidCells(Point coords, int playerId) {
+    public List<Point> computeValidCells(Point coords, int playerId, int sumoLevel) {
         List<Point> validCells = new ArrayList<>();
+        Pawn p = (Pawn) getElement(coords.y, coords.x);
+
+        this.opponentVerticalCounter = 0;
+        this.counterCases = 1;
+
+        boolean withoutOpponent = true;
+        boolean canOshi = true;
 
         if (playerId == 0) {
             // player is based on the top and must go to the bottom
 
+
             // check on the vertical
-            for (int y = coords.y + 1; y < 8; y++) {
-                if (getElement(y, coords.x) == null) {
+            for (int y = coords.y + 1; y <= 7; y++) {
+                // number of possible moves
+                if (p.getNumberCasesPlayable() < counterCases) break;
+
+                // normal valid cell
+                if ((getElement(y, coords.x) == null) && withoutOpponent) {
                     validCells.add(new Point(coords.x, y));
-                } else break;
+                    counterCases++;
+                    canOshi = false;
+                }
+                // detect opponent pawn
+                if (getElement(y, coords.x) != null && withoutOpponent) {
+                    withoutOpponent = false;
+                }
+
+                // oshi if possible
+                if (!withoutOpponent && canOshi) {
+                    Pawn cellPawn = (Pawn) getElement(y, coords.x);
+
+                    if (p.getSumoLevel() <= cellPawn.getSumoLevel()) break;
+
+                    else if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) break;
+
+                    else if (sumoLevel < opponentVerticalCounter) break;
+
+                    else if (getElement(y, coords.x) == null || getElement(y, coords.x).getType() != Pawn.PAWN_ELEMENT_ID) {
+                        validCells.add(new Point(coords.x, y - opponentVerticalCounter));
+                        counterCases++;
+                        break;
+                    } else opponentVerticalCounter++;
+                };
             }
+
 
             // check on the right diagonal
             int x = coords.x, y = coords.y;
+            this.counterCases = 1;
 
             while (x < 7 && y < 7) {
+                if (p.getNumberCasesPlayable() < counterCases) break;
                 x++;
                 y++;
                 if (getElement(y, x) == null) {
                     validCells.add(new Point(x, y));
+                    this.counterCases++;
                 } else break;
             }
 
             // now reset x and y, and do the left diagonal
             x = coords.x; y = coords.y;
+            this.counterCases = 1;
+
             while (x > 0 && y < 7) {
+                if (p.getNumberCasesPlayable() < counterCases) break;
                 x--;
                 y++;
                 if (getElement(y, x) == null) {
                     validCells.add(new Point(x, y));
+                    this.counterCases++;
                 } else break;
             }
 
@@ -100,35 +146,67 @@ public class TrifleBoard extends ContainerElement {
 
             // The same as the upper code, but with inverse conditions
             // edited line will be commented with `+` after
+            this.counterCases = 1;
 
-            for (int y = coords.y - 1; y >= 0; y--) { // +
-                if (getElement(y, coords.x) == null) {
+            for (int y = coords.y - 1; y >= 0; y--) {
+                // number of possible moves
+                if (p.getNumberCasesPlayable() < counterCases) break;
+
+                // normal valid cell
+                if ((getElement(y, coords.x) == null) && withoutOpponent) {
                     validCells.add(new Point(coords.x, y));
-                } else break;
+                    this.counterCases++;
+                    canOshi = false;
+                }
+                if (getElement(y, coords.x) != null && withoutOpponent) {
+                    withoutOpponent = false;
+                }
+                if (!withoutOpponent && canOshi) {
+                    Pawn cellPawn = (Pawn) getElement(y, coords.x);
+
+                    if (p.getSumoLevel() <= cellPawn.getSumoLevel()) break;
+
+                    else if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) break;
+
+                    else if (sumoLevel < this.opponentVerticalCounter) break;
+
+                    else if (getElement(y, coords.x) == null) {
+                        validCells.add(new Point(coords.x, y + this.opponentVerticalCounter));
+                        this.counterCases++;
+                        break;
+                    } else this.opponentVerticalCounter++;
+                };
             }
+
 
             // check on the right diagonal
             int x = coords.x, y = coords.y;
+            this.counterCases = 1;
 
             while (x < 7 && y > 0) {
+                if (p.getNumberCasesPlayable() < counterCases) break;
                 x++;
                 y--; // +
                 if (getElement(y, x) == null) {
                     validCells.add(new Point(x, y));
+                    this.counterCases++;
                 } else break;
             }
 
             // now reset x and y, and do the left diagonal
             x = coords.x; y = coords.y;
+            this.counterCases = 1;
+
             while (x > 0 && y > 0) { // +
+                if (p.getNumberCasesPlayable() < counterCases) break;
                 x--;
                 y--; // +
                 if (getElement(y, x) == null) {
                     validCells.add(new Point(x, y));
+                    this.counterCases++;
                 } else break;
             }
         }
-
         return validCells;
     }
 
