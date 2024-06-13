@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import rules.GameMode;
 import rules.PlayerMode;
+import trifleGraphic.boardifierGraphic.control.Controller;
 import trifleGraphic.boardifierGraphic.control.Logger;
 import trifleGraphic.boardifierGraphic.control.StageFactory;
 import trifleGraphic.boardifierGraphic.model.Model;
@@ -22,6 +23,8 @@ public class Trifle extends Application {
     public static List<String> playerNames  = new ArrayList<>();
 
     public static final String FIRST_STAGE_NAME = "trifleGraphic";
+
+    public static Controller controller;
 
     public static void main(String[] args) {
         Logger.setLevel(Logger.LOGGER_INFO);
@@ -86,7 +89,7 @@ public class Trifle extends Application {
 
         TrifleView view = new TrifleView(model, primaryStage, rootPane);
 
-        GameController controller = new GameController(model, view);
+        controller = new GameController(model, view);
 
         controller.setFirstStageName(FIRST_STAGE_NAME);
         primaryStage.setTitle("Trifle - Kamisado");

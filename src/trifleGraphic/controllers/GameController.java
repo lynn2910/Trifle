@@ -65,13 +65,23 @@ public class GameController extends Controller {
         return false;
     }
 
+    public void configureFromRootPane(){
+        this.model.getPlayers().clear();
+
+        if (TrifleRootPane.isFirstPlayerBot) this.model.addComputerPlayer(TrifleRootPane.firstPlayerName);
+        else this.model.addHumanPlayer(TrifleRootPane.firstPlayerName);
+
+        if (TrifleRootPane.isSecondPlayerBot) this.model.addComputerPlayer(TrifleRootPane.secondPlayerName);
+        else this.model.addHumanPlayer(TrifleRootPane.secondPlayerName);
+    }
+
     @Override
     public void endGame() {
         System.out.println();
 //        super.endGame();
 
         TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
-        int requiredPoints = TrifleRootPane.gameMode.requiredPoints();
+        int requiredPoints = TrifleRootPane.selectedGameMode.requiredPoints();
 
         int givenPoints = 1;
         if (model.getIdWinner() == 0 || model.getIdWinner() == 1) {

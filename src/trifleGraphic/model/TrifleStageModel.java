@@ -25,7 +25,7 @@ public class TrifleStageModel extends GameStageModel {
     private TextElement roundCounter;
     private TextElement playerPoints;
 
-    private GameMode gameMode = GameMode.defaultValue();
+    private GameMode gameMode     = GameMode.defaultValue();
     private PlayerMode playerMode = PlayerMode.defaultValue();
 
     private final List<TextElement> movesHistory;
