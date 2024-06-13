@@ -1,7 +1,11 @@
 package trifleGraphic.controllers;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.StageStyle;
 import rules.GameMode;
 import rules.PlayerMode;
@@ -19,8 +23,8 @@ import trifleGraphic.model.TrifleBoard;
 import trifleGraphic.model.TrifleStageModel;
 import trifleGraphic.view.TrifleRootPane;
 
-import java.util.List;
 import java.awt.*;
+import java.util.List;
 import java.util.Optional;
 
 public class GameController extends Controller {
@@ -121,12 +125,18 @@ public class GameController extends Controller {
 
         // TODO demander si le joueur veut que les pions soit à de droite à gauche ou à l'inverse
 
+        int rightOrLeft = 0;
+        if (model.getIdWinner() == 0 || model.getIdWinner() == 1)
+            rightOrLeft = this.askRightOrLeft();
+
+        System.out.println("rightOrLeft: " + rightOrLeft);
+
         ActionList actionList = new ActionList();
 
         // reset the game
         for (int i = 0; i <= 7; i++) {
             Pawn bluePawn = gameStage.getPlayerPawns(0).get(i);
-            bluePawn.setCoords(new Point(i, 0));
+            bluePawn.setCoords(new Point((rightOrLeft == 1 ? 7 - i : i), 0));
 
             ActionList actionList2 = ActionFactory.generatePutInContainer(
                     this,
@@ -134,7 +144,7 @@ public class GameController extends Controller {
                     bluePawn,
                     TrifleBoard.BOARD_ID,
                     0,
-                    i,
+                    rightOrLeft == 1 ? 7 - i : i,
                     AnimationTypes.NONE,
                     0
             );
@@ -142,7 +152,7 @@ public class GameController extends Controller {
 
 
             Pawn cyanPawn = gameStage.getPlayerPawns(1).get(i);
-            cyanPawn.setCoords(new Point(i, 7));
+            cyanPawn.setCoords(new Point((rightOrLeft == 1 ? 7 - i : i), 7));
 
             ActionList actionList3 = ActionFactory.generatePutInContainer(
                     this,
@@ -150,7 +160,7 @@ public class GameController extends Controller {
                     cyanPawn,
                     TrifleBoard.BOARD_ID,
                     7,
-                    i,
+                    rightOrLeft == 1 ? 7 - i : i,
                     AnimationTypes.NONE,
                     0
             );
@@ -170,6 +180,36 @@ public class GameController extends Controller {
         System.out.println("\n\n\nNew round!\n\n");
     }
 
+
+    /**
+     * Ask the winner if he wants to place every pawn from right to left or from left to right.
+     * @return Zero for the left to right option, or 1 for the right to left option
+     */
+    private int askRightOrLeft(){
+        Alert box = new Alert(Alert.AlertType.NONE);
+        box.setTitle("Winner decision");
+
+        VBox vBox = new VBox();
+        vBox.setPadding(new Insets(10));
+        String winnerName = model.getPlayers().get(model.getIdWinner()).getName();
+        Text text = new Text(winnerName + ", do you want to place your pawns from left to right or from right to left ?");
+        vBox.getChildren().add(text);
+
+        box.getDialogPane().setContent(vBox);
+
+        ButtonType leftToRight = new ButtonType("Left to right", ButtonBar.ButtonData.LEFT);
+        ButtonType rightToLeft = new ButtonType("Right to left", ButtonBar.ButtonData.RIGHT);
+
+        box.getButtonTypes().clear();
+        box.getButtonTypes().addAll(leftToRight, rightToLeft);
+
+        Optional<ButtonType> result = box.showAndWait();
+
+        return result.filter(buttonType -> buttonType != leftToRight)
+                .map(buttonType -> 1)
+                .orElse(0);
+
+    }
     /**
      * At the end of the game, it asks if you want to quit,
      * configure the game or start a new game with the same settings
