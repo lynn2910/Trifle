@@ -123,8 +123,6 @@ public class GameController extends Controller {
             partyEnd();
         }
 
-        // TODO demander si le joueur veut que les pions soit à de droite à gauche ou à l'inverse
-
         int rightOrLeft = 0;
         if (model.getIdWinner() == 0 || model.getIdWinner() == 1)
             rightOrLeft = this.askRightOrLeft();
@@ -210,6 +208,7 @@ public class GameController extends Controller {
                 .orElse(0);
 
     }
+
     /**
      * At the end of the game, it asks if you want to quit,
      * configure the game or start a new game with the same settings
