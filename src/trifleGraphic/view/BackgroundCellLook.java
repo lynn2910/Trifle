@@ -11,41 +11,48 @@ import static trifleGraphic.view.TrifleBoardLook.PAWN_SIZE;
 
 
 public class BackgroundCellLook extends ElementLook {
-    private Rectangle rectangle;
-
     public BackgroundCellLook(GameElement element) {
         super(element);
         render();
     }
 
+    @Override
+    public void onSelectionChange(){
+        System.out.println("Selection change");
+    }
+
+    @Override
+    public void onFaceChange(){
+        System.out.println("Face change");
+    }
+
+    @Override
+    public void onVisibilityChange(){
+        System.out.println("Visibility change");
+    }
+
     protected void render(){
+        Rectangle rectangle = getRectangle();
+        addShape(rectangle);
+
+    }
+
+    private Rectangle getRectangle() {
         BackgroundCell bc = (BackgroundCell) element;
 
-        this.rectangle = new Rectangle(PAWN_SIZE, PAWN_SIZE);
-        this.rectangle.setX(this.rectangle.getX() - ((double) PAWN_SIZE / 2));
-        this.rectangle.setY(this.rectangle.getY() - ((double) PAWN_SIZE / 2));
+        Rectangle rectangle = new Rectangle(PAWN_SIZE, PAWN_SIZE);
+        rectangle.setX(rectangle.getX() - ((double) PAWN_SIZE / 2));
+        rectangle.setY(rectangle.getY() - ((double) PAWN_SIZE / 2));
 
         java.awt.Color bcColor = Pawn.COLORS[bc.getColorIndex()];
 
-        Color convertedColor = javafx.scene.paint.Color.color(
+        Color convertedColor = Color.color(
                 bcColor.getRed() / 255.0,
                 bcColor.getGreen() / 255.0,
                 bcColor.getBlue() / 255.0
         );
 
         rectangle.setFill(convertedColor);
-
-        addShape(rectangle);
-
-//        int colorIndex = TrifleBoard.BOARD[(int) bc.getY()][(int) bc.getX()];
-//        Color color = Pawn.BG_COLORS[colorIndex];
-//
-//        rectangle.setFill(
-//                javafx.scene.paint.Color.color(
-//                        color.getRed() / 255.0,
-//                        color.getGreen() / 255.0,
-//                        color.getBlue()  / 255.0
-//                )
-//        );
+        return rectangle;
     }
 }

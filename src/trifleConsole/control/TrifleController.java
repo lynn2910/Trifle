@@ -237,7 +237,7 @@ public class TrifleController extends Controller {
     private void updateRoundCounter(){
         TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
 
-        String text = "Round " + (this.currentRound + 1) + "/" + gameMode.numberOfRounds();
+        String text = "Round " + (this.currentRound + 1) + "/" + gameMode.requiredPoints();
         stageModel.getRoundCounter().setText(text);
     }
 
@@ -250,7 +250,7 @@ public class TrifleController extends Controller {
     @Override
     public void endGame(){
         // Winner logic
-        if (this.gameMode.numberOfRounds() > this.currentRound) {
+        if (this.gameMode.requiredPoints() > this.currentRound) {
             // A round ended, so we give the winner of this round or tell that it's a draw otherwise
             if (model.getIdWinner() != -1) {
                 System.out.println(model.getPlayers().get(model.getIdWinner()).getName() + " wins this round (no." + (this.currentRound + 1) + ")");
@@ -272,7 +272,7 @@ public class TrifleController extends Controller {
             System.out.println(model.getPlayers().get(0).getName() + ": " + bluePlayerPoints);
             System.out.println(model.getPlayers().get(1).getName() + ": " + cyanPlayerPoints);
             System.out.println();
-            System.out.println("Rounds: " + gameMode.numberOfRounds());
+            System.out.println("Rounds: " + gameMode.requiredPoints());
             System.out.println("Time:   " + formatTime(System.currentTimeMillis() - startTime));
 
             int winnerID;

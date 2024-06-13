@@ -31,6 +31,7 @@ public class GameMouseController extends ControllerMouse implements EventHandler
     public void handle(MouseEvent event) {
         Coord2D clic = new Coord2D(event.getSceneX(), event.getSceneY());
 
+        if (model.getElements() == null) return;
         List<GameElement> elementList = control.elementsAt(clic);
 
         TrifleStageModel stageModel = (TrifleStageModel) model.getGameStage();
@@ -143,13 +144,15 @@ public class GameMouseController extends ControllerMouse implements EventHandler
             board.resetReachableCells(false);
 
 
+            pawn.setCoords(new Point(dest[1], dest[0]));
+            if (((GameController) control).detectWin())
+                return;
+
             ActionPlayer play = new ActionPlayer(model, control, actionList);
             play.start();
 
             GameController controller = (GameController) control;
             controller.registerMove(stageModel, new Point(dest[1], dest[0]), "", pawn);
-
-//            controller.endOfTurn();
 
             return;
         }

@@ -139,7 +139,7 @@ public class TrifleConsole {
         }
 
         try {
-            int numberOfRounds = gameMode.numberOfRounds();
+            int numberOfRounds = gameMode.requiredPoints();
 
             System.out.println("You'll play " + numberOfRounds + " rounds.");
 

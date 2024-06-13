@@ -12,6 +12,7 @@ public enum GameMode {
      * A standard game with multiple rounds
      */
     Standard,
+    Long,
     /**
      * A game with a large number of rounds
      */
@@ -24,24 +25,21 @@ public enum GameMode {
         return switch (this) {
             case Fast     -> "Fast";
             case Standard -> "Standard";
+            case Long     -> "Long";
             case Marathon -> "Marathon";
         };
     }
 
-    public String getDescription(){
-        // TODO ajouter les descriptions des différents modes de jeu
-        return switch (this) {
-            case Fast     -> "One set";
-            case Standard -> "3 sets";
-            default       -> "";
-        };
+    public String getDescription() {
+        return "";
     }
 
-    public int numberOfRounds(){
+    public int requiredPoints(){
         return switch (this) {
             case Fast -> 1;
             case Standard -> 3;
-            case Marathon -> 5;
+            case Long -> 7;
+            case Marathon -> 15;
         };
     }
 

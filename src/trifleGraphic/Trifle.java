@@ -1,9 +1,11 @@
 package trifleGraphic;
 
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import rules.GameMode;
 import rules.PlayerMode;
+import trifleGraphic.boardifierGraphic.control.Controller;
 import trifleGraphic.boardifierGraphic.control.Logger;
 import trifleGraphic.boardifierGraphic.control.StageFactory;
 import trifleGraphic.boardifierGraphic.model.Model;
@@ -14,13 +16,15 @@ import trifleGraphic.view.TrifleView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrifleGraphic extends Application {
+public class Trifle extends Application {
     private static GameMode gameMode;
     private static String outputMovesDir;
     private static final List<String> externalArgs = new ArrayList<>();
     public static List<String> playerNames  = new ArrayList<>();
 
     public static final String FIRST_STAGE_NAME = "trifleGraphic";
+
+    public static Controller controller;
 
     public static void main(String[] args) {
         Logger.setLevel(Logger.LOGGER_INFO);
@@ -33,7 +37,7 @@ public class TrifleGraphic extends Application {
             switch (arg) {
                 case "": {break;}
                 case "--output-moves": {
-                    TrifleGraphic.outputMovesDir = args[i + 1];
+                    Trifle.outputMovesDir = args[i + 1];
                     // remove this arg
                     args[i] = "";
                     args[i + 1] = "";
@@ -44,7 +48,7 @@ public class TrifleGraphic extends Application {
             }
         }
 
-        TrifleGraphic.gameMode = GameMode.defaultValue();
+        Trifle.gameMode = GameMode.defaultValue();
 
         launch(args);
     }
@@ -85,13 +89,18 @@ public class TrifleGraphic extends Application {
 
         TrifleView view = new TrifleView(model, primaryStage, rootPane);
 
-        GameController controller = new GameController(model, view);
+        controller = new GameController(model, view);
 
         controller.setFirstStageName(FIRST_STAGE_NAME);
         primaryStage.setTitle("Trifle - Kamisado");
 
+        model.setCaptureEvents(false);
+
+        primaryStage.getIcons().add(new Image("trifleGraphic/icon.png"));
         Application.setUserAgentStylesheet("trifleGraphic/themes/nord-light.css");
         primaryStage.show();
+
+
 //        try {
 //            int numberOfRounds = gameMode.numberOfRounds();
 //

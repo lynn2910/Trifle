@@ -92,12 +92,6 @@ public class Pawn extends GameElement {
     public void setCoords(Point coords){
         System.out.println("Coordinates defined to " + coords);
         this.coords = coords;
-        // IMPORTANT Update the location every fucking time!
-        this.setLocation((coords.x + 1) * PAWN_SIZE - 2, (coords.y + 1) * PAWN_SIZE + 7);
-        this.setLocation(
-                coords.x * TrifleBoardLook.PAWN_SIZE + 8,
-                coords.y * TrifleBoardLook.PAWN_SIZE + 8
-        );
     }
 
     public int getColorIndex(){
