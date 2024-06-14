@@ -101,9 +101,10 @@ public class GameController extends Controller {
             int losingPlayerId = model.getIdWinner() == 0 ? 1 : 0;
 
             for (Pawn pawn: pawns) {
-                if (pawn.getSumoLevel() > 0 && pawn.getCoords().y == getBaseRowForPlayer(losingPlayerId)) {
+                if (pawn.getCoords().y == getBaseRowForPlayer(losingPlayerId)) {
                     givenPoints = pawn.getSumoLevel() * 2;
-                    pawn.increaseSumoLevel();
+                    pawn.increaseSumoLevel(this);
+                    System.out.println("Pawn with received a sumo: " + pawn);
                     break;
                 }
             }

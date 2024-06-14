@@ -3,6 +3,8 @@ package trifleGraphic.model;
 import trifleGraphic.boardifierGraphic.model.ElementTypes;
 import trifleGraphic.boardifierGraphic.model.GameElement;
 import trifleGraphic.boardifierGraphic.model.GameStageModel;
+import trifleGraphic.controllers.GameController;
+import trifleGraphic.view.PawnLook;
 import trifleGraphic.view.TrifleBoardLook;
 
 import java.awt.*;
@@ -101,8 +103,11 @@ public class Pawn extends GameElement {
     public int getSumoLevel(){
         return sumoLevel;
     }
-    public void increaseSumoLevel(){
+    public void increaseSumoLevel(GameController controller){
         sumoLevel++;
+
+        PawnLook pawnLook = (PawnLook) controller.getElementLook(this);
+        pawnLook.sumoLevelText.setText(sumoLevel + "");
     }
     public void resetSumoLevel(){
         sumoLevel = 0;
@@ -167,6 +172,7 @@ public class Pawn extends GameElement {
     public String toString(){
         return "Pawn { colorIndex: " + colorIndex
                 + ", playerNumber: " + playerID
-                + ", coords: (" + coords.x + ", " + coords.y  + ") }";
+                + ", coords: (" + coords.x + ", " + coords.y  + ")"
+                + ", sumoLevel: " + sumoLevel + " }";
     }
 }
