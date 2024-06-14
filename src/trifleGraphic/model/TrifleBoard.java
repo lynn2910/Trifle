@@ -80,6 +80,7 @@ public class TrifleBoard extends ContainerElement {
             for (int y = coords.y + 1; y <= 7; y++) {
                 System.out.println("y = " + y);
                 // number of possible moves
+                System.out.println("Jtm0" + p.getNumberCasesPlayable());
                 if (p.getNumberCasesPlayable() < counterCases) break;
 
                 // normal valid cell
@@ -98,10 +99,12 @@ public class TrifleBoard extends ContainerElement {
                     Pawn cellPawn = (Pawn) getElement(coords.x, y);
 
                     if (cellPawn != null && p.getSumoLevel() <= cellPawn.getSumoLevel()) break;
+
                     else if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) break;
+
                     else if (cellPawn != null && sumoLevel < opponentVerticalCounter) break;
+
                     else if (getElement(y, coords.x) == null || getElement(y, coords.x).getType() != Pawn.PAWN_ELEMENT_ID) {
-                        System.out.println(new Point(coords.x, y - opponentVerticalCounter));
                         validCells.add(new Point(coords.x, y - opponentVerticalCounter));
                         break;
                     } else opponentVerticalCounter++;
@@ -148,6 +151,7 @@ public class TrifleBoard extends ContainerElement {
 
             for (int y = coords.y - 1; y >= 0; y--) {
                 // number of possible moves
+                System.out.println("Jtm1" + p.getNumberCasesPlayable());
                 if (p.getNumberCasesPlayable() < counterCases) break;
 
                 // normal valid cell
@@ -156,24 +160,24 @@ public class TrifleBoard extends ContainerElement {
                     this.counterCases++;
                     canOshi = false;
                 }
+
+                // detect opponent pawn
                 if (getElement(y, coords.x) != null && withoutOpponent) {
                     withoutOpponent = false;
                 }
+
+                // oshi if possible
                 if (!withoutOpponent && canOshi) {
                     Pawn cellPawn = (Pawn) getElement(coords.x, y);
 
-                    if (cellPawn == null)
-                        break;
+                    if (cellPawn != null && p.getSumoLevel() <= cellPawn.getSumoLevel()) break;
 
-                    if (p.getSumoLevel() <= cellPawn.getSumoLevel()) break;
+                    else if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) break;
 
-                    else if (cellPawn.getPlayerID() == p.getPlayerID()) break;
+                    else if (cellPawn != null && sumoLevel < this.opponentVerticalCounter) break;
 
-                    else if (sumoLevel < this.opponentVerticalCounter) break;
-
-                    else if (getElement(y, coords.x) == null) {
+                    else if (getElement(y, coords.x) == null || getElement(y, coords.x).getType() != Pawn.PAWN_ELEMENT_ID) {
                         validCells.add(new Point(coords.x, y + this.opponentVerticalCounter));
-                        this.counterCases++;
                         break;
                     } else this.opponentVerticalCounter++;
                 };
