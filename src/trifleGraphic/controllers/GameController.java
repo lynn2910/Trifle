@@ -227,13 +227,18 @@ public class GameController extends Controller {
 
         box.getDialogPane().setContent(vBox);
 
-        ButtonType leftToRight = new ButtonType("Left to right", ButtonBar.ButtonData.LEFT);
-        ButtonType rightToLeft = new ButtonType("Right to left", ButtonBar.ButtonData.RIGHT);
+        ButtonType leftToRight = new ButtonType("Left to right",    ButtonBar.ButtonData.OTHER);
+        ButtonType rightToLeft = new ButtonType("Right to left",    ButtonBar.ButtonData.OTHER);
+        ButtonType centerQuit  = new ButtonType("Quit the game",    ButtonBar.ButtonData.FINISH);
 
         box.getButtonTypes().clear();
-        box.getButtonTypes().addAll(leftToRight, rightToLeft);
+        box.getButtonTypes().addAll(leftToRight, rightToLeft, centerQuit);
 
         Optional<ButtonType> result = box.showAndWait();
+
+        if (result.isPresent() && result.get() == centerQuit) {
+            System.exit(0);
+        }
 
         return result.filter(buttonType -> buttonType != leftToRight)
                 .map(buttonType -> 1)
