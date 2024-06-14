@@ -17,7 +17,6 @@ public class ControllerAnimation {
         this.control = control;
 
         animator = new AnimationTimer(){
-
             @Override
             public void handle(long time) {
 

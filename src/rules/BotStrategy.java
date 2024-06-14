@@ -1,5 +1,6 @@
 package rules;
 
+import bots.BotEurdeku;
 import bots.DeterministicMinMaxBot;
 import trifleConsole.boardifier.control.Controller;
 import trifleConsole.boardifier.model.Model;
@@ -9,7 +10,7 @@ public enum BotStrategy {
     BotEurDeCul,
     MinMaxDeterministic;
 
-    public static final BotStrategy DEFAULT = BotStrategy.MinMaxDeterministic;
+    public static final BotStrategy DEFAULT = BotStrategy.BotEurDeCul;
 
     /**
      * @return The name of the strategy
@@ -31,7 +32,7 @@ public enum BotStrategy {
     public TrifleDecider initComputer(Model model, Controller controller){
         return switch (this) {
             case MinMaxDeterministic -> new DeterministicMinMaxBot(model, controller);
-            default -> new TrifleDecider(model, controller);
+            case BotEurDeCul -> new BotEurdeku(model, controller);
         };
     }
 }

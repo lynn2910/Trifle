@@ -41,7 +41,6 @@ public class Node {
         if (boardStatus.isStartOfGame()) {
             List<Pawn> pawns = boardStatus.getPawns(currentPlayerID);
             return List.of(pawns.get((int) Math.floor(Math.random() * pawns.size())));
-//            allowedPawns.addAll(boardStatus.getPawns(currentPlayerID));
         } else {
             // YEET
             Point backgroundLastMoveCoords = boardStatus.getLastMove((currentPlayerID + 1) % 2);

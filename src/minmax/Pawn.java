@@ -15,9 +15,9 @@ public class Pawn {
 
     public Pawn(trifleConsole.model.Pawn pawn) {
         this(
-                new Point(pawn.getCoords().y, pawn.getCoords().x),
-                pawn.getPlayerNumber(),
-                pawn.getColorIndex()
+            new Point(pawn.getCoords().y, pawn.getCoords().x),
+            pawn.getPlayerNumber(),
+            pawn.getColorIndex()
         );
     }
 
