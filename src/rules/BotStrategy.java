@@ -1,9 +1,11 @@
 package rules;
 
 import bots.DeterministicMinMaxBot;
+import bots.DeterministicMinMaxBotGraphic;
 import trifleConsole.boardifier.control.Controller;
 import trifleConsole.boardifier.model.Model;
 import trifleConsole.control.TrifleDecider;
+import trifleGraphic.controllers.BotDecider;
 
 public enum BotStrategy {
     BotEurDeCul,
@@ -32,6 +34,17 @@ public enum BotStrategy {
         return switch (this) {
             case MinMaxDeterministic -> new DeterministicMinMaxBot(model, controller);
             default -> new TrifleDecider(model, controller);
+        };
+    }
+
+
+    public BotDecider initComputerGraphic(
+            trifleGraphic.boardifierGraphic.model.Model model,
+            trifleGraphic.boardifierGraphic.control.Controller controller
+    ){
+        return switch (this) {
+            case MinMaxDeterministic -> new DeterministicMinMaxBotGraphic(model, controller);
+            default -> new BotDecider(model, controller);
         };
     }
 }

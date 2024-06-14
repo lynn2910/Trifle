@@ -7,7 +7,7 @@ import trifleGraphic.boardifierGraphic.model.action.ActionList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class TrifleDeciderTest {
+public class BotDeciderTest {
 
     private TrifleDecider trifleDecider;
     private Model mockModel;

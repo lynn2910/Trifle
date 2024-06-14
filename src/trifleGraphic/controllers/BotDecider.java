@@ -8,8 +8,8 @@ import trifleGraphic.boardifierGraphic.model.action.ActionList;
 /**
  * A default implementation of a Decider, aka a computer player.
  */
-public class TrifleDecider extends Decider {
-    public TrifleDecider(Model model, Controller controller){
+public class BotDecider extends Decider {
+    public BotDecider(Model model, Controller controller){
         super(model, controller);
     }
 
