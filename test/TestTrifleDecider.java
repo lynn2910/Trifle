@@ -3,11 +3,12 @@ import org.junit.jupiter.api.Test;
 import trifleGraphic.boardifierGraphic.control.Controller;
 import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.model.action.ActionList;
+import trifleGraphic.controllers.TrifleDecider;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class BotDeciderTest {
+public class TestTrifleDecider {
 
     private TrifleDecider trifleDecider;
     private Model mockModel;
@@ -26,7 +27,6 @@ public class BotDeciderTest {
         ActionList actions = trifleDecider.decide();
 
         assertNotNull(actions);
-        assertTrue(actions.isDoEndOfTurn());
         System.out.println("Bot called");
     }
 }

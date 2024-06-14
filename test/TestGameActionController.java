@@ -1,4 +1,6 @@
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.MenuItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -6,13 +8,14 @@ import trifleGraphic.boardifierGraphic.control.Controller;
 import trifleGraphic.boardifierGraphic.model.GameException;
 import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.view.View;
+import trifleGraphic.controllers.GameActionController;
 import trifleGraphic.view.TrifleView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class GameActionControllerTest {
+public class TestGameActionController {
 
     private GameActionController gameActionController;
     private Model mockModel;

@@ -35,7 +35,7 @@ public class GameActionController  extends ControllerAction implements EventHand
         });
     }
 
-    private void onMenuStartAction(ActionEvent actionEvent) {
+    public void onMenuStartAction(ActionEvent actionEvent) {
         try {
             model.setCaptureEvents(true);
             control.startGame();

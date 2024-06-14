@@ -1,6 +1,11 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import rules.GameMode;
+import rules.PlayerMode;
+import trifleGraphic.boardifierGraphic.model.Model;
+import trifleGraphic.boardifierGraphic.model.TextElement;
+import trifleGraphic.model.*;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -9,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class TrifleStageModelTest {
+public class TestTrifleStageModel {
 
     private TrifleStageModel model;
     private TrifleBoard mockBoard;
@@ -91,6 +96,7 @@ public class TrifleStageModelTest {
     public void testGetAndAddBluePlayerMove() {
         Point move = new Point(1, 1);
         model.addBluePlayerMove(move);
+
         assertEquals(move, model.getLastBluePlayerMove());
     }
 

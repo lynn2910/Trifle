@@ -234,4 +234,5 @@ public class TrifleStageModel extends GameStageModel {
         TextElement newMove = this.movesHistory.get(MAX_HISTORY_SIZE - 1);
         newMove.setText(oldMovesList.get(oldMovesList.size() - 1).toString());
     }
+
 }

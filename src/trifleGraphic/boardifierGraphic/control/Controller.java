@@ -1,6 +1,6 @@
 package trifleGraphic.boardifierGraphic.control;
 
-import javafx.application.Platform;
+import javafx.application .Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.StageStyle;
