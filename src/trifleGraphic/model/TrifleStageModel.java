@@ -196,14 +196,15 @@ public class TrifleStageModel extends GameStageModel {
      * Create or update the TextElement which store the number of points for each player
      */
     public void updatePlayerPoints(int bluePlayerPoints, int cyanPlayerPoints) {
-        String text = Trifle.playerNames.get(0) + ": " + bluePlayerPoints
-                + "   " + Trifle.playerNames.get(1) + ": " + cyanPlayerPoints;
+        String text = model.getPlayers().get(0).getName() + ": " + bluePlayerPoints
+                + "   " + model.getPlayers().get(1).getName() + ": " + cyanPlayerPoints;
 
         if (this.getPlayerPoints() == null) {
             TextElement playerPointsCounter = new TextElement(text, this);
-            playerPointsCounter.setLocation(BOARD_WIDTH, 84);
+            playerPointsCounter.setLocation(BOARD_WIDTH, 94);
             this.setPlayerPoints(playerPointsCounter);
-        } else {
+        }
+        else {
             // update the text
             this.getPlayerPoints().setText(text);
         }

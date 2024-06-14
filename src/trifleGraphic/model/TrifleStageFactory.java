@@ -21,13 +21,13 @@ public class TrifleStageFactory extends StageElementsFactory {
     @Override
     public void setup() {
         // Create the text that will be used to display the player name
-        TextElement playerNameText = new TextElement(stageModel.getCurrentPlayerName() + " is playing. You start, so you can choose which pawn your moving.", stageModel);
+        TextElement playerNameText = new TextElement(stageModel.getCurrentPlayerName() + " is playing.\nYou start, so you can choose which pawn your moving.", stageModel);
         playerNameText.setLocation(BOARD_WIDTH, 44);
         stageModel.setPlayerName(playerNameText);
 
         // Create the round counter
-        TextElement roundCounterText = new TextElement("Round 1/" + stageModel.getGameMode().requiredPoints(), stageModel);
-        roundCounterText.setLocation(BOARD_WIDTH, 44 + 20);
+        TextElement roundCounterText = new TextElement("Round 1", stageModel);
+        roundCounterText.setLocation(BOARD_WIDTH, 120);
         stageModel.setRoundCounter(roundCounterText);
 
         // create the player counter
@@ -36,7 +36,7 @@ public class TrifleStageFactory extends StageElementsFactory {
         // add all texts history
         for (int i = 0; i < MAX_HISTORY_SIZE; i++) {
             TextElement text = new TextElement("", stageModel);
-            text.setLocation(BOARD_WIDTH + 20, 100 + (i * 14) + (i * 2));
+            text.setLocation(BOARD_WIDTH + 20, 120 + (i * 14) + (i * 2));
 
             stageModel.getMovesHistory().add(text);
             stageModel.addElement(text);

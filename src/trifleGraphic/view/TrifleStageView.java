@@ -13,7 +13,7 @@ import trifleGraphic.model.TrifleStageModel;
 import static trifleGraphic.boardifierGraphic.view.ContainerLook.ALIGN_CENTER;
 
 public class TrifleStageView extends GameStageView {
-    public final static int BOARD_WIDTH = 600;
+    public final static int BOARD_WIDTH = 550;
 
     public TrifleStageView(String name, GameStageModel gameStageModel) {
         super(name, gameStageModel);

@@ -36,6 +36,8 @@ public class GameController extends Controller {
     public BotDecider firstComputer;
     public BotDecider secondComputer;
 
+    private int roundsCounter;
+
     public BotDecider getComputer(int id){
         if (id == 0) return firstComputer;
         else return secondComputer;
@@ -86,6 +88,9 @@ public class GameController extends Controller {
     public void configureFromRootPane(){
         this.model.getPlayers().clear();
 
+        this.gameMode = TrifleRootPane.selectedGameMode;
+        this.playerMode = TrifleRootPane.selectedPlayerMode;
+
         if (TrifleRootPane.isFirstPlayerBot) {
             this.model.addComputerPlayer(TrifleRootPane.firstPlayerName);
 
@@ -98,8 +103,6 @@ public class GameController extends Controller {
         }
         else this.model.addHumanPlayer(TrifleRootPane.secondPlayerName);
 
-        this.gameMode = TrifleRootPane.selectedGameMode;
-        this.playerMode = TrifleRootPane.selectedPlayerMode;
     }
 
     @Override
@@ -129,6 +132,10 @@ public class GameController extends Controller {
             case 0: bluePlayerPoints += givenPoints; break;
             case 1: cyanPlayerPoints += givenPoints; break;
         }
+
+        gameStage.updatePlayerPoints(bluePlayerPoints, cyanPlayerPoints);
+        roundsCounter++;
+        gameStage.getRoundCounter().setText("Round " + (roundsCounter + 1));
 
         int winningPlayerPoints;
         if (model.getIdWinner() == 0) winningPlayerPoints = bluePlayerPoints;
@@ -323,7 +330,7 @@ public class GameController extends Controller {
             // Tell which color must be moved
             int colorIndex = TrifleBoard.BOARD[lastOpponentMove.y][lastOpponentMove.x];
 
-            text += " You must play the ";
+            text += "\nYou must play the ";
 
             text += switch (colorIndex) {
                 case 0 -> "Cyan";
@@ -340,7 +347,7 @@ public class GameController extends Controller {
             text += " at ";
             text += normalizeCoordinate(
                     stageModel.getPlayerPawn(model.getIdPlayer(), colorIndex).getCoords(),
-                    true
+                    false
             );
         }
 
