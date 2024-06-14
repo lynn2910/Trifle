@@ -24,7 +24,7 @@ public class TrifleView extends View {
         menuBar = new MenuBar();
         Menu menu1 = new Menu("Game");
         menuStart = new MenuItem("New game");
-        menuIntro = new MenuItem("Intro");
+        menuIntro = new MenuItem("Configuration");
         menuQuit = new MenuItem("Quit");
         menu1.getItems().add(menuStart);
         menu1.getItems().add(menuIntro);
