@@ -68,6 +68,13 @@ public class GameController extends Controller {
     public boolean detectWin(){
         TrifleStageModel gameStage = (TrifleStageModel) model.getGameStage();
 
+        System.out.println("bluePlayerBlocked: " + gameStage.isBluePlayerBlocked());
+        System.out.println("cyanPlayerBlocked: " + gameStage.isCyanPlayerBlocked());
+        if (gameStage.isPlayerBlocked(0) && gameStage.isPlayerBlocked(1)) {
+            model.setIdWinner((model.getIdWinner() + 1) % 2);
+            return true;
+        }
+
         for (int playerID: PLAYER_IDS){
             List<Pawn> pawns = gameStage.getPlayerPawns(playerID);
             boolean isWinning = pawns.stream()
