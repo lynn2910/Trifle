@@ -70,24 +70,22 @@ public class TrifleBoard extends ContainerElement {
         this.counterCases = 1;
 
         boolean withoutOpponent = true;
-        boolean canOshi = true;
+        boolean canOshi;
 
         if (playerId == 0) {
             // player is based on the top and must go to the bottom
 
+            canOshi = coords.y < 7 && getElement(coords.y + 1, coords.x) != null;
 
             // check on the vertical
-            for (int y = coords.y + 1; y <= 7; y++) {
-                System.out.println("y = " + y);
+            vertical: for (int y = coords.y + 1; y <= 7; y++) {
                 // number of possible moves
-                System.out.println("Jtm0" + p.getNumberCasesPlayable());
-                if (p.getNumberCasesPlayable() < counterCases) break;
+                if (p.getNumberCasesPlayable() < counterCases) break vertical;
 
                 // normal valid cell
                 if ((getElement(y, coords.x) == null) && withoutOpponent) {
                     validCells.add(new Point(coords.x, y));
                     counterCases++;
-                    canOshi = false;
                 }
                 // detect opponent pawn
                 if (getElement(y, coords.x) != null && withoutOpponent) {
@@ -98,15 +96,12 @@ public class TrifleBoard extends ContainerElement {
                 if (!withoutOpponent && canOshi) {
                     Pawn cellPawn = (Pawn) getElement(coords.x, y);
 
-                    if (cellPawn != null && p.getSumoLevel() <= cellPawn.getSumoLevel()) break;
-
-                    else if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) break;
-
-                    else if (cellPawn != null && sumoLevel < opponentVerticalCounter) break;
-
-                    else if (getElement(y, coords.x) == null || getElement(y, coords.x).getType() != Pawn.PAWN_ELEMENT_ID) {
+                    if (cellPawn != null && p.getSumoLevel() <= cellPawn.getSumoLevel()) break vertical;
+                    else if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) break vertical;
+                    else if (cellPawn != null && sumoLevel < opponentVerticalCounter) break vertical;
+                    else if (getElement(y, coords.x) == null) {
                         validCells.add(new Point(coords.x, y - opponentVerticalCounter));
-                        break;
+                        break vertical;
                     } else opponentVerticalCounter++;
                 };
             }
@@ -145,20 +140,19 @@ public class TrifleBoard extends ContainerElement {
         else {
             // player is based on the bottom and must go to the top
 
+            canOshi = coords.y < 7 && getElement(coords.y - 1, coords.x) != null;
+
             // The same as the upper code, but with inverse conditions
             // edited line will be commented with `+` after
-            this.counterCases = 1;
 
-            for (int y = coords.y - 1; y >= 0; y--) {
+            vertical: for (int y = coords.y - 1; y >= 0; y--) {
                 // number of possible moves
-                System.out.println("Jtm1" + p.getNumberCasesPlayable());
-                if (p.getNumberCasesPlayable() < counterCases) break;
+                if (p.getNumberCasesPlayable() < counterCases) break ;
 
                 // normal valid cell
                 if ((getElement(y, coords.x) == null) && withoutOpponent) {
                     validCells.add(new Point(coords.x, y));
                     this.counterCases++;
-                    canOshi = false;
                 }
 
                 // detect opponent pawn
@@ -170,15 +164,13 @@ public class TrifleBoard extends ContainerElement {
                 if (!withoutOpponent && canOshi) {
                     Pawn cellPawn = (Pawn) getElement(coords.x, y);
 
-                    if (cellPawn != null && p.getSumoLevel() <= cellPawn.getSumoLevel()) break;
 
-                    else if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) break;
-
-                    else if (cellPawn != null && sumoLevel < this.opponentVerticalCounter) break;
-
-                    else if (getElement(y, coords.x) == null || getElement(y, coords.x).getType() != Pawn.PAWN_ELEMENT_ID) {
+                    if (cellPawn != null && p.getSumoLevel() < cellPawn.getSumoLevel()) break vertical;
+                    else if (cellPawn != null && cellPawn.getPlayerID() == p.getPlayerID()) break vertical;
+                    else if (cellPawn != null && sumoLevel < this.opponentVerticalCounter) break vertical;
+                    else if (getElement(y, coords.x) == null) {
                         validCells.add(new Point(coords.x, y + this.opponentVerticalCounter));
-                        break;
+                        break vertical;
                     } else this.opponentVerticalCounter++;
                 };
             }

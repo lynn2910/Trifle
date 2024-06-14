@@ -148,6 +148,11 @@ public class  GameMouseController extends ControllerMouse implements EventHandle
             if (((GameController) control).detectWin())
                 return;
 
+            System.out.println("1bluePlayerBlocked: " + stageModel.isBluePlayerBlocked());
+            System.out.println("1cyanPlayerBlocked: " + stageModel.isCyanPlayerBlocked());
+
+            stageModel.setPlayerBlocked(model.getIdPlayer(), false);
+
             ActionPlayer play = new ActionPlayer(model, control, actionList);
             play.start();
 
@@ -202,7 +207,6 @@ public class  GameMouseController extends ControllerMouse implements EventHandle
         if (pawn == null) return;
 
         TrifleBoard board = (TrifleBoard) stageModel.getBoard();
-        if (!board.canPawnMove(pawn, model.getIdPlayer())) return;
 
         // the color pawm must play the same color cell
         Point lastOpponentMove;
