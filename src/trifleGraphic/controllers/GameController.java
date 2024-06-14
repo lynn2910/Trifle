@@ -32,6 +32,15 @@ public class GameController extends Controller {
     private int bluePlayerPoints = 0;
     private int cyanPlayerPoints = 0;
 
+    // Store each computer if needed
+    public BotDecider firstComputer;
+    public BotDecider secondComputer;
+
+    public BotDecider getComputer(int id){
+        if (id == 0) return firstComputer;
+        else return secondComputer;
+    }
+
     public GameController(Model model, View view) {
         super(model, view);
 
@@ -77,10 +86,16 @@ public class GameController extends Controller {
     public void configureFromRootPane(){
         this.model.getPlayers().clear();
 
-        if (TrifleRootPane.isFirstPlayerBot) this.model.addComputerPlayer(TrifleRootPane.firstPlayerName);
-        else this.model.addHumanPlayer(TrifleRootPane.firstPlayerName);
+        if (TrifleRootPane.isFirstPlayerBot) {
+            this.model.addComputerPlayer(TrifleRootPane.firstPlayerName);
 
-        if (TrifleRootPane.isSecondPlayerBot) this.model.addComputerPlayer(TrifleRootPane.secondPlayerName);
+            firstComputer = TrifleRootPane.firstBotStrategy.initComputerGraphic(model, this);
+        } else this.model.addHumanPlayer(TrifleRootPane.firstPlayerName);
+
+        if (TrifleRootPane.isSecondPlayerBot) {
+            this.model.addComputerPlayer(TrifleRootPane.secondPlayerName);
+            secondComputer = TrifleRootPane.secondBotStrategy.initComputerGraphic(model, this);
+        }
         else this.model.addHumanPlayer(TrifleRootPane.secondPlayerName);
 
         this.gameMode = TrifleRootPane.selectedGameMode;
@@ -101,9 +116,10 @@ public class GameController extends Controller {
             int losingPlayerId = model.getIdWinner() == 0 ? 1 : 0;
 
             for (Pawn pawn: pawns) {
-                if (pawn.getSumoLevel() > 0 && pawn.getCoords().y == getBaseRowForPlayer(losingPlayerId)) {
+                if (pawn.getCoords().y == getBaseRowForPlayer(losingPlayerId)) {
                     givenPoints = pawn.getSumoLevel() * 2;
-                    pawn.increaseSumoLevel();
+                    pawn.increaseSumoLevel(this);
+                    System.out.println("Pawn with received a sumo: " + pawn);
                     break;
                 }
             }
@@ -330,7 +346,20 @@ public class GameController extends Controller {
 
         stageModel.getPlayerName().setText(text);
 
-        super.endOfTurn();
+        if ((model.getIdPlayer() == 0 && firstComputer != null) || (model.getIdPlayer() == 1 && secondComputer != null)) {
+            playBot();
+        }
+    }
+
+    public void playBot(){
+        BotDecider bot = getComputer(model.getIdPlayer());
+
+        ActionList actionList = bot.decide();
+
+        actionList.setDoEndOfTurn(true);
+        ActionPlayer play = new ActionPlayer(model, this, actionList);
+
+        play.start();
     }
 
     /**

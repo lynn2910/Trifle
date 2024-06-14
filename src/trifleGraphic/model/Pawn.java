@@ -3,6 +3,8 @@ package trifleGraphic.model;
 import trifleGraphic.boardifierGraphic.model.ElementTypes;
 import trifleGraphic.boardifierGraphic.model.GameElement;
 import trifleGraphic.boardifierGraphic.model.GameStageModel;
+import trifleGraphic.controllers.GameController;
+import trifleGraphic.view.PawnLook;
 import trifleGraphic.view.TrifleBoardLook;
 
 import java.awt.*;
@@ -66,7 +68,7 @@ public class Pawn extends GameElement {
     private Point coords;
 
     private int sumoLevel;
-    private static int numberCasesPlayable;
+    private int numberCasesPlayable;
 
     public Pawn(int colorIndex, int playerID, GameStageModel gameStageModel, int x, int y) {
         super(gameStageModel);
@@ -79,7 +81,7 @@ public class Pawn extends GameElement {
         this.playerID = playerID;
         this.sumoLevel = 0;
 
-        this.numberCasesPlayable = 7 - 2 * this.sumoLevel;
+        this.numberCasesPlayable = 7;
 
         this.coords = new Point(x, y);
         this.setLocation((x + 1) * PAWN_SIZE - 2, (y + 1) * PAWN_SIZE + 7);
@@ -101,8 +103,13 @@ public class Pawn extends GameElement {
     public int getSumoLevel(){
         return sumoLevel;
     }
-    public void increaseSumoLevel(){
+    public void increaseSumoLevel(GameController controller){
         sumoLevel++;
+
+        this.numberCasesPlayable = 7 - 2 * this.sumoLevel;
+
+        PawnLook pawnLook = (PawnLook) controller.getElementLook(this);
+        pawnLook.sumoLevelText.setText(sumoLevel + "");
     }
     public void resetSumoLevel(){
         sumoLevel = 0;
@@ -167,6 +174,7 @@ public class Pawn extends GameElement {
     public String toString(){
         return "Pawn { colorIndex: " + colorIndex
                 + ", playerNumber: " + playerID
-                + ", coords: (" + coords.x + ", " + coords.y  + ") }";
+                + ", coords: (" + coords.x + ", " + coords.y  + ")"
+                + ", sumoLevel: " + sumoLevel + " }";
     }
 }

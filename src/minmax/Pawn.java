@@ -21,6 +21,14 @@ public class Pawn {
         );
     }
 
+    public Pawn(trifleGraphic.model.Pawn pawn) {
+        this(
+                new Point(pawn.getCoords().y, pawn.getCoords().x),
+                pawn.getPlayerID(),
+                pawn.getColorIndex()
+        );
+    }
+
     public Point getCoords() {
         return coords;
     }

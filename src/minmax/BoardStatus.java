@@ -51,6 +51,34 @@ public class BoardStatus {
         }
     }
 
+    public BoardStatus(List<trifleGraphic.model.Pawn> bluePlayer, List<trifleGraphic.model.Pawn> cyanPlayer, trifleGraphic.model.TrifleBoard board, trifleGraphic.model.TrifleStageModel stageModel) {
+        this.bluePawns = bluePlayer.stream().map(Pawn::new).toList();
+        this.cyanPawns = cyanPlayer.stream().map(Pawn::new).toList();
+
+        if (stageModel.getLastBluePlayerMove() != null) {
+            this.lastBlueMove = new Point(
+                    stageModel.getLastBluePlayerMove().y,
+                    stageModel.getLastBluePlayerMove().x
+            );
+        }
+
+        if (stageModel.getLastCyanPlayerMove() != null) {
+            this.lastCyanMove = new Point(
+                    stageModel.getLastCyanPlayerMove().y,
+                    stageModel.getLastCyanPlayerMove().x
+            );
+        }
+
+        this.matrix = new int[8][8];
+        for (Pawn bluePawn: this.bluePawns) {
+            this.matrix[bluePawn.getCoords().x][bluePawn.getCoords().y] = 1;
+        }
+
+        for (Pawn cyanPawn: this.cyanPawns) {
+            this.matrix[cyanPawn.getCoords().x][cyanPawn.getCoords().y] = 2;
+        }
+    }
+
     public Point getLastBlueMove() {
         return this.lastBlueMove;
     }
