@@ -213,7 +213,7 @@ public class GameController extends Controller {
      * At the end of the game, it asks if you want to quit,
      * configure the game or start a new game with the same settings
      */
-    private void partyEnd(){
+    public void partyEnd(){
         Alert endGameBox = this.createEndGameBox();
         model.setCaptureEvents(false);
         Optional<ButtonType> res = endGameBox.showAndWait();
@@ -253,7 +253,7 @@ public class GameController extends Controller {
      * Create the alert box shown at the end of a game.
      * @return The alert box initiated
      */
-    private Alert createEndGameBox(){
+    public Alert createEndGameBox(){
         String message = switch(model.getIdWinner()) {
             case 0 -> "Winner: " + model.getPlayers().get(0).getName();
             case 1 -> "Winner: " + model.getPlayers().get(1).getName();

@@ -12,6 +12,7 @@ import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.model.action.ActionList;
 import trifleGraphic.boardifierGraphic.model.animation.AnimationTypes;
 import trifleGraphic.boardifierGraphic.view.View;
+import trifleGraphic.controllers.GameMouseController;
 import trifleGraphic.model.Pawn;
 import trifleGraphic.model.TrifleBoard;
 import trifleGraphic.model.TrifleStageModel;
@@ -25,7 +26,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class GameMouseControllerTest {
+public class TestGameMouseController {
 
     private GameMouseController gameMouseController;
     private Model mockModel;
@@ -119,6 +120,6 @@ public class GameMouseControllerTest {
 
         verify(mockPawn).toggleSelected();
         verify(mockStageModel).setState(TrifleStageModel.SELECT_DEST_STATE);
-        verify(mockBoard).setValidCells(mockPawn.getCoords(), mockModel.getIdPlayer());
+        verify(mockBoard).setValidCells(mockPawn.getCoords(), mockModel.getIdPlayer(), 0);
     }
 }

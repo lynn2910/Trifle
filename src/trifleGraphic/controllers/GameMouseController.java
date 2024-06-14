@@ -23,7 +23,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class GameMouseController extends ControllerMouse implements EventHandler<MouseEvent> {
+public class  GameMouseController extends ControllerMouse implements EventHandler<MouseEvent> {
     public GameMouseController(Model model, View view, Controller controller) {
         super(model, view, controller);
     }
@@ -51,7 +51,7 @@ public class GameMouseController extends ControllerMouse implements EventHandler
      * @param stageModel The stage model
      * @param elementList All elements that have been clicked since last frame.
      */
-    private void processPawnDestination(Coord2D clic, TrifleStageModel stageModel, List<GameElement> elementList){
+    public void processPawnDestination(Coord2D clic, TrifleStageModel stageModel, List<GameElement> elementList){
         handlePawnSelectionState(clic, stageModel);
 
         boolean boardClicked = false;
@@ -170,7 +170,7 @@ public class GameMouseController extends ControllerMouse implements EventHandler
      * @param stageModel The stage Model
      * @return A pawn model of the current player if any
      */
-    private Pawn getPawnFrom(Coord2D clic, TrifleStageModel stageModel) {
+    public Pawn getPawnFrom(Coord2D clic, TrifleStageModel stageModel) {
         System.out.println();
         System.out.println("Player ID: " + model.getIdPlayer());
         TrifleBoardLook boardLook = (TrifleBoardLook) control.getElementLook(stageModel.getBoard());
@@ -195,7 +195,7 @@ public class GameMouseController extends ControllerMouse implements EventHandler
      * @param clic The clic coordinates
      * @param stageModel The stage model
      */
-    private void handlePawnSelectionState(Coord2D clic, TrifleStageModel stageModel) {
+    public void handlePawnSelectionState(Coord2D clic, TrifleStageModel stageModel) {
         System.out.println();
         Pawn pawn = getPawnFrom(clic, stageModel);
         System.out.println(clic);

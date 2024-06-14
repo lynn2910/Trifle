@@ -8,6 +8,7 @@ import trifleGraphic.boardifierGraphic.model.GameException;
 import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.model.Player;
 import trifleGraphic.boardifierGraphic.view.View;
+import trifleGraphic.controllers.GameController;
 import trifleGraphic.model.Pawn;
 import trifleGraphic.model.TrifleBoard;
 import trifleGraphic.model.TrifleStageModel;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class GameControllerTest {
+public class TestGameController {
 
     private GameController gameController;
     private Model mockModel;
@@ -50,8 +51,9 @@ public class GameControllerTest {
     @Test
     public void testRegisterMove() {
         Point moveCoordinates = new Point(1, 1);
-        Pawn pawn = new Pawn(0, new Point(0, 0));
-        TrifleStageModel gameStage = new TrifleStageModel();
+        Pawn pawn = new Pawn(0, 0, mockStageModel, 0,0);
+
+        TrifleStageModel gameStage = new TrifleStageModel("test", mockModel);
 
         gameController.registerMove(gameStage, moveCoordinates, "move", pawn);
 
