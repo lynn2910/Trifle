@@ -10,8 +10,6 @@ import trifleGraphic.boardifierGraphic.model.Coord2D;
 import trifleGraphic.boardifierGraphic.model.GameElement;
 import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.model.action.ActionList;
-import trifleGraphic.boardifierGraphic.model.action.GameAction;
-import trifleGraphic.boardifierGraphic.model.action.PutInContainerAction;
 import trifleGraphic.boardifierGraphic.model.animation.AnimationTypes;
 import trifleGraphic.boardifierGraphic.view.View;
 import trifleGraphic.model.Pawn;
@@ -27,6 +25,9 @@ public class  GameMouseController extends ControllerMouse implements EventHandle
     public GameMouseController(Model model, View view, Controller controller) {
         super(model, view, controller);
     }
+
+    public static final int ANIMATION_FACTOR = 12;
+    public static final String ANIMATION_TYPE = AnimationTypes.MOVE_LINEARPROP;
 
     public void handle(MouseEvent event) {
         Coord2D clic = new Coord2D(event.getSceneX(), event.getSceneY());
@@ -84,8 +85,8 @@ public class  GameMouseController extends ControllerMouse implements EventHandle
                     TrifleBoard.BOARD_ID,
                     dest[0],
                     dest[1],
-                    AnimationTypes.NONE,
-                    0
+                    ANIMATION_TYPE,
+                    ANIMATION_FACTOR
             );
 
             if (isOshi) {
@@ -113,8 +114,8 @@ public class  GameMouseController extends ControllerMouse implements EventHandle
                             TrifleBoard.BOARD_ID,
                             newRow,
                             dest[1],
-                            AnimationTypes.NONE,
-                            0
+                            ANIMATION_TYPE,
+                            ANIMATION_FACTOR
                     );
 
                     actionList.addAll(actionList2);
@@ -176,6 +177,7 @@ public class  GameMouseController extends ControllerMouse implements EventHandle
         TrifleBoardLook boardLook = (TrifleBoardLook) control.getElementLook(stageModel.getBoard());
 
         int[] dest = boardLook.getCellFromSceneLocation(clic);
+
         System.out.println("Mouse destination: " + Arrays.toString(dest));
         for (Pawn p: stageModel.getPlayerPawns(model.getIdPlayer())) {
             System.out.println(p.getCoords());

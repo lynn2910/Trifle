@@ -1,11 +1,13 @@
 package trifleGraphic.model;
 
+import trifleGraphic.boardifierGraphic.control.Logger;
 import trifleGraphic.boardifierGraphic.model.ElementTypes;
 import trifleGraphic.boardifierGraphic.model.GameElement;
 import trifleGraphic.boardifierGraphic.model.GameStageModel;
+import trifleGraphic.boardifierGraphic.model.animation.Animation;
+import trifleGraphic.boardifierGraphic.model.animation.AnimationStep;
 import trifleGraphic.controllers.GameController;
 import trifleGraphic.view.PawnLook;
-import trifleGraphic.view.TrifleBoardLook;
 
 import java.awt.*;
 
@@ -139,6 +141,23 @@ public class Pawn extends GameElement {
 
     public int getPlayerID(){
         return playerID;
+    }
+
+    @Override
+    public void update() {
+        if (animation != null) {
+            AnimationStep step = animation.next();
+            if (step == null) {
+                animation = null;
+            }
+            else if (step == Animation.NOPStep) {
+                Logger.debug("nothing to do", this);
+            }
+            else {
+                Logger.debug("move animation", this);
+                setLocation(step.getInt(0), step.getInt(1));
+            }
+        }
     }
 
     /**

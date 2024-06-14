@@ -17,6 +17,9 @@ import trifleGraphic.model.TrifleStageModel;
 
 import java.awt.*;
 
+import static trifleGraphic.controllers.GameMouseController.ANIMATION_FACTOR;
+import static trifleGraphic.controllers.GameMouseController.ANIMATION_TYPE;
+
 public class DeterministicMinMaxBotGraphic extends BotDecider {
     private final MinMax minMax;
 
@@ -82,8 +85,8 @@ public class DeterministicMinMaxBotGraphic extends BotDecider {
                 TrifleBoard.BOARD_ID,
                 nextMove.getMoveDone().y,
                 nextMove.getMoveDone().x,
-                AnimationTypes.NONE,
-                0
+                ANIMATION_TYPE,
+                ANIMATION_FACTOR
         );
         actions.setDoEndOfTurn(true);
 
