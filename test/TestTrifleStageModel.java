@@ -1,109 +1,144 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import trifleConsole.boardifier.model.Model;
-import trifleConsole.boardifier.model.TextElement;
-import trifleConsole.model.OldMove;
-import trifleConsole.model.Pawn;
-import trifleConsole.model.TrifleBoard;
-import trifleConsole.model.TrifleStageModel;
+import org.mockito.Mockito;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-public class TestTrifleStageModel {
+public class TrifleStageModelTest {
 
-    private TrifleStageModel stageModel;
-    private TrifleBoard board;
+    private TrifleStageModel model;
+    private TrifleBoard mockBoard;
+    private TextElement mockTextElement;
+    private OldMove mockOldMove;
+    private Model mockModel;
+    private Pawn mockPawn;
+    private BackgroundCell mockBackgroundCell;
 
     @BeforeEach
     public void setUp() {
-        stageModel = new TrifleStageModel("Test Stage", new Model());
-        board = new TrifleBoard(0, 0, stageModel);
-        stageModel.setBoard(board);
+        mockModel = mock(Model.class);
+        model = new TrifleStageModel("TestStage", mockModel);
+
+        mockBoard = mock(TrifleBoard.class);
+        mockTextElement = mock(TextElement.class);
+        mockOldMove = mock(OldMove.class);
+        mockPawn = mock(Pawn.class);
+        mockBackgroundCell = mock(BackgroundCell.class);
     }
 
     @Test
-    public void testPlayerPawns() {
-        List<Pawn> bluePawns = new ArrayList<>();
-        bluePawns.add(new Pawn(0, 0, stageModel, 0, 0));
-        bluePawns.add(new Pawn(1, 0, stageModel, 1, 1));
-
-        List<Pawn> cyanPawns = new ArrayList<>();
-        cyanPawns.add(new Pawn(2, 1, stageModel, 2, 2));
-        cyanPawns.add(new Pawn(3, 1, stageModel, 3, 3));
-
-        stageModel.setBluePawns(bluePawns);
-        stageModel.setCyanPawns(cyanPawns);
-
-        assertEquals(2, stageModel.getBluePlayer().size());
-        assertEquals(2, stageModel.getCyanPlayer().size());
-
-        Pawn bluePawn = stageModel.getPlayerPawn(0, 0);
-        assertNotNull(bluePawn);
-        assertEquals(0, bluePawn.getColorIndex());
-
-        Pawn cyanPawn = stageModel.getPlayerPawn(1, 2);
-        assertNotNull(cyanPawn);
-        assertEquals(2, cyanPawn.getColorIndex());
+    public void testConstructor() {
+        assertNotNull(model.getBluePlayer());
+        assertNotNull(model.getCyanPlayer());
+        assertNotNull(model.getBackgroundCells());
+        assertNotNull(model.getOldMovesList());
+        assertNotNull(model.getMovesHistory());
+        assertEquals(TrifleStageModel.SELECT_PAWN_STATE, model.getState());
     }
 
     @Test
-    public void testPlayerBlocked() {
-        stageModel.setPlayerBlocked(0, true);
-        assertTrue(stageModel.isBluePlayerBlocked());
-
-        stageModel.setPlayerBlocked(1, true);
-        assertTrue(stageModel.isCyanPlayerBlocked());
-
-        stageModel.setPlayerBlocked(0, false);
-        assertFalse(stageModel.isBluePlayerBlocked());
-
-        stageModel.setPlayerBlocked(1, false);
-        assertFalse(stageModel.isCyanPlayerBlocked());
+    public void testSetAndGetBoard() {
+        model.setBoard(mockBoard);
+        assertEquals(mockBoard, model.getBoard());
     }
 
     @Test
-    public void testLastPlayerMove() {
-        Point blueMove = new Point(1, 2);
-        Point cyanMove = new Point(3, 4);
+    public void testSetAndGetState() {
+        model.setState(TrifleStageModel.SELECT_DEST_STATE);
+        assertEquals(TrifleStageModel.SELECT_DEST_STATE, model.getState());
+    }
 
-        stageModel.setLastBluePlayerMove(blueMove);
-        assertEquals(blueMove, stageModel.getLastBluePlayerMove());
-
-        stageModel.setLastCyanPlayerMove(cyanMove);
-        assertEquals(cyanMove, stageModel.getLastCyanPlayerMove());
+    @Test
+    public void testAddAndRetrieveOldMove() {
+        model.addOldMove(mockOldMove);
+        List<OldMove> oldMovesList = model.getOldMovesList();
+        assertEquals(1, oldMovesList.size());
+        assertEquals(mockOldMove, oldMovesList.get(0));
     }
 
     @Test
     public void testUpdatePlayerPoints() {
-        List<String> playerNames = List.of("Blue", "Cyan");
-        stageModel.setPlayerNames(playerNames);
-
-        stageModel.updatePlayerPoints(5, 10);
-        TextElement playerPoints = stageModel.getPlayerPoints();
-        assertNotNull(playerPoints);
-        assertEquals("Blue: 5   Cyan: 10", playerPoints.getText());
+        when(mockTextElement.getText()).thenReturn("Blue: 10   Cyan: 8");
+        model.setPlayerPoints(mockTextElement);
+        model.updatePlayerPoints(10, 8);
+        verify(mockTextElement).setText("Blue: 10   Cyan: 8");
     }
 
     @Test
-    public void testMovesHistory() {
-        List<OldMove> oldMoves = new ArrayList<>();
-        oldMoves.add(new OldMove(1, "A", "A1", "A2"));
-        oldMoves.add(new OldMove(2, "B", "G8", "G7"));
+    public void testGetAndSetPlayerName() {
+        model.setPlayerName(mockTextElement);
+        assertEquals(mockTextElement, model.getPlayerName());
+    }
 
-        for (OldMove move : oldMoves) {
-            stageModel.addOldMove(move);
+    @Test
+    public void testGetAndSetRoundCounter() {
+        model.setRoundCounter(mockTextElement);
+        assertEquals(mockTextElement, model.getRoundCounter());
+    }
+
+    @Test
+    public void testGetAndSetPlayerPoints() {
+        model.setPlayerPoints(mockTextElement);
+        assertEquals(mockTextElement, model.getPlayerPoints());
+    }
+
+    @Test
+    public void testGetAndAddBluePlayerMove() {
+        Point move = new Point(1, 1);
+        model.addBluePlayerMove(move);
+        assertEquals(move, model.getLastBluePlayerMove());
+    }
+
+    @Test
+    public void testGetAndAddCyanPlayerMove() {
+        Point move = new Point(2, 2);
+        model.addCyanPlayerMove(move);
+        assertEquals(move, model.getLastCyanPlayerMove());
+    }
+
+    @Test
+    public void testGetAndSetGameMode() {
+        GameMode gameMode = GameMode.defaultValue();
+        model.setGameMode(gameMode);
+        assertEquals(gameMode, model.getGameMode());
+    }
+
+    @Test
+    public void testGetAndSetPlayerMode() {
+        PlayerMode playerMode = PlayerMode.defaultValue();
+        model.setPlayerMode(playerMode);
+        assertEquals(playerMode, model.getPlayerMode());
+    }
+
+    @Test
+    public void testUpdateHistory() {
+        for (int i = 0; i < TrifleStageModel.MAX_HISTORY_SIZE; i++) {
+            TextElement textElement = mock(TextElement.class);
+            model.getMovesHistory().add(textElement);
         }
+        model.addOldMove(mockOldMove);
+        model.updateHistory();
+        verify(model.getMovesHistory().get(TrifleStageModel.MAX_HISTORY_SIZE - 1)).setText(mockOldMove.toString());
+    }
 
-        stageModel.updateHistory();
-        List<OldMove> movesHistory = stageModel.getOldMovesList();
-        assertEquals(oldMoves.size(), movesHistory.size());
+    @Test
+    public void testBluePlayerBlocked() {
+        model.setBluePlayerBlocked(true);
+        assertTrue(model.isBluePlayerBlocked());
+        model.setBluePlayerBlocked(false);
+        assertFalse(model.isBluePlayerBlocked());
+    }
 
-        for (int i = 0; i < oldMoves.size(); i++) {
-            assertEquals(oldMoves.get(i), movesHistory.get(i));
-        }
+    @Test
+    public void testCyanPlayerBlocked() {
+        model.setCyanPlayerBlocked(true);
+        assertTrue(model.isCyanPlayerBlocked());
+        model.setCyanPlayerBlocked(false);
+        assertFalse(model.isCyanPlayerBlocked());
     }
 }
