@@ -203,14 +203,12 @@ public class  GameMouseController extends ControllerMouse implements EventHandle
      * @param stageModel The stage model
      */
     public void handlePawnSelectionState(Coord2D clic, TrifleStageModel stageModel) {
-        System.out.println();
         Pawn pawn = getPawnFrom(clic, stageModel);
-        System.out.println(clic);
         if (pawn == null) return;
 
         TrifleBoard board = (TrifleBoard) stageModel.getBoard();
 
-        // the color pawm must play the same color cell
+        // the pawn must play the same color cell
         Point lastOpponentMove;
         if (model.getIdPlayer() == 0) {
             lastOpponentMove = stageModel.getLastCyanPlayerMove();
@@ -220,11 +218,6 @@ public class  GameMouseController extends ControllerMouse implements EventHandle
 
         if (lastOpponentMove != null) {
             int colorIndex = TrifleBoard.BOARD[lastOpponentMove.y][lastOpponentMove.x];
-            System.out.println("\n\n\n");
-            System.out.println(colorIndex);
-            System.out.println(lastOpponentMove);
-            System.out.println(pawn.getColorIndex());
-            System.out.println("\n\n\n");
             if (colorIndex != pawn.getColorIndex()){
                 System.out.println("Invalid color: cannot move the wanted color");
                 return;
@@ -235,6 +228,5 @@ public class  GameMouseController extends ControllerMouse implements EventHandle
         stageModel.setState(TrifleStageModel.SELECT_DEST_STATE);
 
         board.setValidCells(pawn.getCoords(), model.getIdPlayer(), pawn.getSumoLevel());
-        System.out.println();
     }
 }

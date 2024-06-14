@@ -66,6 +66,9 @@ public class TrifleBoard extends ContainerElement {
         List<Point> validCells = new ArrayList<>();
         Pawn p = (Pawn) getElement(coords.y, coords.x);
 
+        if (p == null)
+            return validCells;
+
         this.opponentVerticalCounter = 0;
         this.counterCases = 1;
 
@@ -140,7 +143,7 @@ public class TrifleBoard extends ContainerElement {
         else {
             // player is based on the bottom and must go to the top
 
-            canOshi = coords.y < 7 && getElement(coords.y - 1, coords.x) != null;
+            canOshi = coords.y < 7 && getElement(coords.y + 1, coords.x) != null;
 
             // The same as the upper code, but with inverse conditions
             // edited line will be commented with `+` after

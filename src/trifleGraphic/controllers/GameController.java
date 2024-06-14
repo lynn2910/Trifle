@@ -16,7 +16,6 @@ import trifleGraphic.boardifierGraphic.model.GameException;
 import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.model.Player;
 import trifleGraphic.boardifierGraphic.model.action.ActionList;
-import trifleGraphic.boardifierGraphic.model.animation.AnimationTypes;
 import trifleGraphic.boardifierGraphic.view.View;
 import trifleGraphic.model.Pawn;
 import trifleGraphic.model.TrifleBoard;
@@ -26,6 +25,9 @@ import trifleGraphic.view.TrifleRootPane;
 import java.awt.*;
 import java.util.List;
 import java.util.Optional;
+
+import static trifleGraphic.controllers.GameMouseController.ANIMATION_FACTOR;
+import static trifleGraphic.controllers.GameMouseController.ANIMATION_TYPE;
 
 public class GameController extends Controller {
 
@@ -173,8 +175,8 @@ public class GameController extends Controller {
                     TrifleBoard.BOARD_ID,
                     0,
                     rightOrLeft == 1 ? 7 - i : i,
-                    AnimationTypes.NONE,
-                    0
+                    ANIMATION_TYPE,
+                    ANIMATION_FACTOR
             );
             actionList.addAll(actionList2);
 
@@ -189,8 +191,8 @@ public class GameController extends Controller {
                     TrifleBoard.BOARD_ID,
                     7,
                     rightOrLeft == 1 ? 7 - i : i,
-                    AnimationTypes.NONE,
-                    0
+                    ANIMATION_TYPE,
+                    ANIMATION_FACTOR
             );
             actionList.addAll(actionList3);
 
@@ -340,14 +342,14 @@ public class GameController extends Controller {
             text += "\nYou must play the ";
 
             text += switch (colorIndex) {
-                case 0 -> "Cyan";
+                case 0 -> "Orange";
                 case 1 -> "Blue";
                 case 2 -> "Purple";
-                case 3 -> "White";
+                case 3 -> "Pink";
                 case 4 -> "Yellow";
                 case 5 -> "Red";
                 case 6 -> "Green";
-                case 7 -> "Black";
+                case 7 -> "Brown";
                 default -> "Unknown";
             };
 
