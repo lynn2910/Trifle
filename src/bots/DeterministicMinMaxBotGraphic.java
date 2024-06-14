@@ -16,6 +16,8 @@ import trifleGraphic.model.TrifleBoard;
 import trifleGraphic.model.TrifleStageModel;
 
 import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 import static trifleGraphic.controllers.GameMouseController.ANIMATION_FACTOR;
 import static trifleGraphic.controllers.GameMouseController.ANIMATION_TYPE;
@@ -40,6 +42,9 @@ public class DeterministicMinMaxBotGraphic extends BotDecider {
                 (TrifleBoard) stageModel.getBoard(),
                 stageModel
         );
+
+        for (int[] row: boardStatus.getMatrix())
+            System.out.println(Arrays.toString(row));
 
         this.minMax.reset();
         this.minMax.buildTree(boardStatus, model.getIdPlayer());
@@ -97,7 +102,7 @@ public class DeterministicMinMaxBotGraphic extends BotDecider {
                     + GameController.normalizeCoordinate(nextMove.getMoveDone(), false),
                 pawnInvolved
         );
-        pawnInvolved.setCoords(new Point(nextMove.getMoveDone().y, nextMove.getMoveDone().x));
+        pawnInvolved.setCoords(new Point(nextMove.getMoveDone().x, nextMove.getMoveDone().y));
 
         return actions;
     }
