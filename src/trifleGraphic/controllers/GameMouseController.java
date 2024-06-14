@@ -10,6 +10,8 @@ import trifleGraphic.boardifierGraphic.model.Coord2D;
 import trifleGraphic.boardifierGraphic.model.GameElement;
 import trifleGraphic.boardifierGraphic.model.Model;
 import trifleGraphic.boardifierGraphic.model.action.ActionList;
+import trifleGraphic.boardifierGraphic.model.action.GameAction;
+import trifleGraphic.boardifierGraphic.model.action.PutInContainerAction;
 import trifleGraphic.boardifierGraphic.model.animation.AnimationTypes;
 import trifleGraphic.boardifierGraphic.view.View;
 import trifleGraphic.model.Pawn;
@@ -64,7 +66,7 @@ public class GameMouseController extends ControllerMouse implements EventHandler
         Pawn pawn = (Pawn) model.getSelected().get(0);
 
         TrifleBoard board = (TrifleBoard) stageModel.getBoard();
-        board.setValidCells(pawn.getCoords(), model.getIdPlayer());
+        board.setValidCells(pawn.getCoords(), model.getIdPlayer(), pawn.getSumoLevel());
 
         TrifleBoardLook boardLook = (TrifleBoardLook) control.getElementLook(stageModel.getBoard());
         int[] dest = boardLook.getCellFromSceneLocation(clic);
@@ -72,6 +74,8 @@ public class GameMouseController extends ControllerMouse implements EventHandler
 
         if (board.canReachCell(dest[0], dest[1])) {
             System.out.println("The selected pawn can reach the cell at (" + dest[0] + ", " + dest[1] + ")");
+
+            boolean isOshi = board.getElement(dest[0], dest[1]) != null && board.getElement(dest[0], dest[1]).getType() == Pawn.PAWN_ELEMENT_ID;
 
             ActionList actionList = ActionFactory.generatePutInContainer(
                     control,
@@ -83,7 +87,57 @@ public class GameMouseController extends ControllerMouse implements EventHandler
                     AnimationTypes.NONE,
                     0
             );
-            actionList.setDoEndOfTurn(true);
+
+            if (isOshi) {
+                Point lastOpponentPawnOshied = null;
+                for (int rowdest = 0; rowdest < pawn.getSumoLevel() + 1; rowdest++) {
+                    int rowDest = dest[0] + (model.getIdPlayer() == 0 ? rowdest : -rowdest);
+                    System.out.println("modifications [" + rowDest + "]["+ dest[1] + "] : " + rowDest);
+                    if (board.getElement(rowDest, dest[1]) == null || board.getElement(rowDest, dest[1]).getType() != Pawn.PAWN_ELEMENT_ID) {
+                        System.out.println("no YEET");
+                        break;
+                    }
+
+                    System.out.println("YEET");
+
+                    Pawn p = (Pawn) board.getElement(rowDest, dest[1]);
+
+                    int newRow = rowDest + (model.getIdPlayer() == 0 ? 1 : -1);
+                    p.setCoords(new Point(dest[1], newRow));
+                    lastOpponentPawnOshied = (Point) p.getCoords().clone();
+
+                    ActionList actionList2 = ActionFactory.generatePutInContainer(
+                            control,
+                            model,
+                            p,
+                            TrifleBoard.BOARD_ID,
+                            newRow,
+                            dest[1],
+                            AnimationTypes.NONE,
+                            0
+                    );
+
+                    actionList.addAll(actionList2);
+                }
+
+                if (lastOpponentPawnOshied != null){
+                    System.out.println("\n\n" + lastOpponentPawnOshied);
+                    System.out.println(TrifleBoard.BOARD[lastOpponentPawnOshied.y][lastOpponentPawnOshied.x]);
+                    System.out.println(Pawn.COLORS[TrifleBoard.BOARD[lastOpponentPawnOshied.y][lastOpponentPawnOshied.x]] + "\n\n");
+                    if (model.getIdPlayer() == 0) {
+                        stageModel.setLastCyanPlayerMove(lastOpponentPawnOshied);
+                    } else {
+                        stageModel.setLastBluePlayerMove(lastOpponentPawnOshied);
+                    }
+                }
+            } else {
+                actionList.setDoEndOfTurn(true);
+                if (model.getIdPlayer() == 0) {
+                    stageModel.setLastBluePlayerMove(new Point(dest[1], dest[0]));
+                } else {
+                    stageModel.setLastCyanPlayerMove(new Point(dest[1], dest[0]));
+                }
+            }
 
             stageModel.unselectAll();
             stageModel.setState(TrifleStageModel.SELECT_PAWN_STATE);
@@ -150,13 +204,31 @@ public class GameMouseController extends ControllerMouse implements EventHandler
         TrifleBoard board = (TrifleBoard) stageModel.getBoard();
         if (!board.canPawnMove(pawn, model.getIdPlayer())) return;
 
-//        Point lastOpponentMove = stageModel.getLastBluePlayerMove();
-        // pawn.getColorIndex() == TrifleBoard.BOARD[lastOpponentMove.y][lastOpponentMove.x]
+        // the color pawm must play the same color cell
+        Point lastOpponentMove;
+        if (model.getIdPlayer() == 0) {
+            lastOpponentMove = stageModel.getLastCyanPlayerMove();
+        } else {
+            lastOpponentMove = stageModel.getLastBluePlayerMove();
+        }
+
+        if (lastOpponentMove != null) {
+            int colorIndex = TrifleBoard.BOARD[lastOpponentMove.y][lastOpponentMove.x];
+            System.out.println("\n\n\n");
+            System.out.println(colorIndex);
+            System.out.println(lastOpponentMove);
+            System.out.println(pawn.getColorIndex());
+            System.out.println("\n\n\n");
+            if (colorIndex != pawn.getColorIndex()){
+                System.out.println("Invalid color: cannot move the wanted color");
+                return;
+            }
+        }
 
         pawn.toggleSelected();
         stageModel.setState(TrifleStageModel.SELECT_DEST_STATE);
 
-        board.setValidCells(pawn.getCoords(), model.getIdPlayer());
+        board.setValidCells(pawn.getCoords(), model.getIdPlayer(), pawn.getSumoLevel());
         System.out.println();
     }
 }
