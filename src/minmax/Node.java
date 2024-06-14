@@ -38,13 +38,14 @@ public class Node {
     private List<Pawn> getAllowedPawns(BoardStatus boardStatus) {
         List<Pawn> allowedPawns = new ArrayList<>();
 
-        if (boardStatus.isStartOfGame()) {
+        if (boardStatus.isStartOfGame() || (boardStatus.getLastBlueMove() == null && boardStatus.getLastCyanMove() == null)) {
             List<Pawn> pawns = boardStatus.getPawns(currentPlayerID);
             return List.of(pawns.get((int) Math.floor(Math.random() * pawns.size())));
 //            allowedPawns.addAll(boardStatus.getPawns(currentPlayerID));
         } else {
             // YEET
             Point backgroundLastMoveCoords = boardStatus.getLastMove((currentPlayerID + 1) % 2);
+
             int backgroundColorIndex = TrifleBoard.BOARD[backgroundLastMoveCoords.x][backgroundLastMoveCoords.y];
 
             // get the pawn
