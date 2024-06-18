@@ -2,6 +2,8 @@ package trifleGraphic;
 
 import javafx.application.Application;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import rules.GameMode;
 import rules.PlayerMode;
@@ -13,14 +15,14 @@ import trifleGraphic.controllers.GameController;
 import trifleGraphic.view.TrifleRootPane;
 import trifleGraphic.view.TrifleView;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Trifle extends Application {
-    private static GameMode gameMode;
-    private static String outputMovesDir;
-    private static final List<String> externalArgs = new ArrayList<>();
-    public static List<String> playerNames  = new ArrayList<>();
+    private static GameMode     gameMode;
+    public  static List<String> playerNames  = new ArrayList<>();
 
     public static final String FIRST_STAGE_NAME = "trifleGraphic";
 
@@ -29,24 +31,6 @@ public class Trifle extends Application {
     public static void main(String[] args) {
         Logger.setLevel(Logger.LOGGER_INFO);
         Logger.setVerbosity(Logger.VERBOSE_BASIC);
-
-        // Parse the internal arguments, such as `--output-moves`
-        for (int i = 0; i < args.length; i++) {
-            String arg = args[i];
-
-            switch (arg) {
-                case "": {break;}
-                case "--output-moves": {
-                    Trifle.outputMovesDir = args[i + 1];
-                    // remove this arg
-                    args[i] = "";
-                    args[i + 1] = "";
-                    break;
-                }
-                default:
-                    externalArgs.add(arg);
-            }
-        }
 
         Trifle.gameMode = GameMode.defaultValue();
 
@@ -59,7 +43,7 @@ public class Trifle extends Application {
 
         // Add the players to the model
         playerNames = getPlayerNames(gameMode);
-        PlayerMode playerMode = getPlayerMode(externalArgs.isEmpty() ? "" : externalArgs.get(0));
+        PlayerMode playerMode = getPlayerMode("");
         switch (playerMode) {
             case HumanVsHuman: {
                 model.addHumanPlayer(playerNames.get(0));
@@ -96,10 +80,20 @@ public class Trifle extends Application {
 
         model.setCaptureEvents(false);
 
+        Media sound = new Media(BACKGROUND_SOUND_PATH);
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setOnEndOfMedia(mediaPlayer::play);
+        mediaPlayer.setVolume(0.25);
+
         primaryStage.getIcons().add(new Image("trifleGraphic/icon.png"));
+
         Application.setUserAgentStylesheet("trifleGraphic/themes/nord-light.css");
+        mediaPlayer.play();
+
         primaryStage.show();
     }
+
+    public static final String BACKGROUND_SOUND_PATH = new File("src/trifleGraphic/sounds/background.mp3").toURI().toString();
 
     /**
      * Get the player Mode
@@ -108,8 +102,7 @@ public class Trifle extends Application {
      */
     private static PlayerMode getPlayerMode(String mode) {
         return switch (mode) {
-            case "" -> PlayerMode.HumanVsHuman;
-            case "0" -> PlayerMode.HumanVsHuman;
+            case "", "0" -> PlayerMode.HumanVsHuman;
             case "1" -> PlayerMode.HumanVsComputer;
             case "2" -> PlayerMode.ComputerVsComputer;
             default -> throw new IllegalStateException("Unexpected value: " + mode);

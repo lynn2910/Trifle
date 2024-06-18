@@ -5,6 +5,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.StageStyle;
 import rules.GameMode;
@@ -23,8 +25,11 @@ import trifleGraphic.model.TrifleStageModel;
 import trifleGraphic.view.TrifleRootPane;
 
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static trifleGraphic.controllers.GameMouseController.ANIMATION_FACTOR;
 import static trifleGraphic.controllers.GameMouseController.ANIMATION_TYPE;
@@ -120,6 +125,8 @@ public class GameController extends Controller {
         return pawn.getSumoLevel() <= 1 ? (pawn.getSumoLevel() - 1) * 2 : 0;
     }
 
+    public static boolean isResettingGame = false;
+
     @Override
     public void endGame() {
         System.out.println();
@@ -154,9 +161,10 @@ public class GameController extends Controller {
         if (model.getIdWinner() == 0) winningPlayerPoints = bluePlayerPoints;
         else winningPlayerPoints = cyanPlayerPoints;
 
-        // détecter une victoire
+        // détect une victoire
         if (winningPlayerPoints >= requiredPoints) {
             partyEnd();
+            return;
         }
 
         int rightOrLeft = 0;
@@ -210,6 +218,14 @@ public class GameController extends Controller {
 
         ActionPlayer play = new ActionPlayer(model, this, actionList);
         play.start();
+
+        isResettingGame = true;
+        try {
+            Thread.sleep(16 * (ANIMATION_FACTOR * 100));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        isResettingGame = false;
 
         System.out.println("\n\n\nNew round!\n\n");
     }
@@ -326,12 +342,27 @@ public class GameController extends Controller {
         return playerID == 0 ? 0 : 7;
     }
 
+    public static final String MOVE1 = new File("src/trifleGraphic/sounds/move1.mp3").toURI().toString();
+    public static final String MOVE2 = new File("src/trifleGraphic/sounds/move2.mp3").toURI().toString();
+
+    public static int move_sound_cursor = 0;
+
     @Override
     public void endOfTurn(){
+        if (isResettingGame)
+            return;
+
         if (detectWin()) {
             this.endGame();
             return;
         }
+
+        Media sound = new Media(move_sound_cursor == 0 ? MOVE1 : MOVE2);
+        move_sound_cursor = move_sound_cursor == 0 ? 1 : 0;
+
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setOnEndOfMedia(mediaPlayer::play);
+        mediaPlayer.play();
 
         System.out.println("End of turn");
         System.out.println("PlayerID: " + model.getIdPlayer());

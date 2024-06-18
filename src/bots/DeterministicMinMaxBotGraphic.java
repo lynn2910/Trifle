@@ -91,7 +91,7 @@ public class DeterministicMinMaxBotGraphic extends BotDecider {
                 nextMove.getMoveDone().y,
                 nextMove.getMoveDone().x,
                 ANIMATION_TYPE,
-                ANIMATION_FACTOR
+                ANIMATION_FACTOR / 4.0
         );
         actions.setDoEndOfTurn(true);
 
