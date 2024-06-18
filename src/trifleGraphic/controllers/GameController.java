@@ -125,8 +125,6 @@ public class GameController extends Controller {
         return pawn.getSumoLevel() <= 1 ? (pawn.getSumoLevel() - 1) * 2 : 0;
     }
 
-    public static boolean isResettingGame = false;
-
     @Override
     public void endGame() {
         System.out.println();
@@ -218,14 +216,6 @@ public class GameController extends Controller {
 
         ActionPlayer play = new ActionPlayer(model, this, actionList);
         play.start();
-
-        isResettingGame = true;
-        try {
-            Thread.sleep(16 * (ANIMATION_FACTOR * 100));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        isResettingGame = false;
 
         System.out.println("\n\n\nNew round!\n\n");
     }
@@ -349,9 +339,6 @@ public class GameController extends Controller {
 
     @Override
     public void endOfTurn(){
-        if (isResettingGame)
-            return;
-
         if (detectWin()) {
             this.endGame();
             return;
