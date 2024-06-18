@@ -55,7 +55,7 @@ public class HoleDecider extends Decider {
             if (p != null) {
                 // get the valid cells
                 List<Point> valid = board.computeValidCells(p.getNumber());
-                if (valid.size() != 0) {
+                if (!valid.isEmpty()) {
                     // choose at random one of the valid cells
                     int id = loto.nextInt(valid.size());
                     pawn = p;

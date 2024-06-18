@@ -9,8 +9,8 @@ import boardifier.model.animation.AnimationStep;
 
 public class Pawn extends GameElement {
 
-    private int number;
-    private int color;
+    private final int number;
+    private final int color;
     public static int PAWN_BLACK = 0;
     public static int PAWN_RED = 1;
 

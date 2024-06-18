@@ -4,7 +4,6 @@ package trifleGraphic.model;
  * The purpose of this class is to register what moves have been done
  */
 public class OldMove {
-    private final int playerId;
     private final String playerName;
     // Normalized to `color (position)`
     private final String pawn;
@@ -12,7 +11,6 @@ public class OldMove {
     private final String move;
 
     public OldMove(int playerId, String playerName, String pawn, String move){
-        this.playerId = playerId;
         this.playerName = playerName;
         this.pawn = pawn;
         this.move = move;

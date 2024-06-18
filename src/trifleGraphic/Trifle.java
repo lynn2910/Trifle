@@ -99,39 +99,6 @@ public class Trifle extends Application {
         primaryStage.getIcons().add(new Image("trifleGraphic/icon.png"));
         Application.setUserAgentStylesheet("trifleGraphic/themes/nord-light.css");
         primaryStage.show();
-
-
-//        try {
-//            int numberOfRounds = gameMode.numberOfRounds();
-//
-//            System.out.println("You'll play " + numberOfRounds + " rounds.");
-//
-//            while (controller.getCurrentRound() < numberOfRounds) {
-//                System.out.println("Round no." + (controller.getCurrentRound() + 1));
-//
-//                controller.startGame();
-//                controller.stageLoop();
-//
-//                controller.increaseRoundCounter();
-//
-//                if (controller.getCurrentRound() < numberOfRounds - 1) {
-//                    System.out.println("End of round. Next round start in 5s...");
-//                    Thread.sleep(5000);
-//                    System.out.println("\n\n");
-//                }
-//            }
-//
-//            controller.endGame();
-//        } catch (GameException | InterruptedException e) {
-//            System.out.println(RED + e.getMessage());
-//            e.printStackTrace();
-//            System.out.println("Cannot start the game. Abort" + RESET);
-//            System.exit(1);
-//        } finally {
-//            Logger.trace("Closing InputReader stream...");
-//            controller.closeStreams();
-//            Logger.trace("Controller's streams closed successfully");
-//        }
     }
 
     /**

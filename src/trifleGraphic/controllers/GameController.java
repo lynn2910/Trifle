@@ -114,7 +114,7 @@ public class GameController extends Controller {
 
     }
 
-    private int newSumoLevelForPawn(Pawn pawn){;
+    private int newSumoLevelForPawn(Pawn pawn){
         pawn.increaseSumoLevel(this);
         System.out.println("Pawn with received a sumo: " + pawn);
         return pawn.getSumoLevel() * 2;

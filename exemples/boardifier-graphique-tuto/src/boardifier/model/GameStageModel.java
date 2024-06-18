@@ -90,8 +90,7 @@ public abstract class GameStageModel {
     }
 
     public boolean isElementInStage(GameElement element) {
-        if (elements.contains(element)) return true;
-        return false;
+        return elements.contains(element);
     }
 
     public List<ContainerElement> getContainers() {

@@ -130,9 +130,6 @@ public class TrifleRootPane extends RootPane {
             missingRequirementsList.setAlignment(Pos.BASELINE_LEFT);
             missingRequirementsList.setSpacing(10);
 
-//            missingRequirementsList.setPrefWidth(300);
-//            missingRequirementsList.setPrefHeight(50 * missingRequirements.size());
-
             for (String missingRequirement : missingRequirements) {
                 Text text = new Text("- " + missingRequirement);
 

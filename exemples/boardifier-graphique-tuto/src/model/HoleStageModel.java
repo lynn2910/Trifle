@@ -97,7 +97,7 @@ public class HoleStageModel extends GameStageModel {
     private void setupCallbacks() {
         onSelectionChange( () -> {
             // get the selected pawn if any
-            if (selected.size() == 0) {
+            if (selected.isEmpty()) {
                 board.resetReachableCells(false);
                 return;
             }

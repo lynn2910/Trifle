@@ -41,10 +41,6 @@ public class PawnLook extends ElementLook {
         }
     }
 
-    @Override
-    public void onFaceChange() {
-    }
-
     protected void render() {
         Pawn pawn = (Pawn)element;
         circle = new Circle();

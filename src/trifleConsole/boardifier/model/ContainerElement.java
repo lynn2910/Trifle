@@ -313,7 +313,7 @@ public class ContainerElement extends StaticElement {
      * @return the first element stored or null if there are no elements
      */
     public GameElement getFirstElement(int row, int col) {
-        if (grid[row][col].size() > 0) {
+        if (!grid[row][col].isEmpty()) {
             return grid[row][col].get(0);
         }
         return null;
@@ -327,7 +327,7 @@ public class ContainerElement extends StaticElement {
      * @return the last element stored or null if there are no elements
      */
     public GameElement getLastElement(int row, int col) {
-        if (grid[row][col].size() > 0) {
+        if (!grid[row][col].isEmpty()) {
             return grid[row][col].get(grid[row][col].size() - 1);
         }
         return null;
@@ -356,7 +356,7 @@ public class ContainerElement extends StaticElement {
      * @return the first element stored or null if there are no elements
      */
     public GameElement getElement(int row, int col, int index) {
-        if ((grid[row][col].size() == 0) || (index < 0) || (index >= grid[row][col].size())) return null;
+        if ((grid[row][col].isEmpty()) || (index < 0) || (index >= grid[row][col].size())) return null;
         return grid[row][col].get(index);
     }
 
@@ -368,7 +368,7 @@ public class ContainerElement extends StaticElement {
      * @return true if there is at least one element, otherwise false
      */
     public boolean isElementAt(int row, int col) {
-        if (grid[row][col].size() > 0) return true;
+        if (!grid[row][col].isEmpty()) return true;
         return false;
     }
 
@@ -379,7 +379,7 @@ public class ContainerElement extends StaticElement {
     public boolean isEmpty() {
         for (int i = 0; i < nbRows; i++) {
             for (int j = 0; j < nbCols; j++) {
-                if (grid[i][j].size() > 0) {
+                if (!grid[i][j].isEmpty()) {
                     return false;
                 }
             }

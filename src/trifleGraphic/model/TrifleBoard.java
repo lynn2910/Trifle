@@ -106,7 +106,7 @@ public class TrifleBoard extends ContainerElement {
                         validCells.add(new Point(coords.x, y - opponentVerticalCounter));
                         break vertical;
                     } else opponentVerticalCounter++;
-                };
+                }
             }
 
 
@@ -175,7 +175,7 @@ public class TrifleBoard extends ContainerElement {
                         validCells.add(new Point(coords.x, y + this.opponentVerticalCounter));
                         break vertical;
                     } else this.opponentVerticalCounter++;
-                };
+                }
             }
 
 

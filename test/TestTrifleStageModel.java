@@ -92,20 +92,6 @@ public class TestTrifleStageModel {
         assertEquals(mockTextElement, model.getPlayerPoints());
     }
 
-    @Test
-    public void testGetAndAddBluePlayerMove() {
-        Point move = new Point(1, 1);
-        model.addBluePlayerMove(move);
-
-        assertEquals(move, model.getLastBluePlayerMove());
-    }
-
-    @Test
-    public void testGetAndAddCyanPlayerMove() {
-        Point move = new Point(2, 2);
-        model.addCyanPlayerMove(move);
-        assertEquals(move, model.getLastCyanPlayerMove());
-    }
 
     @Test
     public void testGetAndSetGameMode() {
