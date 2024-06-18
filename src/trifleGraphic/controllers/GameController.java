@@ -338,6 +338,15 @@ public class GameController extends Controller {
     public static int move_sound_cursor = 0;
 
     @Override
+    public void startGame() throws GameException {
+        super.startGame();
+
+        if (this.playerMode == PlayerMode.ComputerVsComputer){
+            this.endOfTurn();
+        }
+    }
+
+    @Override
     public void endOfTurn(){
         if (detectWin()) {
             this.endGame();
