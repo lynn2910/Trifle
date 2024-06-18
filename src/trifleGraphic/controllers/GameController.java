@@ -114,6 +114,12 @@ public class GameController extends Controller {
 
     }
 
+    private int newSumoLevelForPawn(Pawn pawn){;
+        pawn.increaseSumoLevel(this);
+        System.out.println("Pawn with received a sumo: " + pawn);
+        return pawn.getSumoLevel() * 2;
+    }
+
     @Override
     public void endGame() {
         System.out.println();
@@ -129,9 +135,7 @@ public class GameController extends Controller {
 
             for (Pawn pawn: pawns) {
                 if (pawn.getCoords().y == getBaseRowForPlayer(losingPlayerId)) {
-                    givenPoints = pawn.getSumoLevel() * 2;
-                    pawn.increaseSumoLevel(this);
-                    System.out.println("Pawn with received a sumo: " + pawn);
+                    givenPoints += newSumoLevelForPawn(pawn);
                     break;
                 }
             }
@@ -243,7 +247,6 @@ public class GameController extends Controller {
         return result.filter(buttonType -> buttonType != leftToRight)
                 .map(buttonType -> 1)
                 .orElse(0);
-
     }
 
     /**
@@ -325,6 +328,11 @@ public class GameController extends Controller {
 
     @Override
     public void endOfTurn(){
+        if (detectWin()) {
+            this.endGame();
+            return;
+        }
+
         System.out.println("End of turn");
         System.out.println("PlayerID: " + model.getIdPlayer());
         model.setNextPlayer();
@@ -336,13 +344,13 @@ public class GameController extends Controller {
         Player p = model.getCurrentPlayer();
         String text = p.getName() + " is playing.";
 
-        Point lastOpponentMove = model.getIdPlayer() == 0 ? stageModel.getLastCyanPlayerMove() : stageModel.getLastBluePlayerMove();
+        Point lastOpponentMove = stageModel.getLastPlayerMove((model.getIdPlayer() + 1) % 2);
         if (lastOpponentMove == null) {
             text += " You start, so you can choose which pawn your moving.";
         }
         else {
-            // Tell which color must be moved
             int colorIndex = TrifleBoard.BOARD[lastOpponentMove.y][lastOpponentMove.x];
+            // Tell which color must be moved
 
             text += "\nYou must play the ";
 
@@ -366,6 +374,26 @@ public class GameController extends Controller {
         }
 
         stageModel.getPlayerName().setText(text);
+
+
+        // check whether the next player can play?
+        TrifleBoard board = (TrifleBoard) stageModel.getBoard();
+
+        // lastOpponentMove
+        if (lastOpponentMove != null) {
+            int colorIndex = TrifleBoard.BOARD[lastOpponentMove.y][lastOpponentMove.x];
+            Pawn pawn = stageModel.getPlayerPawn(model.getIdPlayer(), colorIndex);
+            if (!board.canPawnMove(pawn, model.getIdPlayer())) {
+                System.out.println("Player " + model.getIdPlayer() + " cannot move, therefor he'll skip his turn");
+                stageModel.setPlayerBlocked(model.getIdPlayer(), true);
+
+                if (model.getIdPlayer() == 0) stageModel.setLastBluePlayerMove(pawn.getCoords());
+                else stageModel.setLastCyanPlayerMove(pawn.getCoords());
+
+                this.endOfTurn();
+            }
+
+        }
 
         if ((model.getIdPlayer() == 0 && firstComputer != null) || (model.getIdPlayer() == 1 && secondComputer != null)) {
             playBot();
