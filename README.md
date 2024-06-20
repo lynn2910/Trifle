@@ -14,11 +14,11 @@ Source: [en.wikipedia.org](https://en.wikipedia.org/wiki/Trifle)
 ## Project members
 
 The project members are:
-- Cédric Colin
-- Marvyn Levin
+- [Cédric Colin](https://github.com/lynn2910)
+- [Marvyn Levin](https://github.com/marvynlevin)
 - Hugues Estrade
-- Timothée Meyer
-- Baptiste Dulieux
+- [Timothée Meyer](https://github.com/Spaceiii)
+- [Baptiste Dulieux](https://github.com/baptisteDULIEUX)
 
 ## Installation
 
